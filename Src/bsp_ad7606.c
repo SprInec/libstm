@@ -1,40 +1,40 @@
 /**
  ******************************************************************************
- * @file		:bsp_ad7606.c
- * @brief		:AD7606 driver.
+ * @file	:bsp_ad7606.c
+ * @brief	:AD7606 driver.
  * @version	:0.1.0
- * @author	:ÁèÖÇµç×Ó
- * @date		:2022.07.05
+ * @author	:å‡Œæ™ºç”µå­
+ * @date	:2022.07.05
  ******************************************************************************
  * @pinset
  *	
- *	¿ØÖÆÏß:
- *				rst 	 		 -->				PB3
- *				convstB 	 -->		 		PB4
- *				convstA 	 -->		 		PB5
- *				STby 	     -->		 		PB6
- *				OSI2 	     -->		 		PB7
- *				OSI1 	     -->		 		PB8
- *				OSI0 	     -->		 		PB9
+ *	æŽ§åˆ¶çº¿:
+ *				rst 	    -->	PB3
+ *				convstB     -->	PB4
+ *				convstA     -->	PB5
+ *				STby 	    -->	PB6
+ *				OSI2 	    -->	PB7
+ *				OSI1 	    -->	PB8
+ *				OSI0 	    -->	PB9
  *
- *				frstdata 	 -->		  	PE2
- *				busy 	  	 -->				PE3
- *				cs 	  		 -->				PE4
- *				rd 	  		 -->		 		PE5
+ *				frstdata    -->	PE2
+ *				busy 	    -->    PE3
+ *				cs 	     	-->		PE4
+ *				rd 	     	-->		PE5
  *
- *	Êý¾ÝÏß:
+ *	æ•°æ®çº¿:
  *				DB0 DB1 DB2 DB3 DB4 DB5 DB6 DB7 DB8 DB9 DB10 DB11 DB12 DB13 DB14 DB15 
  *				PF0 PF1 PF2 PF3 PF4 PF5 PF6 PF7 PF8 PF9 PF10 PF11 PF12 PF13 PF14 PF15
  *
- *	Íâ½Ó(²¢ÐÐÏÂÑ¡ÔñÒÔÏÂÁ½Î»):
+ *	å¤–æŽ¥(å¹¶è¡Œä¸‹é€‰æ‹©ä»¥ä¸‹ä¸¤ä½):
  *				SER             0V
- *				D15             0V£¨²¢ÐÐÄ£Ê½ÏÂÎªÊý¾ÝÎ»²»ÓÃÖÃ0£©
+ *				D15             0Vï¼ˆå¹¶è¡Œæ¨¡å¼ä¸‹ä¸ºæ•°æ®ä½ä¸ç”¨ç½®0ï¼‰
  *
- *@attention
+ * @attention
  *
- *       (1) ²¢ÐÐ£ºSER = 0£»D15 = 0£»
- *			 (2) Í¨¹ýJ3ÌøÃ±Ñ¡ÔñÊäÈëµçÑ¹µÄ·¶Î§¡£
- *			 (3) J2ÌøÃ±ÕâÀïÁ¬½Ó3.3V£¬¾ßÌåÑ¡Ôñ¿´Òý½Å¹¦ÄÜ¡£
+ *      	(1) å¹¶è¡Œï¼šSER = 0ï¼›D15 = 0ï¼›
+ *			(2) é€šè¿‡J3è·³å¸½é€‰æ‹©è¾“å…¥ç”µåŽ‹çš„èŒƒå›´ã€‚
+ *			(3) J2è·³å¸½è¿™é‡Œè¿žæŽ¥3.3Vï¼Œå…·ä½“é€‰æ‹©çœ‹å¼•è„šåŠŸèƒ½ã€‚
  *
  ******************************************************************************
  */
@@ -46,38 +46,38 @@
 #if  __AD7606_FSMC_
 /*
 -----------------------------------------------------------------
- ³õÊ¼»¯³ÌÐòÇø
+ åˆå§‹åŒ–ç¨‹åºåŒº
 -----------------------------------------------------------------
 -----------------------------------------------------------------
  void GPIO_AD7606_Configuration(void)
 -----------------------------------------------------------------
 
- º¯Êý¹¦ÄÜ: AD7606Òý½ÅÅäÖÃº¯Êý
- Èë¿Ú²ÎÊý: ÎÞ
- ·µ»Ø²ÎÊý: ÎÞ
- È«¾Ö±äÁ¿: ÎÞ
- µ÷ÓÃÄ£¿é: __HAL_RCC_GPIOA_CLK_ENABLE(); HAL_GPIO_DeInit();
- ×¢ÒâÊÂÏî: ÓÃGPIOÇý¶¯·½Ê½ºÍFSMCÇý¶¯·½Ê½ÏÂµÄÒý½ÅÅäÖÃ²»Ò»Ñù			
+ å‡½æ•°åŠŸèƒ½: AD7606å¼•è„šé…ç½®å‡½æ•°
+ å…¥å£å‚æ•°: æ— 
+ è¿”å›žå‚æ•°: æ— 
+ å…¨å±€å˜é‡: æ— 
+ è°ƒç”¨æ¨¡å—: __HAL_RCC_GPIOA_CLK_ENABLE(); HAL_GPIO_DeInit();
+ æ³¨æ„äº‹é¡¹: ç”¨GPIOé©±åŠ¨æ–¹å¼å’ŒFSMCé©±åŠ¨æ–¹å¼ä¸‹çš„å¼•è„šé…ç½®ä¸ä¸€æ ·			
 -----------------------------------------------------------------
 */
 void GPIO_AD7606_Configuration(void)
 { 
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	// Ê¹ÄÜIO¿ÚÊ±ÖÓ
+	// ä½¿èƒ½IOå£æ—¶é’Ÿ
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOE_CLK_ENABLE();
 	__HAL_RCC_GPIOF_CLK_ENABLE();
 	
-	HAL_GPIO_DeInit(GPIOA,GPIO_PIN_5 );//½«GPIOxÍâÉè¼Ä´æÆ÷³õÊ¼»¯ÎªÄ¬ÈÏ¸´Î»Öµ
+	HAL_GPIO_DeInit(GPIOA,GPIO_PIN_5 );//å°†GPIOxå¤–è®¾å¯„å­˜å™¨åˆå§‹åŒ–ä¸ºé»˜è®¤å¤ä½å€¼
 	HAL_GPIO_DeInit(GPIOB,GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9);
 	HAL_GPIO_DeInit(GPIOE,GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5);
 	HAL_GPIO_DeInit(GPIOF,GPIO_PIN_All);
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// AD7606 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// ¿ØÖÆÏßÅäÖÃ 
+	// æŽ§åˆ¶çº¿é…ç½® 
 	//             CS_N       RD/SCLK      
 			GPIO_InitStructure.Pin = GPIO_PIN_4 | GPIO_PIN_5;
 			GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;
@@ -95,8 +95,7 @@ void GPIO_AD7606_Configuration(void)
 
 	//    rst convstB convstA STby OS12 OS11 OS10
       GPIO_InitStructure.Pin = GPIO_PIN_3 | GPIO_PIN_4 | 
-			                         GPIO_PIN_5 | GPIO_PIN_6 |
-															 GPIO_PIN_7 | GPIO_PIN_8 | 
+			                         GPIO_PIN_5 | GPIO_PIN_6 |GPIO_PIN_7 | GPIO_PIN_8 | 
 			                         GPIO_PIN_9 ;
 			GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 			GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
@@ -104,7 +103,7 @@ void GPIO_AD7606_Configuration(void)
 			HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_All, GPIO_PIN_RESET);
-    //Êý¾ÝÏßÅäÖÃ(16)
+    //æ•°æ®çº¿é…ç½®(16)
 		//DB0 DB1 DB2 DB3 DB4 DB5 DB6 DB7 DB8 DB9 DB10 DB11 DB12 DB13 DB14 DB15 
 		  GPIO_InitStructure.Pin = GPIO_PIN_0 | GPIO_PIN_1 | 
 			                         GPIO_PIN_2 | GPIO_PIN_3 |
@@ -126,12 +125,12 @@ void GPIO_AD7606_Configuration(void)
  void AD7606_Init(void)
 -----------------------------------------------------------------
 
- º¯Êý¹¦ÄÜ: AD7606³õÊ¼»¯º¯Êý
- Èë¿Ú²ÎÊý: ÎÞ
- ·µ»Ø²ÎÊý: ÎÞ
- È«¾Ö±äÁ¿: ÎÞ
- µ÷ÓÃÄ£¿é:    
- ×¢ÒâÊÂÏî: ÎÞ
+ å‡½æ•°åŠŸèƒ½: AD7606åˆå§‹åŒ–å‡½æ•°
+ å…¥å£å‚æ•°: æ— 
+ è¿”å›žå‚æ•°: æ— 
+ å…¨å±€å˜é‡: æ— 
+ è°ƒç”¨æ¨¡å—:    
+ æ³¨æ„äº‹é¡¹: æ— 
 -----------------------------------------------------------------
 */
 void AD7606_Init(void)
@@ -149,7 +148,7 @@ void AD7606_Init(void)
 	
 }
 
-/*   * Ãû³Æ£ºAD7606_startconvst()  * ¹¦ÄÜ£ºÆô¶¯×ª»»  */  
+/*   * åç§°ï¼šAD7606_startconvst()  * åŠŸèƒ½ï¼šå¯åŠ¨è½¬æ¢  */  
 void AD7606_startconvst(void)
 {  
 	convstA_Reset;	
@@ -159,7 +158,7 @@ void AD7606_startconvst(void)
 	convstB_Set;
 }
   
-/*   * Ãû³Æ£ºAD7606_reset()  * ¹¦ÄÜ£º¸´Î»Ä£¿é  */
+/*   * åç§°ï¼šAD7606_reset()  * åŠŸèƒ½ï¼šå¤ä½æ¨¡å—  */
 void AD7606_reset(void) 
 { 
 	rst_Reset;
@@ -178,9 +177,9 @@ uint16_t GPIO_ReadInputData(GPIO_TypeDef* GPIOx)
 }
 
 /* 
-* Ãû³Æ£ºAD7606_read_data() 
-* ¹¦ÄÜ£º¶ÁÈ¡Êý¾Ý 
-* ·µ»ØÖµ£º·µ»ØÒ»¸ö½á¹¹ÌåÖ¸Õë£¬¸ÃÖ¸ÕëÎªÖ¸Ïò½á¹¹ÌåÊý×éµÄÊ×µØÖ·  
+* åç§°ï¼šAD7606_read_data() 
+* åŠŸèƒ½ï¼šè¯»å–æ•°æ® 
+* è¿”å›žå€¼ï¼šè¿”å›žä¸€ä¸ªç»“æž„ä½“æŒ‡é’ˆï¼Œè¯¥æŒ‡é’ˆä¸ºæŒ‡å‘ç»“æž„ä½“æ•°ç»„çš„é¦–åœ°å€  
 */ 
 void AD7606_read_data(int16_t * DB_data) 
 {  
@@ -318,10 +317,10 @@ static void AD7606_SetOs(uint8_t _ucOS)
 #if (USE_IO_CONTROL_RANGE)
 /*
 *********************************************************************************************************
-*	@ º¯ Êý Ãû: AD7606_SetInputRange
-*	@ ¹¦ÄÜËµÃ÷: ÅäÖÃAD7606Ä£ÄâÐÅºÅÊäÈëÁ¿³Ì¡£
-*	@ ÐÎ    ²Î: _ucRange : 0 ±íÊ¾Õý¸º5V   1±íÊ¾Õý¸º10V
-*	@ ·µ »Ø Öµ: ÎÞ
+*	@ å‡½ æ•° å: AD7606_SetInputRange
+*	@ åŠŸèƒ½è¯´æ˜Ž: é…ç½®AD7606æ¨¡æ‹Ÿä¿¡å·è¾“å…¥é‡ç¨‹ã€‚
+*	@ å½¢    å‚: _ucRange : 0 è¡¨ç¤ºæ­£è´Ÿ5V   1è¡¨ç¤ºæ­£è´Ÿ10V
+*	@ è¿” å›ž å€¼: æ— 
 *********************************************************************************************************
 */
 static void AD7606_SetInputRange(uint8_t _ucRange)
@@ -329,54 +328,54 @@ static void AD7606_SetInputRange(uint8_t _ucRange)
 	if (_ucRange == AD7606_5V)
 	{
 		AD7606Class_1.ucRange = AD7606_5V;
-		RANGE_0();	/* ÉèÖÃÎªÕý¸º5V */
+		RANGE_0();	/* è®¾ç½®ä¸ºæ­£è´Ÿ5V */
 	}
 	else
 	{
 		AD7606Class_1.ucRange = AD7606_10V;
-		RANGE_1();	/* ÉèÖÃÎªÕý¸º10V */
+		RANGE_1();	/* è®¾ç½®ä¸ºæ­£è´Ÿ10V */
 	}
 }
 #endif
 
 /*
 *********************************************************************************************************
-*	@ º¯ Êý Ãû: AD7606_Reset
-*	@ ¹¦ÄÜËµÃ÷: AD7606Ó²¼þ¸´Î»
-*	@ ÐÎ    ²Î: NULL
-*	@ ·µ »Ø Öµ: ÎÞ
+*	@ å‡½ æ•° å: AD7606_Reset
+*	@ åŠŸèƒ½è¯´æ˜Ž: AD7606ç¡¬ä»¶å¤ä½
+*	@ å½¢    å‚: NULL
+*	@ è¿” å›ž å€¼: æ— 
 *********************************************************************************************************
 */
 
 static void AD7606_Reset(void)
 {
-	RESET_0();	/* ÍË³ö¸´Î»×´Ì¬ */
+	RESET_0();	/* é€€å‡ºå¤ä½çŠ¶æ€ */
 
-	RESET_1();	/* ½øÈë¸´Î»×´Ì¬ */
-	RESET_1();	/* ½öÓÃÓÚÑÓ³Ù¡£ RESET¸´Î»¸ßµçÆ½Âö³å¿í¶È×îÐ¡50ns¡£ */
+	RESET_1();	/* è¿›å…¥å¤ä½çŠ¶æ€ */
+	RESET_1();	/* ä»…ç”¨äºŽå»¶è¿Ÿã€‚ RESETå¤ä½é«˜ç”µå¹³è„‰å†²å®½åº¦æœ€å°50nsã€‚ */
 	RESET_1();
 	RESET_1();
 	
-	RESET_0();	/* ÍË³ö¸´Î»×´Ì¬ */
+	RESET_0();	/* é€€å‡ºå¤ä½çŠ¶æ€ */
 }
 /*
 *********************************************************************************************************
-*	º¯ Êý Ãû: AD7606_StartConvst
-*	¹¦ÄÜËµÃ÷: Æô¶¯1´ÎADC×ª»»
-*	ÐÎ    ²Î: ÎÞ
-*	·µ »Ø Öµ: ÎÞ
+*	å‡½ æ•° å: AD7606_StartConvst
+*	åŠŸèƒ½è¯´æ˜Ž: å¯åŠ¨1æ¬¡ADCè½¬æ¢
+*	å½¢    å‚: æ— 
+*	è¿” å›ž å€¼: æ— 
 *********************************************************************************************************
 */
 static void AD7606_StartConvst(void)
 {
-	/* page 7£º  CONVST ¸ßµçÆ½Âö³å¿í¶ÈºÍµÍµçÆ½Âö³å¿í¶È×î¶Ì 25ns */
-	/* CONVSTÆ½Ê±Îª¸ß */
+	/* page 7ï¼š  CONVST é«˜ç”µå¹³è„‰å†²å®½åº¦å’Œä½Žç”µå¹³è„‰å†²å®½åº¦æœ€çŸ­ 25ns */
+	/* CONVSTå¹³æ—¶ä¸ºé«˜ */
 #if  1
 	COA_0_COB_0();
 	COA_0_COB_0();
 	COA_0_COB_0();
 
-	COA_1_COB_1();			//ËùÓÃÍ¨µÀ
+	COA_1_COB_1();			//æ‰€ç”¨é€šé“
 #else
 	PAout(5) = 0;
 	PAout(6) = 0;
@@ -388,14 +387,14 @@ static void AD7606_StartConvst(void)
 
 static void AD7606_ReadNowAdc(void)
 {
-	AD7606Class_1.ucADCData[0]	= AD7606_RESULT();	/* ¶ÁµÚ1Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[1]	= AD7606_RESULT();	/* ¶ÁµÚ2Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[2]	= AD7606_RESULT();	/* ¶ÁµÚ3Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[3]	= AD7606_RESULT();	/* ¶ÁµÚ4Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[4]	= AD7606_RESULT();	/* ¶ÁµÚ5Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[5]	= AD7606_RESULT();	/* ¶ÁµÚ6Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[6]	= AD7606_RESULT();	/* ¶ÁµÚ7Â·Ñù±¾ */
-	AD7606Class_1.ucADCData[7]	= AD7606_RESULT();	/* ¶ÁµÚ8Â·Ñù±¾ */
+	AD7606Class_1.ucADCData[0]	= AD7606_RESULT();	/* è¯»ç¬¬1è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[1]	= AD7606_RESULT();	/* è¯»ç¬¬2è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[2]	= AD7606_RESULT();	/* è¯»ç¬¬3è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[3]	= AD7606_RESULT();	/* è¯»ç¬¬4è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[4]	= AD7606_RESULT();	/* è¯»ç¬¬5è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[5]	= AD7606_RESULT();	/* è¯»ç¬¬6è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[6]	= AD7606_RESULT();	/* è¯»ç¬¬7è·¯æ ·æœ¬ */
+	AD7606Class_1.ucADCData[7]	= AD7606_RESULT();	/* è¯»ç¬¬8è·¯æ ·æœ¬ */
 
 	//AD7606_SEGGER_RTTOUT();
 }
@@ -409,7 +408,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if(GPIO_Pin == AD7606_BUSY_Pin)
 	{
 		
-		AD7606_ReadNowAdc();//AD7606×ª»»ISR
+		AD7606_ReadNowAdc();//AD7606è½¬æ¢ISR
 #if		0
 		PRINTF_DEBUG("adc: %d,%d\n", AD7606Class_1.ucADCData[0]\
 															 , AD7606Class_1.ucADCData[1] );
@@ -422,17 +421,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 void bsp_InitAD7606(void)
 {
-	AD7606_SetOs(AD_OS_NO);		/* ÎÞ¹ý²ÉÑù */
-	AD7606_SetInputRange(1);	/* 0±íÊ¾ÊäÈëÁ¿³ÌÎªÕý¸º5V, 1±íÊ¾Õý¸º10V */
-	AD7606_Reset();						/* ¸´Î» */
-	COA_1_COB_0();						/* Æô¶¯×ª»»µÄGPIO£¬Æ½Ê±ÉèÖÃÎª¸ß */
+	AD7606_SetOs(AD_OS_NO);		/* æ— è¿‡é‡‡æ · */
+	AD7606_SetInputRange(1);	/* 0è¡¨ç¤ºè¾“å…¥é‡ç¨‹ä¸ºæ­£è´Ÿ5V, 1è¡¨ç¤ºæ­£è´Ÿ10V */
+	AD7606_Reset();						/* å¤ä½ */
+	COA_1_COB_0();						/* å¯åŠ¨è½¬æ¢çš„GPIOï¼Œå¹³æ—¶è®¾ç½®ä¸ºé«˜ */
 }
 void BSP_AD7606_Init(void)
 {
 	bsp_InitAD7606();
 	AD7606_SetOs(AD_OS_NO);
-	AD7606_SetInputRange(1);	/* 0±íÊ¾ÊäÈëÁ¿³ÌÎªÕý¸º5V, 1±íÊ¾Õý¸º10V */
-	AD7606_StartConvst();			/* Æô¶¯1´Î×ª»» */
+	AD7606_SetInputRange(1);	/* 0è¡¨ç¤ºè¾“å…¥é‡ç¨‹ä¸ºæ­£è´Ÿ5V, 1è¡¨ç¤ºæ­£è´Ÿ10V */
+	AD7606_StartConvst();			/* å¯åŠ¨1æ¬¡è½¬æ¢ */
 }
 
 
