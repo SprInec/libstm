@@ -1,7 +1,11 @@
 #ifndef __OLEDFONT_H__
 #define __OLEDFONT_H__
  
+#if __BSP_STM32F1_ENABLED
 #include "stm32f1xx_hal.h"
+#else
+#include "stm32f4xx_hal.h"
+#endif
 
 //8*6 ASCII字符集点阵
 const unsigned char F6x8[][6] =		

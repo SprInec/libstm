@@ -28,9 +28,8 @@
 			(void) (&_x == &_y);\
 			_x < _y ? _x : _y;	})
 
-
-
-
+/* 自相关函数 */
+float bsp_xcorr(float *data, int m, int N);
 
 #endif
 

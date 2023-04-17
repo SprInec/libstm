@@ -1,7 +1,12 @@
 #ifndef __OLED_H__
 #define __OLED_H__
 
+#if __BSP_STM32F1_ENABLED
 #include "stm32f1xx_hal.h"
+#else
+#include "stm32f4xx_hal.h"
+#endif
+
 
 #if		0
 #define   OLED_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOA_CLK_ENABLE()

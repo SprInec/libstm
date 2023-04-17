@@ -1,54 +1,44 @@
 /**
- ******************************************************************************
- * @file		:bsp_fft.h
- * @brief		:The board support package for FFT.
- * @version		:0.1.0
- * @author		:July
- * @date		:2022.07.03
- ******************************************************************************
+ * @file bsp_fft.h
+ * @author July (Email: JulyCub@163.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-04-04
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
- 
+
 #ifndef __BSP_FFT_H__
 #define __BSP_FFT_H__
 
 #include "bsp_config.h"
+#include "arm_math_types.h"
 
+#define BSP_FFT_SAMPLE_NUMBER 1024
+#define BSP_FFT_SAMPLE_FREQUENCY (84000000/(84 + 100))
+#define BSP_FFT_SAMPLE_STEP ((float)(BSP_FFT_SAMPLE_FREQUENCY / BSP_FFT_SAMPLE_NUMBER))
 
+/**
+ * @brief bsp fft struct
+ *
+ * @param input[] : input buffer
+ * @param output[] : output buffer
+ * @param amplitude : amplitude
+ * @param frequency : frequency
+ * @param subscript : subscript
+ */
+typedef struct{
+		uint16_t subscript;
+    float32_t input[BSP_FFT_SAMPLE_NUMBER * 2];
+    float32_t output[BSP_FFT_SAMPLE_NUMBER];
+    float32_t ampltitude;
+    float32_t frequency;
+}fftbspTypedef;
 
-typedef float          FFT_TYPE;
- 
-#ifndef PI
-#define PI             (3.14159265f)
-#endif
+extern uint16_t sample_data[BSP_FFT_SAMPLE_NUMBER];
+extern fftbspTypedef bsp_fft_handle;
 
-#define  FFT_SAMPLE_NODES              (128u)
-#define  FFT_SMPELE_FREQ								50000.0f
-#define  FFT_DATA_LENGTH								1024u
- 
-typedef struct complex_st {
-	FFT_TYPE real;
-	FFT_TYPE img;
-}complex;
-
-extern float32_t 	fft_handle_data[DATA_LENGTH*2];
-extern float32_t	fft_output_data[DATA_LENGTH];
-
-int fft(complex *x, int N);
-int ifft(complex *x, int N);
-
-void bsp_zx_fft(void);
-float bsp_arm_fft_getfreq(void);
- 
-
-
-
-
-
-
-
-
-
-
-
+void bsp_arm_fft(fftbspTypedef * fft_handle, uint16_t * sample_data);
 
 #endif
