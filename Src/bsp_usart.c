@@ -15,11 +15,14 @@
 #ifdef __BSP_USART_Receive
 
 /* Variable declarations BEGIN */
-volatile uint8_t rx_len=0;
-volatile uint8_t recv_end_flag=0;
+#ifdef __BSP_USART_VariableReceive
+volatile uint8_t rx_len = 0;
+volatile uint8_t recv_end_flag = 0;
 uint8_t rx_buffer[USART_RX_LEN];
 
-
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart2_rx;
+#endif
 /* Variable declarations END */
 
 /**
@@ -42,28 +45,29 @@ __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  */
 BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
 {
-		uint32_t tmp_flag = 0;
-		uint32_t temp;
+	uint32_t tmp_flag = 0;
+	uint32_t temp;
 
-    tmp_flag =__HAL_UART_GET_FLAG(&USART_HANDLE, UART_FLAG_IDLE);
+	tmp_flag = __HAL_UART_GET_FLAG(&USART_HANDLE, UART_FLAG_IDLE);
     if((tmp_flag != RESET))
     {
-        __HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE);
-        temp = USART_HANDLE.Instance->SR;
-        temp = USART_HANDLE.Instance->DR;
-        HAL_UART_DMAStop(&USART_HANDLE);
+        __HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE); 
+        // temp = USART_HANDLE.Instance->SR;
+        // temp = USART_HANDLE.Instance->DR;
+        HAL_UART_DMAStop(&USART_HANDLE); // 与上两句等效
 				/* !< The user needs to declare variable "DMA_HandleTypeDef hdma_usart1_rx"
 							outside of file <usart.h> */
-				#ifdef __BSP_STM32F1
-        temp  = hdma_usart2_rx.Instance->CNDTR;
+				#ifdef __BSP_STM32F1_ENABLED
+        		temp  = hdma_usart2_rx.Instance->CNDTR;
 				#endif /* __BSP_STM32F1 */
-				#ifdef __BSP_STM32F4
-				temp  = hdma_usart2_rx.Instance->NDTR;
-				#endif /* __BSP_STM32F4 */
+				#ifdef __BSP_STM32F4_ENABLED
+				// temp  = hdma_usart2_rx.Instance->NDTR;
+				temp = __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);	// 与上一句等效
+#endif /* __BSP_STM32F4 */
         rx_len =  USART_RX_LEN - temp;
         recv_end_flag = 1;
     }
-		return USART_OK;
+	return USART_OK;
 }
 
 /**
@@ -71,7 +75,7 @@ BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
  * @attention
  *
  * 	The users need to paste the following two functions segments between ------
- * " USER CODE BEGIN USART1_Init 2 " and " USER CODE END USART1_Init 2 " of the
+ * " USER CODE BEGIN USARTX_Init 2 " and " USER CODE END USARTX_Init 2 " of the
  * " MX_USART1_UART_Init(void) "in the <usart.c>.
  *
  * functions segments:
@@ -90,7 +94,18 @@ BSP_UsartState bsp_usartVar_Conduct(void)
 	_Bool uart_state = 0;
 	if(recv_end_flag == 1)
 	{
+#if 1
+		/* 串口接收指示灯 */
+	 	__BSP_LED1_Ficker(50);
+#endif
+#if 1 
+		/* 返回串口接收到的数据 */
+		bsprif1("%sx\n", rx_buffer);
+#endif
+#if 1
+		/* 用户自定义串口回调 */
 		bsp_usartVar_Callback(rx_buffer);
+#endif
 		for(uint8_t i=0;i<rx_len;i++)
 		{
 			rx_buffer[i]=0;
