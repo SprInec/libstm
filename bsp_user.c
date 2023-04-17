@@ -9,10 +9,5 @@
  * 
  */
 #include "bsp_user.h"
-#include "bsp_statemac.h"
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	BSP_KEY_StateTransition();
-		
-}
+/* User code */
