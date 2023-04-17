@@ -19,7 +19,3 @@ git clone <https://github.com/JulyCub/stm32-bsp-library.git>
 ## 贡献
 
 如果您发现此库中存在问题或者有任何改进建议，请随时提交Issue或者Pull Request，让我们共同完善此BSP库。
-
-## 许可证
-
-此库基于MIT许可证授权，详情请参见[LICENSE](notion://www.notion.so/LICENSE)文件。
