@@ -7,7 +7,7 @@
  * @date		:2022.06.28
  ******************************************************************************
  */
- 
+
 #ifndef __BSP_DECODE_H__
 #define __BSP_DECODE_H__
 
@@ -20,8 +20,6 @@ unsigned char bsp_SyncRx1Byte(unsigned int data[]);
 void bsp_Get1ByetfromArray(unsigned int data[], unsigned int result[], char startlen, int len);
 _Bool bsp_SyncRxData(unsigned int data[], unsigned char result[]);
 float bsp_Arry16ToUFloat(uint16_t arry[]);
-uint16_t	bsp_Arry8ToUInt(uint16_t arry[]);
-
-
+uint16_t bsp_Arry8ToUInt(uint16_t arry[]);
 
 #endif

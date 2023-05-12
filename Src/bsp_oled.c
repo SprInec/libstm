@@ -1,6 +1,16 @@
+/**
+ * @file bsp_oled.c
+ * @author Web
+ * @brief OLED HAL FUNC
+ * @version 0.1
+ * @date 2023.05.12
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 #include "bsp_oled.h"
 #include "i2c.h"
-#include "bsp_oledfont.h" //头文件
+#include "bsp_oledfont.h"
 
 uint8_t CMD_Data[] = {
 	0xAE, 0x00, 0x10, 0x40, 0xB0, 0x81, 0xFF, 0xA1, 0xA6, 0xA8, 0x3F,
@@ -44,7 +54,7 @@ void OLED_Clear(void)
 		OLED_WR_CMD(0x00);
 		OLED_WR_CMD(0x10);
 		for (n = 0; n < 128; n++)
-		OLED_WR_DATA(0);
+			OLED_WR_DATA(0);
 	}
 }
 // 开启OLED显示
@@ -77,7 +87,7 @@ void OLED_On(void)
 		OLED_WR_CMD(0x00);	   // 设置显示位置—列低地址
 		OLED_WR_CMD(0x10);	   // 设置显示位置—列高地址
 		for (n = 0; n < 128; n++)
-		OLED_WR_DATA(1);
+			OLED_WR_DATA(1);
 	} // 更新显示
 }
 unsigned int oled_pow(uint8_t m, uint8_t n)

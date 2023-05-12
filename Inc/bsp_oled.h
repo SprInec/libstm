@@ -1,14 +1,25 @@
+/**
+ * @file bsp_oled.h
+ * @author Web
+ * @brief OLED HAL FUNC
+ * @version 0.1
+ * @date 2023.05.12
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #ifndef __OLED_H__
 #define __OLED_H__
 
-#if __BSP_STM32F1_ENABLED
+#ifdef __BSP_STM32F1_ENABLED
 #include "stm32f1xx_hal.h"
-#else
+#endif
+#ifdef __BSP_STM32F4_ENABLED
 #include "stm32f4xx_hal.h"
 #endif
 
 
-#if		0
+#if 0
 #define   OLED_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOA_CLK_ENABLE()
 
 #define   GPIOx_OLED_PORT               GPIOB

@@ -12,6 +12,7 @@
 #include "usart.h"
 #include "stdarg.h"
 
+#ifndef __RTOS_RTTHREAD_ENABLED
 #ifdef __BSP_USART_Receive
 
 /* Variable declarations BEGIN */
@@ -113,8 +114,8 @@ BSP_UsartState bsp_usartVar_Conduct(void)
 		rx_len=0;
 		recv_end_flag=0;
 		uart_state = USART_OK;
-	}
-	HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN);
+	}HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN);
+	
 	return uart_state;
 }
 
@@ -185,3 +186,4 @@ void bsprif3(char *fmt, ...)
 #endif
 #endif
 #endif /* __BSP_USART_Transmit */
+#endif

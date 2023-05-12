@@ -1,15 +1,15 @@
 /*
  ******************************************************************************
- * @file		:bsp_sys.h
- * @brief		:The board support package for sys.
- * @version	:0.1.0
- * @author	:正点原子
- * @date		:2022.06.28
+ * @file    :bsp_sys.h
+ * @brief   :The board support package for sys.
+ * @version :0.1.0
+ * @author  :正点原子
+ * @date    :2022.06.28
  ******************************************************************************
  * @attention
  *
- * 位带操作,实现51类似的GPIO控制功能
- * 具体实现思想,参考<<CM3权威指南>>第五章(87页~92页).
+ *    位带操作,实现51类似的GPIO控制功能
+ *    具体实现思想,参考<<CM3权威指南>>第五章(87页~92页).
  *
  ******************************************************************************
  */
@@ -24,6 +24,12 @@
 #endif
 #ifdef __BSP_STM32F4_ENABLED
 #include "stm32f4xx.h"
+#endif
+#ifdef __BSP_STM32G4_ENABLED
+#include "stm32g4xx.h"
+#endif
+#ifdef __BSP_STM32H7_ENABLED
+#include "stm32h7xx.h"
 #endif
 
 /**********************************************************
@@ -70,21 +76,41 @@
 
 #ifdef __BSP_STM32F4_ENABLED
 
-#define GPIOA_ODR_Addr (GPIOA_BASE + 20)
-#define GPIOB_ODR_Addr (GPIOB_BASE + 20)
-#define GPIOC_ODR_Addr (GPIOC_BASE + 20)
-#define GPIOD_ODR_Addr (GPIOD_BASE + 20)
-#define GPIOE_ODR_Addr (GPIOE_BASE + 20)
-#define GPIOF_ODR_Addr (GPIOF_BASE + 20)
-#define GPIOG_ODR_Addr (GPIOG_BASE + 20)
+#define GPIOA_IDR_Addr (GPIOA_BASE + 10)
+#define GPIOB_IDR_Addr (GPIOB_BASE + 10)
+#define GPIOC_IDR_Addr (GPIOC_BASE + 10)
+#define GPIOD_IDR_Addr (GPIOD_BASE + 10)
+#define GPIOE_IDR_Addr (GPIOE_BASE + 10)
+#define GPIOF_IDR_Addr (GPIOF_BASE + 10)
+#define GPIOG_IDR_Addr (GPIOG_BASE + 10)
 
-#define GPIOA_IDR_Addr (GPIOA_BASE + 16)
-#define GPIOB_IDR_Addr (GPIOB_BASE + 16)
-#define GPIOC_IDR_Addr (GPIOC_BASE + 16)
-#define GPIOD_IDR_Addr (GPIOD_BASE + 16)
-#define GPIOE_IDR_Addr (GPIOE_BASE + 16)
-#define GPIOF_IDR_Addr (GPIOF_BASE + 16)
-#define GPIOG_IDR_Addr (GPIOG_BASE + 16)
+#define GPIOA_ODR_Addr (GPIOA_BASE + 14)
+#define GPIOB_ODR_Addr (GPIOB_BASE + 14)
+#define GPIOC_ODR_Addr (GPIOC_BASE + 14)
+#define GPIOD_ODR_Addr (GPIOD_BASE + 14)
+#define GPIOE_ODR_Addr (GPIOE_BASE + 14)
+#define GPIOF_ODR_Addr (GPIOF_BASE + 14)
+#define GPIOG_ODR_Addr (GPIOG_BASE + 14)
+
+#endif
+
+#ifdef __BSP_STM32H7_ENABLED
+
+#define GPIOA_IDR_Addr (GPIOA_BASE + 10)
+#define GPIOB_IDR_Addr (GPIOB_BASE + 10)
+#define GPIOC_IDR_Addr (GPIOC_BASE + 10)
+#define GPIOD_IDR_Addr (GPIOD_BASE + 10)
+#define GPIOE_IDR_Addr (GPIOE_BASE + 10)
+#define GPIOF_IDR_Addr (GPIOF_BASE + 10)
+#define GPIOG_IDR_Addr (GPIOG_BASE + 10)
+
+#define GPIOA_ODR_Addr (GPIOA_BASE + 14)
+#define GPIOB_ODR_Addr (GPIOB_BASE + 14)
+#define GPIOC_ODR_Addr (GPIOC_BASE + 14)
+#define GPIOD_ODR_Addr (GPIOD_BASE + 14)
+#define GPIOE_ODR_Addr (GPIOE_BASE + 14)
+#define GPIOF_ODR_Addr (GPIOF_BASE + 14)
+#define GPIOG_ODR_Addr (GPIOG_BASE + 14)
 
 #endif
 

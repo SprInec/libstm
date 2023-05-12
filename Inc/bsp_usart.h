@@ -1,16 +1,18 @@
 /**
- ******************************************************************************
- * @file		:bsp_usart.h
- * @brief		:The board support package for USART.
- * @version		:0.1.0
- * @author		:July
- * @date		:2022.06.25
- ******************************************************************************
+ * @file bsp_usart.h
+ * @author July (Email: JulyCub@163.com)
+ * @brief USART Function
+ * @version 0.1
+ * @date 2022.06.25
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
 
 #ifndef __BSP_USART_H__
 #define __BSP_USART_H__
 
+#ifndef __RTOS_RTTHREAD_ENABLED
 /* Include BEGIN */
 #include "bsp_config.h"
 #include "stdio.h"
@@ -34,32 +36,14 @@
 #if 1
 #define __BSP_USART_Transmit 1
 #endif
-
-#ifndef __BSP_USART_Receive
-//	#define __BSP_USART_Receive
-#endif /* __BSP_USART_Receive */
-#ifndef __BSP_USART_Transmit
-//	#define __BSP_USART_Transmit
-#endif /* __BSP_USART_Transmit */
 /* Select the function END */
 
-/* Macro definition BEGIN */
-/* Macro definition END */
-
-/* Enumeration type definition BEGIN */
 typedef enum
 {
 	USART_ERROR = 0,
 	USART_OK = 1
 } BSP_UsartState;
 
-/* Enumeration type definition END */
-
-/* External variable declaration BEGIN */
-
-/* External variable declaration END */
-
-/* Function declaration BEGIN */
 #ifdef __BSP_USART_Receive
 
 #if __BSP_USART_VariableReceive
@@ -78,8 +62,7 @@ void bsp_usartVar_Callback(uint8_t *str);
 #endif /* __BSP_USART_Receive */
 
 #if __BSP_USART_Transmit >= 1
-
-#define USART_HANDLE_PRF1 huart1
+#define USART_HANDLE_PRF1 huart3
 #if __BSP_USART_Transmit >= 2
 #define USART_HANDLE_PRF2 huart2
 #if __BSP_USART_Transmit >= 3
@@ -94,4 +77,5 @@ void bsprif3(char *fmt, ...);
 #endif /* __BSP_USART_Transmit */
 /* Function declaration END */
 
+#endif
 #endif /* __BSP_USART_H__ */

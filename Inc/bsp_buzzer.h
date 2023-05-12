@@ -14,11 +14,11 @@
 #include "bsp_config.h"
 #include "gpio.h"
 
-#define BSP_BUZZER_Port			GPIOA
-#define BSP_BUZZER_Pin			GPIO_PIN_1
+#define BSP_BUZZER_Port GPIOA
+#define BSP_BUZZER_Pin GPIO_PIN_1
 
-#define BSP_BUZZER_Ring			({	HAL_GPIO_WritePin(BSP_BUZZER_Port, BSP_BUZZER_PIN, GPIO_PIN_SET);\
-									HAL_Delay(500);\
-									HAL_GPIO_WritePin(BSP_BUZZER_Port, BSP_BUZZER_PIN, GPIO_PIN_RESET);})
+#define __BSP_BUZZER_Ring ({	HAL_GPIO_WritePin(BSP_BUZZER_Port, BSP_BUZZER_PIN, GPIO_PIN_SET);\
+								HAL_Delay(500);\
+								HAL_GPIO_WritePin(BSP_BUZZER_Port, BSP_BUZZER_PIN, GPIO_PIN_RESET); })
 
 #endif

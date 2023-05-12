@@ -1,9 +1,9 @@
 /**
  * @file bsp_user.h
  * @author July (Email: JulyCub@163.com)
- * @brief
+ * @brief User H File
  * @version 0.1
- * @date 2023-02-27
+ * @date xxx
  *
  * @copyright Copyright (c) 2023
  *
@@ -12,6 +12,7 @@
 #define _BSP_USER_H_
 
 #include "bsp_config.h"
+
 
 
 

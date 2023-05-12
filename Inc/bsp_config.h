@@ -18,41 +18,77 @@
 #ifndef __BSP_CONFIG__
 #define __BSP_CONFIG__
 
-/* !< CHIP TYPE */
+/*!======= BSP Files Enable =======!*/
+
+/* !< CHIP TYPE >! */
 #if			0
 #define __BSP_STM32F1_ENABLED
-#else
+#endif
+#if         0
 #define __BSP_STM32F4_ENABLED
 #endif
+#if         0
+#define __BSP_STM32G4_ENABLED
+#endif
+#if         1
+#define __BSP_STM32H7_ENABLED
+#endif
 
-/* SYS */
-#if			0
+
+
+/*!< RTOS >!*/
+#if         1
+#define __RTOS_RTTHREAD_ENABLED
+#endif
+
+
+/* !< MAIN >! */
+#if         1
+#define __MAIN_ENABLED
+#endif
+
+/* !< USER CODE >! */
+#if         0
+#define __BSP_USER_ENABLED
+#endif
+
+/* !< STDINT >! */
+#if         1
+#define __STDINT_ENABLED
+#endif
+
+/* !< SYS >! */
+#if			1
 #define __BSP_SYS_ENABLED
 #endif
 
-/* DELAY */
+/* !< BSP COMMON >! */
+#if 1
+#define __BSP_COMMON_ENABLED
+#endif
+
+
+/* !< DELAY */
 #if			1
 #define __BSP_DELAY_ENABLED
 #endif
 
-/* DWT */
+/* !< DWT */
 #if			0
 #define __BSP_DWT_ENABLED
 #endif
 
-#if			0
-#define __BSP_SYSTICK_ENABLED
-#endif
-
-/* TIM */
+/* !< TIM */
 #if			0
 #define __BSP_TIM_ENABLED
 #endif
 
+
 /* !< BSP USART */
-#if			1
+#if			0
 #define __BSP_USART_ENABLED
 #endif 
+
 
 /* !< BSP LED */
 #if			1
@@ -64,10 +100,11 @@
 #define __BSP_BUZZER_ENABLED
 #endif
 
-/* !< BSP COMMON */
-#if			1
-#define __BSP_COMMON_ENABLE
+/* !< BSP EEPORM */
+#if         0
+#define __BSP_EEPORM_ENABLED
 #endif
+
 
 /* !< PERIPHERALS SELECTION */
 
@@ -97,6 +134,8 @@
 #define __BSP_DAC8563_ENABLED
 #endif
 
+
+
 /* PLL */
 #if			0
 #define __BSP_ADF4351_ENABLED
@@ -106,10 +145,13 @@
 #define __BSP_ADF4002_ENABLED
 #endif
 
+
+
 /* THERMOMETRY */
 #if			0
 #define __BSP_DS18B20_ENABLED
 #endif
+
 
 /* !< DISPLAY EQUIPMENT */
 #if			0
@@ -124,6 +166,7 @@
 #define __BSP_OLED_ENABLED
 #endif
 
+
 /* !< ANALOG */
 /* ADC */
 #if			0
@@ -134,6 +177,7 @@
 #if			0
 #define __BSP_DAC_ENABLED
 #endif
+
   
 /* !< DIGITAL CODING */
 /* CODING */
@@ -161,18 +205,56 @@
 #define __BSP_MATH_ENABLED
 #endif
 
+
+/* !< COMMUNICATION >! */
+/* SCCB */
+#if         1
+#define __BSP_SCCB_ENABLED
+#endif
+
+/* IIC */
 #if         0
+#define __BSP_I2C_ENABLED
+#endif
+
+/* SPI */
+#if 0
+#define __BSP_SPI_ENABLED
+#endif
+
+/*!======= BSP Files Include =======!*/
+
+#ifdef __BSP_STM32F1_ENABLED
+#include "stm32f1xx_hal.h"
+#endif
+
+#ifdef __BSP_STM32F4_ENABLED
+#include "stm32f4xx_hal.h"
+#endif
+
+#ifdef __BSP_STM32G4_ENABLED
+#include "stm32g4xx_hal.h"
+#endif
+
+#ifdef __BSP_STM32H7_ENABLED
+#include "stm32h7xx_hal.h"
+#endif
+
+#ifdef __MAIN_ENABLED
 #include "main.h"
 #endif /* MAIN */
 
-#if			0
+#ifdef __BSP_USER_ENABLED
 #include "bsp_user.h"
 #endif	/* USER CODE */
 
-#if			1
+#ifdef __STDINT_ENABLED
 #include "stdint.h"
 #endif /*  ALL RIGHTS RESERVED */
 
+#ifdef __RTOS_RTTHREAD_ENABLED
+#include "rtthread.h"
+#endif
 #ifdef __BSP_SYS_ENABLED
 #include "bsp_sys.h"
 #endif /* __BSP_SYS_ENABLED */
@@ -184,10 +266,6 @@
 #ifdef __BSP_DWT_ENABLED
 #include "bsp_dwt.h"
 #endif /* __BSP_DWT_ENABLED */
-
-#ifdef __BSP_SYSTICK_ENABLED
-#include "bsp_SysTick.h"
-#endif /* __BSP_SYSTICK_ENABLED */
 
 #ifdef __BSP_TIM_ENABLED
 #include "bsp_tim.h"
@@ -201,11 +279,15 @@
 #include "bsp_buzzer.h"
 #endif /* __BSP_BUZZER_ENABLED */
 
+#ifdef __BSP_EEPROM_ENABLED
+#include "bsp_eeprom.h"
+#endif /* __BSP_EEPROM_ENABLED */
+
 #ifdef __BSP_LED_ENABLED
 #include "bsp_led.h"
 #endif /* __BSP_LED_ENABLED */
 
-#ifdef __BSP_COMMON_ENABLE
+#ifdef __BSP_COMMON_ENABLED
 #include "bsp_common.h"
 #endif /* __BSP_COMMON_ENABLE */
 
@@ -281,6 +363,12 @@
 #include "bsp_math.h"
 #endif	/* __BSP_MATH_ENABLED */
 	
+#ifdef __BSP_SCCB_ENABLED
+#include "bsp_sccb.h"
+#endif /* __BSP_SCCB_ENABLED */
 
+#ifdef __BSP_I2C_ENABLED
+#include "bsp_i2c.h"
+#endif /* __BSP_I2C_ENABLED */
 
 #endif

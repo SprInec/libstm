@@ -33,7 +33,7 @@ https://shop110336474.taobao.com/?spm=a230r.7195193.1997079397.2.Ic3MRJ
 #define ADF4351_PD_ON ((uint32_t)0X10E42)
 #define ADF4351_PD_OFF ((uint32_t)0X10E02)
 
-#if 0
+#ifndef __BSP_DELAY_ENABLED
 void delay_us(int length)
 {
 	while (length > 0)
