@@ -44,6 +44,7 @@ u8 BSP_OV2640_Init(void)
 	GPIO_InitStructure.Pull = GPIO_PuPd_UP;					   // 上拉
 	GPIO_Init(GPIOG, &GPIO_InitStructure);					   // 初始化
 
+#if OV2640_FILL_LIGHT
 	// PF8初始化设置：PF8用于控制摄像头补光高亮LED灯，高电平点亮，低电平灭
 	GPIO_InitStructure.Pin = OV2640_LED_PIN;	  // PF8推挽输出
 	GPIO_InitStructure.Mode = GPIO_Mode_OUT;	  // 推挽输出
@@ -51,7 +52,6 @@ u8 BSP_OV2640_Init(void)
 	GPIO_InitStructure.Pull = GPIO_PuPd_UP;		  // 上拉
 	GPIO_Init(GPIOF, &GPIO_InitStructure);		  // 初始化
 
-#if OV2640_FILL_LIGHT
 	OV2640_LED_light = 0; // 关闭补光LED
 	OV2640_LED_light = 1; // 开启补光LED
 	OV2640_LED_light = 0; // 关闭补光LED
@@ -93,9 +93,9 @@ u8 BSP_OV2640_Init(void)
 }
 
 /**
- * @brief OV2640切换为JPEG模式
+ * @brief OV2640切换为YUV422-JPEG模式
  */
-void OV2640_JPEG_Mode(void)
+void OV2640_YUV422JPEG_Mode(void)
 {
 	u16 i = 0;
 	// 设置:YUV422格式
@@ -105,6 +105,22 @@ void OV2640_JPEG_Mode(void)
 	}
 
 	// 设置:输出JPEG数据
+	for (i = 0; i < (sizeof(ov2640_jpeg_reg_tbl) / 2); i++)
+	{
+		BSP_SCCB_WriteRegister(ov2640_jpeg_reg_tbl[i][0], ov2640_jpeg_reg_tbl[i][1]);
+	}
+}
+
+/**
+ * @brief OV2640切换为RGB565-JPEG模式
+ */
+void OV2640_RGB565JPEG_Mode(void)
+{
+	uint16_t i = 0;
+	for (i = 0; i < (sizeof(ov2640_rgb565_reg_tbl) / 2); i++)
+	{
+		BSP_SCCB_WriteRegister(ov2640_rgb565_reg_tbl[i][0], ov2640_rgb565_reg_tbl[i][1]);
+	}
 	for (i = 0; i < (sizeof(ov2640_jpeg_reg_tbl) / 2); i++)
 	{
 		BSP_SCCB_WriteRegister(ov2640_jpeg_reg_tbl[i][0], ov2640_jpeg_reg_tbl[i][1]);
@@ -502,7 +518,7 @@ uint8_t BSP_OV2640_JPEGToUART(void)
 	}
 #endif /* !__RTOS_RTTHREAD_ENABLED */
 
-	OV2640_JPEG_Mode();
+	OV2640_RGB565JPEG_Mode();
 	OV2640_OutSize_Set(jpeg_img_size_tbl[5][0], jpeg_img_size_tbl[5][1]);
 	BSP_DCMI_Start(DCMI_MODE_SNAPSHOT, (uint32_t)&jpeg_buf, JPEG_BUFFER_SIZE);
 	return SUCCESS;
@@ -564,6 +580,5 @@ void BSP_OV2640_Controller(void)
 		BSP_DCMI_Start(DCMI_MODE_SNAPSHOT, (u32)&jpeg_buf, JPEG_BUFFER_SIZE);
 		/* ! 必要延时 MIN: 50ms ! */
 		delay_ms(100);
-		__BSP_LED1_Ficker(100);
 	}
 }

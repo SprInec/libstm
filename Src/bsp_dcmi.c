@@ -66,6 +66,8 @@ const uint8_t *JPEG_SIZE_TBL[9] = {(uint8_t *)"QCIF", (uint8_t *)"QQVGA", (uint8
 								   (uint8_t *)"QVGA", (uint8_t *)"VGA", (uint8_t *)"SVGA",
 								   (uint8_t *)"XGA", (uint8_t *)"SXGA", (uint8_t *)"UXGA"};
 
+uint16_t debug_counter = 0;
+
 /**
  * @brief 初始化 DCMI GPIO 口
  */
@@ -166,10 +168,9 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 #if DCMI_USE_LCD
 		LCD_SetCursor(0, 0);
 		LCD_WriteRAM_Prepare(); // 开始写入GRAM
-		/* !< 必要延时 >! */
+		// !必要延时
 		delay_ms(10);
 #endif /* !DCMI_USE_LCD */
 	}
-	/* LED1 指示灯翻转电平状态 */
-	HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+	(debug_counter >= 65535) ? (debug_counter++) : (debug_counter = 0);
 }
