@@ -113,7 +113,7 @@ void BSP_DCMI_Start(uint32_t DCMI_Mode, uint32_t pData, uint32_t Length)
 #endif
 	HAL_DCMI_Start_DMA(&hdcmi, DCMI_Mode, pData, Length);
 	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
-	__HAL_DCMI_DISABLE_IT(&hdmi, DCMI_IT_VSYNC | DCMI_IT_LINE | DCMI_IT_OVF);
+	__HAL_DCMI_DISABLE_IT(&hdcmi, DCMI_IT_VSYNC | DCMI_IT_LINE | DCMI_IT_OVF);
 }
 
 /**
