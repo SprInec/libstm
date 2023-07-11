@@ -29,7 +29,7 @@
 #endif
 
 /* -> F407 */
-#if 1
+#if 0
 #define __BSP_STM32F4_ENABLED
 #endif
 
@@ -38,7 +38,7 @@
 #endif
 
 /* -> H7A3 */
-#if 0
+#if 1
 #define __BSP_STM32H7_ENABLED
 #endif
 
@@ -147,12 +147,12 @@
 
 /* !< DCXO >! */
 /* LMK61E07 */
-#if 1
+#if 0
 #define __BSP_LMK61E07_ENABLED
 #endif
 
 /* PE4302 */
-#if 1
+#if 0
 #define __BSP_PE4302_ENABLED
 #endif 
 
@@ -190,7 +190,7 @@
 
 /* !< CAMERA */
 /* OV2640 */
-#if 0
+#if 1
 #define __BSP_OV2640_ENABLED
 #endif
 
@@ -238,7 +238,7 @@
 
 /* !< COMMUNICATION >! */
 /* SCCB */
-#if 0
+#if 1
 #define __BSP_SCCB_ENABLED
 #endif
 
