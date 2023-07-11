@@ -575,10 +575,12 @@ void BSP_OV2640_Controller(void)
 				while ((USART3->ISR & USART_ISR_TC) == 0);
 				USART3->TDR = jpeg_file[x];
 			}
+			__BSP_LED2_Ficker(100);
 		}
-		jpeg_data_state = 2;
+		jpeg_data_state = 0;
 		BSP_DCMI_Start(DCMI_MODE_SNAPSHOT, (u32)&jpeg_buf, JPEG_BUFFER_SIZE);
 		/* ! ±ØÒªÑÓÊ± MIN: 50ms ! */
 		delay_ms(100);
+		__BSP_LED1_Ficker(100);
 	}
 }
