@@ -308,19 +308,19 @@ void WriteData_AD9959(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_
 Channel:  输出通道
 Freq:     输出频率
 ---------------------------------------*/
-void Write_frequence(uint8_t Channel, uint32_t Freq);
+void AD9959_WriteFreq(uint8_t Channel, uint32_t Freq);
 /*---------------------------------------
 函数功能：设置通道输出幅度
 Channel:  输出通道
 Ampli:    输出幅度
 ---------------------------------------*/
-void Write_Amplitude(uint8_t Channel, uint16_t Ampli);
+void AD9959_WriteAmpl(uint8_t Channel, uint16_t Ampli);
 /*---------------------------------------
 函数功能：设置通道输出相位
 Channel:  输出通道
 Phase:    输出相位,范围：0~16383(对应角度：0°~360°)
 ---------------------------------------*/
-void Write_Phase(uint8_t Channel, uint16_t Phase);
+void AD9959_WritePhase(uint8_t Channel, uint16_t Phase);
 /*---------------------------------------
 函数功能：AD9959初始化
 ---------------------------------------*/

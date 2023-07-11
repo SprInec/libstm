@@ -50,24 +50,24 @@ BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
 	uint32_t temp;
 
 	tmp_flag = __HAL_UART_GET_FLAG(&USART_HANDLE, UART_FLAG_IDLE);
-    if((tmp_flag != RESET))
-    {
-        __HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE); 
-        // temp = USART_HANDLE.Instance->SR;
-        // temp = USART_HANDLE.Instance->DR;
-        HAL_UART_DMAStop(&USART_HANDLE); // 与上两句等效
-				/* !< The user needs to declare variable "DMA_HandleTypeDef hdma_usart1_rx"
-							outside of file <usart.h> */
-				#ifdef __BSP_STM32F1_ENABLED
-        		temp  = hdma_usart2_rx.Instance->CNDTR;
-				#endif /* __BSP_STM32F1 */
-				#ifdef __BSP_STM32F4_ENABLED
-				// temp  = hdma_usart2_rx.Instance->NDTR;
-				temp = __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);	// 与上一句等效
-#endif /* __BSP_STM32F4 */
-        rx_len =  USART_RX_LEN - temp;
-        recv_end_flag = 1;
-    }
+	if ((tmp_flag != RESET))
+	{
+		__HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE);
+		// temp = USART_HANDLE.Instance->SR;
+		// temp = USART_HANDLE.Instance->DR;
+		HAL_UART_DMAStop(&USART_HANDLE); // 与上两句等效
+/* !< The user needs to declare variable "DMA_HandleTypeDef hdma_usart1_rx"
+			outside of file <usart.h> */
+#ifdef __BSP_STM32F1_ENABLED
+		temp = hdma_usart2_rx.Instance->CNDTR;
+#endif /* __BSP_STM32F1 */
+#ifdef __BSP_STM32F4_ENABLED
+		// temp  = hdma_usart2_rx.Instance->NDTR;
+		temp = __HAL_DMA_GET_COUNTER(&hdma_usart1_rx); // 与上一句等效
+#endif												   /* __BSP_STM32F4 */
+		rx_len = USART_RX_LEN - temp;
+		recv_end_flag = 1;
+	}
 	return USART_OK;
 }
 
@@ -86,20 +86,19 @@ BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
  *
  */
 
-
 /**
  *@brief	USART variable length receiving execution function.
  */
 BSP_UsartState bsp_usartVar_Conduct(void)
 {
 	_Bool uart_state = 0;
-	if(recv_end_flag == 1)
+	if (recv_end_flag == 1)
 	{
-#if 1
+#if 0
 		/* 串口接收指示灯 */
-	 	__BSP_LED1_Ficker(50);
+		__BSP_LED1_Ficker(50);
 #endif
-#if 1 
+#if 0
 		/* 返回串口接收到的数据 */
 		bsprif1("%sx\n", rx_buffer);
 #endif
@@ -107,15 +106,16 @@ BSP_UsartState bsp_usartVar_Conduct(void)
 		/* 用户自定义串口回调 */
 		bsp_usartVar_Callback(rx_buffer);
 #endif
-		for(uint8_t i=0;i<rx_len;i++)
+		for (uint8_t i = 0; i < rx_len; i++)
 		{
-			rx_buffer[i]=0;
+			rx_buffer[i] = 0;
 		}
-		rx_len=0;
-		recv_end_flag=0;
+		rx_len = 0;
+		recv_end_flag = 0;
 		uart_state = USART_OK;
-	}HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN);
-	
+	}
+	HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN);
+
 	return uart_state;
 }
 
@@ -123,16 +123,14 @@ BSP_UsartState bsp_usartVar_Conduct(void)
  *@brief	The user redefines this function to handle the information received
  *				by the serial port.
  */
-__weak void bsp_usartVar_Callback(uint8_t* str)
+__weak void bsp_usartVar_Callback(uint8_t *str)
 {
 	/* User Code */
 }
 
 #endif /* __BSP_USART_VariableReceive */
 
-
 #endif /* __BSP_USART_Receive */
-
 
 #if __BSP_USART_Transmit >= 1
 
@@ -141,21 +139,22 @@ __weak void bsp_usartVar_Callback(uint8_t* str)
  */
 int fputc(int ch, FILE *f)
 {
-  HAL_UART_Transmit(&USART_HANDLE_PRF1, (uint8_t *)&ch, 1, 0xffff);
-  return ch;
+	HAL_UART_Transmit(&USART_HANDLE_PRF1, (uint8_t *)&ch, 1, 0xffff);
+	return ch;
 }
 
+#if __BSP_USE_PRINTF
 /* bsp printf 1 */
 void bsprif1(char *fmt, ...)
 {
 	va_list va;
 	int i = 0;
 	char buffer[256];
-	
+
 	va_start(va, fmt);
 	i = vsprintf(buffer, fmt, va);
 	va_end(va);
-	HAL_UART_Transmit(&USART_HANDLE_PRF1, (uint8_t *)buffer ,i ,0XFF);
+	HAL_UART_Transmit(&USART_HANDLE_PRF1, (uint8_t *)buffer, i, 0XFF);
 }
 #if __BSP_USART_Transmit >= 2
 /* bsp printf 2 */
@@ -164,11 +163,11 @@ void bsprif2(char *fmt, ...)
 	va_list va;
 	int i = 0;
 	char buffer[256];
-	
+
 	va_start(va, fmt);
 	i = vsprintf(buffer, fmt, va);
 	va_end(va);
-	HAL_UART_Transmit(&USART_HANDLE_PRF2, (uint8_t *)buffer ,i ,0XFF);
+	HAL_UART_Transmit(&USART_HANDLE_PRF2, (uint8_t *)buffer, i, 0XFF);
 }
 #if __BSP_USART_Transmit >= 3
 /* bsp printf 3 */
@@ -177,12 +176,13 @@ void bsprif3(char *fmt, ...)
 	va_list va;
 	int i = 0;
 	char buffer[256];
-	
+
 	va_start(va, fmt);
 	i = vsprintf(buffer, fmt, va);
 	va_end(va);
-	HAL_UART_Transmit(&USART_HANDLE_PRF3, (uint8_t *)buffer ,i ,0XFF);
+	HAL_UART_Transmit(&USART_HANDLE_PRF3, (uint8_t *)buffer, i, 0XFF);
 }
+#endif
 #endif
 #endif
 #endif /* __BSP_USART_Transmit */

@@ -12,9 +12,9 @@
 
  
  /**
-	*		模拟转等量数字数组 
+	*	模拟转等量数字数组 
 	* 	data > 0	--->  1 
-	*		data = 0	--->	0
+	*	data = 0	--->	0
 	*/
 _Bool AnlogToDigit(uint16_t data[], uint16_t result[], uint16_t len)
 {

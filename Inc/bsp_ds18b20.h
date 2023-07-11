@@ -20,7 +20,7 @@
 #define HIGH 1
 #define LOW 0
 
-#define DS18B20_PIN GPIO_PIN_11
+#define DS18B20_PIN GPIO_PIN_13
 #define DS18B20_PORT GPIOB
 
 #define DS18B20_DATA_OUT(a)                                         \

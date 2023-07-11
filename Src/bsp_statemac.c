@@ -185,7 +185,6 @@ void BSP_KEY_StateTransition(void)
             }
             break;
         case KEY_DOUB_PRESSED:
-            
             default: break;
         }
     }

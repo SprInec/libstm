@@ -108,9 +108,16 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define GPIO_PuPd_DN GPIO_PULLDOWN
 
 /* GPIOSpeed_TypeDef */
-#define GPIO_Speed_10MHz GPIO_SPEED_FREQ_MEDIUM // 中速
-#define GPIO_Speed_2MHz GPIO_SPEED_FREQ_LOW     // 低速
-#define GPIO_Speed_50MHz GPIO_SPEED_FREQ_MEDIUM // 高速
+#define GPIO_Speed_10MHz GPIO_SPEED_FREQ_MEDIUM     // 中速
+#define GPIO_Speed_2MHz GPIO_SPEED_FREQ_LOW         // 低速
+#define GPIO_Speed_50MHz GPIO_SPEED_FREQ_MEDIUM     // 高速
+#define GPIO_Speed_100MHz GPIO_SPEED_FREQ_VERY_HIGH // 超高速
+
+/* FSMC_Access_Mode Typedef */
+#define FSMC_AccessMode_A FSMC_ACCESS_MODE_A
+#define FSMC_AccessMode_B FSMC_ACCESS_MODE_B
+#define FSMC_AccessMode_C FSMC_ACCESS_MODE_C
+#define FSMC_AccessMode_D FSMC_ACCESS_MODE_D
 
 #define GPIO_Init(n1, n2) HAL_GPIO_Init(n1, n2)
 

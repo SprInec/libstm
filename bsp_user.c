@@ -1,16 +1,15 @@
 /**
  * @file bsp_user.c
  * @author July (Email: JulyCub@163.com)
- * @brief User C File
+ * @brief 
  * @version 0.1
- * @date xxx
+ * @date 2023.05.11
  * 
  * @copyright Copyright (c) 2023
- * xxx
+ * 
  */
 
 #include "bsp_user.h"
-
 
 
 

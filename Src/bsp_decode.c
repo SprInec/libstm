@@ -1,127 +1,534 @@
 /**
- ******************************************************************************
- * @file		:bsp_decode.c
- * @brief		:The board support package for decode.
- * @version		:0.1.0
- * @author		:July
- * @date		:2022.06.28
- ******************************************************************************
+ * @file bsp_decode.c
+ * @author July (Email: JulyCub@163.com)
+ * @brief The board support package for decode.
+ * @version 0.1
+ * @date 2022.06.28
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
 
 #include "stdio.h"
 #include "bsp_decode.h"
 
-
- /* 二进制输出 */
-void print_binary(unsigned int number) {
-    if (number >> 1) {
-        print_binary(number >> 1);
-    }
-    putc((number & 1) ? '1' : '0', stdout);
-}
-
-/* 同步帧检测 */
-/* 1111 1111 */
-_Bool bsp_SyncDetection(unsigned int data[])
+/**
+ * @brief 16位数组转无符号浮点数
+ * @param arry 源数据，定长为16
+ * @attention 高8位整数,低8位小数
+ * @return float
+ */
+float BSP_Arry16ToUFloat(uint16_t arry[])
 {
-    unsigned char temp;
+    uint8_t temp1 = 0x00u, temp2 = 0x00u;
+    float temp3, result;
 
-    for(char i = 7, j = 0; j < 8; i--, j++)
-        temp |= data[i] << j;
-    if(temp == 0xFF)
-        return 1;
-    else
-        return 0;
-}
-
-/* 结束帧检测 */
-/* 0000 0000 */
-_Bool bsp_SyncEnd(unsigned int data[])
-{
-    unsigned int temp;
-
-    for(char i = 7, j = 0; j < 8; i--, j++)
-        temp |= data[i] << j;
-    if(temp == 0x00)
-        return 1;
-    else
-        return 0;
-}
-
-/* 接收一字节数据 */
-unsigned char bsp_SyncRx1Byte(unsigned int data[])
-{
-    unsigned int temp;
-    for(char i = 7, j = 0; j < 8; i--, j++)
-        temp |= data[i] << j;
-    return temp;
-}
-
-/* 获取定长数组 */
-void bsp_Get1ByetfromArray(unsigned int data[], unsigned int result[], char startlen, int len)
-{
-    for(char i = 0; i < len; i++){
-        result[i] = data[startlen + i];
-    }
-}
-
-/* 接收不定长数据 */
-_Bool bsp_SyncRxData(unsigned int data[], unsigned char result[])
-{
-    unsigned int temp[8];
-    result[0] = 0;
-    result[1] = 0;
-
-    bsp_Get1ByetfromArray(data, temp, 0, 8);
-    if(bsp_SyncDetection(temp))
+    for (uint8_t i = 0; i < 16; i++)
     {
-        bsp_Get1ByetfromArray(data, temp, 8, 8);
-        result[0] = bsp_SyncRx1Byte(temp);
-        bsp_Get1ByetfromArray(data, temp, 16, 8);
-        result[1] = bsp_SyncRx1Byte(temp);
-        return 1;
+        if (i < 8)
+        {
+            temp1 += arry[i];
+            temp1 <<= 1;
+        }
+        else
+        {
+            temp2 += arry[i];
+            temp2 <<= 1;
+        }
     }
-    else
-        return 0;
+    temp3 = (float)(temp2 / 100.0);
+    result = temp1 / 2 + temp3 / 2;
+
+    return result;
 }
 
-
-/* 16位数组转正浮点数 */
-/* 高8位整数 低8位小数 */
-float bsp_Arry16ToUFloat(uint16_t arry[])
+/**
+ * @brief 24位数组转无符号浮点数
+ * @param arry 源数据，定长为24
+ * @attention 高8位为2位整数,低16位位4位小数
+ * @return 转换结果
+ */
+float BSP_Arry24ToUFloat(uint8_t arry[])
 {
-	uint8_t temp1 = 0x00u, temp2 = 0x00u;
-	float temp3, result;
-	
-	for(uint8_t i = 0; i < 16; i++)
-	{
-		if(i < 8){
-			temp1 += arry[i];
-			temp1 <<= 1;
-		}
-		else{
-			temp2 += arry[i];
-			temp2 <<= 1;
-		}
-	}
-	temp3 = (float)(temp2/100.0);
-	result = temp1/2 + temp3/2;
-	
-	return result;
+    uint16_t temp = 0;
+    float result = 0;
+
+    for (uint8_t i = 0; i < 24; i++)
+    {
+        temp <<= 1;
+        temp += arry[i];
+        switch (i)
+        {
+        case 7:
+            result += temp;
+            temp = 0;
+            break;
+        case 15:
+            result += temp % 100 / 100.0;
+            temp = 0;
+            break;
+        case 23:
+            result += temp % 100 / 10000.0;
+            break;
+        default:
+            break;
+        }
+    }
+    return result;
 }
 
-/* 8位数组转正整数 */
-uint16_t	bsp_Arry8ToUInt(uint16_t arry[])
+/**
+ * @brief 归一化
+ *
+ * @param data 采样数据
+ * @param result 归一化结果
+ * @param len 采样数据长度
+ * @param threshold 阈值
+ */
+void BSP_DataNormalization(uint16_t data[], uint16_t result[], uint16_t len, uint16_t threshold)
 {
-	uint16_t temp = 0x0000u;
-	
-	for(uint8_t i = 0; i < 8; i++)
-	{
-		temp += arry[i];
-		temp <<= 1;
-	}
-	
-	return temp;
+    for (uint16_t i = 0; i < len; i++)
+    {
+        if (data[i] <= threshold)
+            result[i] = 0;
+        else
+            result[i] = 1;
+    }
 }
 
+/**
+ * @brief 检波算法
+ *
+ * @param data 源数据
+ * @param result 处理结果
+ * @param data_len 数据长度
+ * @param bitlen 位宽
+ */
+void BSP_DigitalDetector(uint16_t *data, uint16_t *result, uint16_t data_len, uint16_t bitlen)
+{
+    uint8_t lock = 0;
+    uint16_t Zeros = 0;
 
+    for (uint16_t i = 0; i < data_len - 1; i++)
+    {
+        if (*(data + i + 1) - *(data + i) == -1) /* 下降沿检测 */
+        {
+            *(result + i) = 1;
+            *(result + i + 1) = 1;
+
+            /* Zeros自锁 */
+            lock = 1;
+            while (lock)
+            {
+                i++; /* 数据地址递增 */
+                /* 上升沿检测 */
+                if (*(data + i))
+                    lock = 0; /* Zeros解锁 */
+                Zeros++;      /* 0值累加 */
+            }
+            /* 位0 */
+            if (Zeros >= bitlen)
+            {
+                for (uint16_t j = 1; j < Zeros; j++)
+                {
+                    *(result + (i - j)) = 0;
+                }
+            }
+            /* 位1 */
+            else
+            {
+                for (uint16_t j = 0; j < Zeros; j++)
+                {
+                    *(result + (i - j)) = 1;
+                }
+            }
+            Zeros = 0;
+        }
+        else
+        {
+            *(result + i) = 1;
+        }
+    }
+}
+
+/**
+ * @brief 帧数据提取
+ *
+ * @version 1.0
+ * @param data 源数据
+ * @param result 提取结果
+ * @param data_len 源数据长度
+ * @param bitlen 位宽
+ * @param headtaillen 帧头/尾宽度
+ *
+ * @return 1-提取到数据 0-未提取到数据
+ */
+uint8_t BSP_ExtractEffectiveData(uint16_t *data,
+                                 uint16_t *result,
+                                 uint16_t data_len,
+                                 uint16_t bitlen,
+                                 uint16_t headtaillen)
+{
+    uint8_t lock = 0;
+    uint16_t Ones = 0;
+    uint16_t cache = 0;
+
+    for (uint16_t i = 0; i < data_len; i++)
+    {
+        /* 帧头检测 */
+        if ((*(data + i + 1) - *(data + i)) == 1) /* 上升沿检测 */
+        {
+            /* Ones自锁 */
+            lock = 1;
+            while (lock)
+            {
+                Ones++;
+                i++;
+                if (!*(data + i)) /* 下降沿检测 */
+                    lock = 0;
+            }
+            /* 帧头判断 */
+            if (Ones > headtaillen)
+            {
+                /* 1值累加器清零 */
+                Ones = 0;
+                for (; i < data_len;)
+                {
+                    /* 帧尾检测 */
+                    if (*(data + 1)) /* 上升沿检测 */
+                    {
+                        /* Ones自锁 */
+                        lock = 1;
+                        while (lock)
+                        {
+                            Ones++;
+                            i++;
+                            if (!*(data + i)) /* 下降沿检测 */
+                                lock = 0;
+                        }
+                        /* 帧尾判断 */
+                        if (Ones > headtaillen + bitlen)
+                        {
+                            /* 数据偏移 */
+                            uint16_t excursion = Ones + cache - bitlen;
+
+                            cache += bitlen;
+                            /* 数据提取 */
+                            *(result + 0) = 2;
+                            for (uint16_t j = 1; j < cache; j++)
+                            {
+                                /* 数据提取 */
+                                *(result + j) = *(data + i - excursion + j);
+                            }
+                            *(result + cache) = 2;
+                            /* Success */
+                            return 1;
+                        }
+                        else if (Ones > headtaillen)
+                        {
+                            /* 数据偏移 */
+                            uint16_t excursion = Ones + cache;
+
+                            /* 数据提取 */
+                            *(result + 0) = 1;
+                            for (uint16_t j = 1; j < cache; j++)
+                            {
+                                /* 数据提取 */
+                                *(result + j) = *(data + i - excursion + j);
+                            }
+                            *(result + cache) = 1;
+                            /* Success */
+                            return 1;
+                        }
+                        else
+                        {
+                            /* 数据缓存 */
+                            cache += Ones;
+                            /* 1累加器清零 */
+                            Ones = 0;
+                        }
+                    }
+                    else
+                    {
+                        /* 数据缓存 */
+                        cache++;
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                /* 1累加器清零 */
+                Ones = 0;
+            }
+        }
+    }
+    /* Faile */
+    return 0;
+}
+
+/**
+ * @brief 帧数据提取
+ *
+ * @version 1.1
+ * @param data 源数据
+ * @param result 结果
+ * @param data_len 数据长度
+ * @param bitlen 位长
+ * @param headtaillen 帧头/尾宽度
+ * @return uint8_t 1-提取到数据 0-未提取到数据
+ */
+uint8_t BSP_ExtractEffectiveData_v2(uint16_t *data,
+                                    uint16_t *result,
+                                    uint16_t data_len,
+                                    uint16_t bitlen,
+                                    uint16_t headtaillen)
+{
+    uint16_t place = 0;
+    uint16_t Ones = 0;
+    uint16_t cache = 0;
+
+    while (place < data_len)
+    {
+        do
+        {
+            Ones++;
+            place++;
+            /* 下降沿判断 */
+        } while (__BSP_FALEDGE_DET(*(data + place), *(data + place + 1)));
+        if (Ones >= headtaillen)
+        {
+            /* 记录回溯锚点 */
+            cache = place;
+            /* 1累加器清零 */
+            Ones = 0;
+            /* 上升沿判断 */
+            if (__BSP_TOPEDGE_DET(*(data + place), (*(data + place + 1))))
+            {
+                do
+                {
+                    if (*(data + place))
+                        Ones++;
+                    if (Ones >= headtaillen)
+                    {
+                        // TODO:代码未写完 -> 1.帧尾判断 2.帧提取
+                        break;
+                    }
+                    /* 下降沿判断 */
+                } while (__BSP_FALEDGE_DET(*(data + place), *(data + place + 1)));
+            }
+            else
+            {
+                /* 向右滑动 */
+                place++;
+            }
+        }
+    }
+    return 0;
+}
+
+/**
+ * @brief 帧数据提取
+ *
+ * @version 1.2
+ * @param data 源数据
+ * @param result 结果
+ * @param data_len 源数据长度
+ * @param frame_len 帧长度
+ * @return uint8_t 1-提取到数据 0-未提取到数据
+ */
+uint8_t BSP_ExtractEffectiveData_v3(uint16_t *data,
+                                        uint16_t *result,
+                                        uint16_t data_len,
+                                        uint16_t frame_len)
+{
+    uint16_t place = 0;
+    
+    /* 向右滑动找到帧头 */
+    do
+    {
+        place++;
+    } while (!__BSP_FALEDGE_DET(*(data + place), *(data + place + 1)));
+    /* 帧数据提取 */
+    for (uint16_t i = 0; i < frame_len; i++)
+    {
+        result[i] = data[place + i];
+        if (place + i >= data_len){
+            /* Faile */
+            return 0;
+        }
+    }
+    /* success */
+    return 1;
+}
+
+/**
+ * @brief 数据规范化
+ *
+ * @param data 源数据
+ * @param datalen 数据长度
+ * @param bitlen 位宽
+ * @param framenum 帧长度
+ */
+void BSP_DataStandardization(uint16_t *data, uint16_t datalen, uint16_t bitlen, uint8_t framenum)
+{
+    uint16_t Adder = 0;
+
+    for (uint16_t i = 0; i < bitlen * framenum; i += bitlen)
+    {
+        for (uint16_t j = 1; j < bitlen; j++)
+        {
+            if (*(data + j + i))
+                Adder++;
+        }
+        if (Adder >= bitlen / 2)
+        {
+            for (uint16_t j = 0; j < bitlen; j++)
+                *(data + j + i) = 1;
+        }
+        else
+        {
+            for (uint16_t j = 0; j < bitlen; j++)
+                *(data + j + i) = 0;
+        }
+        Adder = 0;
+    }
+}
+
+/**
+ * @brief 数组定幅采样
+ *
+ * @param data 源数据
+ * @param result 结果
+ * @param datalen 数据长度
+ * @param bitlen 位宽
+ * @param framenum 帧长度
+ */
+void BSP_ReadcodeFromArry(uint16_t *data, uint8_t *result, uint16_t datalen, uint16_t bitlen, uint8_t framenum)
+{
+    uint16_t i = 0, j = 0;
+
+    for (i = bitlen / 2; i < datalen; i += bitlen)
+    {
+        if (*(data + i))
+            *(result + j) = 1;
+        else
+            *(result + j) = 0;
+        j++;
+    }
+}
+
+/**
+ * @brief 边沿对累积清零算法
+ * @param data 源数据
+ * @param result 结果
+ * @param datalen 数据长度
+ * @param threshold 阈值
+ */
+void BSP_CumMonitorEdgePairs(uint16_t *data, uint16_t *result, uint16_t datalen, uint16_t threshold)
+{
+    uint16_t place = 0;
+    uint16_t cache = 0;
+    uint16_t sum = 0;
+
+    while (place < datalen)
+    {
+        /* 上升沿检测 */
+        if (__BSP_TOPEDGE_DET(*(data + place), *(data + place + 1)))
+        {
+            /* 回溯锚点记录 */
+            cache = place;
+            do
+            {
+                place++;                                                        /* 向右滑动 */
+                sum++;                                                          /* 边沿对点数累加 */
+            } while (!__BSP_TOPEDGE_DET(*(data + place), *(data + place + 1))); /* 下一个上升沿截至 */
+            /* 回溯尺度计算 */
+            cache = place - cache;
+            /* 阈值比较 */
+            if (sum >= threshold)
+            {
+                /* 回溯清零 */
+                for (uint16_t i = 0; i <= cache; i++)
+                {
+                    result[place - cache + i] = 0;
+                }
+                /* 累加器清零 */
+                sum = 0;
+            }
+            else
+            {
+                /* 回溯置一 */
+                for (uint16_t i = 0; i <= cache; i++)
+                {
+                    result[place - cache + i] = 1;
+                }
+                /* 累加器清零 */
+                sum = 0;
+            }
+        }
+        else
+        {
+            /* 数值存储 */
+            result[place] = data[place];
+            /* 向右滑动 */
+            place++;
+        }
+    }
+}
+
+/**
+ * @brief 和值规范算法
+ * 
+ * @param data 源数据
+ * @param result 结果
+ * @param data_len 源数据长度
+ * @param bits 位数
+ * @param threshold 阈值
+ */
+void BSP_SumValueStandard(uint16_t *data, uint16_t *result, uint16_t data_len, uint8_t bits, uint16_t threshold)
+{
+    /* 位宽 */
+    const uint16_t bit_len = data_len / bits;
+    /* 和值 */
+    uint16_t sum = 0;
+    /* 计数器 */
+    uint16_t counter = 0;
+    /* 当前位数 */
+    uint16_t nowbit = 0;
+
+    for (uint16_t i = 0; i < data_len; i++)
+    {
+        /* 单位宽求和 */
+        if (counter++ < bit_len)
+        {
+            sum += data[i];
+        }
+        else
+        {
+            /* 计数器清零 */
+            counter = 0;
+            /* 阈值判断 */
+            if (sum < threshold)
+            {
+                /* 回溯置 0 */
+                for (uint16_t j = nowbit * bit_len; j < (nowbit + 1) * bit_len; j++)
+                {
+                    result[j] = 0;
+                }
+            }
+            else
+            {
+                /* 回溯置 1 */
+                for (uint16_t j = nowbit * bit_len; j < (nowbit + 1) * bit_len; j++)
+                {
+                    result[j] = 1;
+                }
+            }
+            /* 和值清零 */
+            sum = 0;
+            /* 当前位数加一 */
+            nowbit++;
+        }
+    }
+}

@@ -7,12 +7,12 @@
  * @date		:2022.07.05
  ******************************************************************************
  * @pinset
- *					PB10		-->	DIN
- *					PB11		-->	SCK
- *					PE14		-->	SYN
- *					PE15		-->	CLR
- *					PE12		-->	LD
- *					NONE		--> NC
+ *				PB10		-->	DIN
+ *				PB11		-->	SCK
+ *				PE14		-->	SYN
+ *				PE15		-->	CLR
+ *				PE12		-->	LD
+ *				NONE		--> NC
  *
  ******************************************************************************
  */
@@ -83,23 +83,60 @@ uint16_t TriangleWave_Value[255]={
 	5631,5119,4607,4095,3583,3071,2559,2047,1535,1023,511,
 };
 
-void DAC8563_IO_Init(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
+/* -700ms - +700ms 三角波 */
+uint16_t TriangleWave_Value2[255] = {
+	20700, 20879, 21059, 21239, 21418, 21598, 21778, 21957, 22137,
+	22317, 22496, 22676, 22856, 23035, 23215, 23395, 23575, 23754, 
+	23934, 24114, 24293, 24473, 24653, 24832, 25012, 25192, 25371, 
+	25551, 25731, 25910, 26090, 26270, 26450, 26629, 26809, 26989, 
+	27168, 27348, 27528, 27707, 27887, 28067, 28246, 28426, 28606, 
+	28785, 28965, 29145, 29325, 29504, 29684, 29864, 30043, 30223, 
+	30403, 30582, 30762, 30942, 31121, 31301, 31481, 31660, 31840, 
+	32020, 32200, 32379, 32559, 32739, 32918, 33098, 33278, 33457, 
+	33637, 33817, 33996, 34176, 34356, 34535, 34715, 34895, 35075, 
+	35254, 35434, 35614, 35793, 35973, 36153, 36332, 36512, 36692, 
+	36871, 37051, 37231, 37410, 37590, 37770, 37950, 38129, 38309, 
+	38489, 38668, 38848, 39028, 39207, 39387, 39567, 39746, 39926, 
+	40106, 40285, 40465, 40645, 40825, 41004, 41184, 41364, 41543, 
+	41723, 41903, 42082, 42262, 42442, 42621, 42801, 42981, 43160, 
+	43340, 43520, 43700, 43520, 43340, 43160, 42981, 42801, 42621, 
+	42442, 42262, 42082, 41903, 41723, 41543, 41364, 41184, 41004, 
+	40825, 40645, 40465, 40285, 40106, 39926, 39746, 39567, 39387, 
+	39207, 39028, 38848, 38668, 38489, 38309, 38129, 37950, 37770, 
+	37590, 37410, 37231, 37051, 36871, 36692, 36512, 36332, 36153, 
+	35973, 35793, 35614, 35434, 35254, 35075, 34895, 34715, 34535, 
+	34356, 34176, 33996, 33817, 33637, 33457, 33278, 33098, 32918, 
+	32739, 32559, 32379, 32200, 32020, 31840, 31660, 31481, 31301, 
+	31121, 30942, 30762, 30582, 30403, 30223, 30043, 29864, 29684, 
+	29504, 29325, 29145, 28965, 28785, 28606, 28426, 28246, 28067, 
+	27887, 27707, 27528, 27348, 27168, 26989, 26809, 26629, 26450, 
+	26270, 26090, 25910, 25731, 25551, 25371, 25192, 25012, 24832, 
+	24653, 24473, 24293, 24114, 23934, 23754, 23575, 23395, 23215, 
+	23035, 22856, 22676, 22496, 22317, 22137, 21957, 21778, 21598, 
+	21418, 21239, 21059};
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOE_CLK_ENABLE();
+uint16_t TriangleWave_Value3[36] = {
+	20700, 21977, 23255, 24533, 25811, 27088, 28366, 29644, 30922, 
+	32199, 33477, 34755, 36033, 37311, 38588, 39866, 41144, 42422, 
+	43700, 42422, 41144, 39866, 38588, 37311, 36033, 34755, 33477, 
+	32199, 30922, 29644, 28366, 27088, 25811, 24533, 23255, 21977};
 
-	GPIO_InitStructure.Pin = GPIO_PIN_10 | GPIO_PIN_11;
-	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	GPIO_InitStructure.Pin = GPIO_PIN_12 | GPIO_PIN_14 | GPIO_PIN_15;
-	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	HAL_GPIO_Init(GPIOE, &GPIO_InitStructure);
-	LDAC_H;
+void DAC8563_IO_Init(void){GPIO_InitTypeDef GPIO_InitStructure;
+
+__HAL_RCC_GPIOB_CLK_ENABLE();
+__HAL_RCC_GPIOE_CLK_ENABLE();
+
+GPIO_InitStructure.Pin = GPIO_PIN_10 | GPIO_PIN_11;
+GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
+GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+GPIO_InitStructure.Pin = GPIO_PIN_12 | GPIO_PIN_14 | GPIO_PIN_15;
+GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
+GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+HAL_GPIO_Init(GPIOE, &GPIO_InitStructure);
+LDAC_H;
 }
 
 void DAC8563_WRITE(uint8_t cmd, uint16_t data)
@@ -152,13 +189,7 @@ void DAC8563_Init(void)
 	DAC8563_WRITE(CMD_GAIN, DATA_GAIN_B2_A1);				  // Set Gains
 }
 
-//=============================================
-//
-//	设置并更新DAC输出电压（更改模块跳线帽及设置DAC8563内部增益 可设置不同输出范围 ）
-//
-//	参数：data_a为A路输出，data_b为B路输出
-//
-//=============================================
+
 uint16_t DAC8563_NumChangeA(float num)
 {
 	uint16_t result = 0;
@@ -185,12 +216,31 @@ uint16_t DAC8563_NumChangeB(float num)
 	return result;
 }
 
+/**
+ * @brief DAC Output Pattern1
+ * @param vlotA 0-10V -> 0.00 - 10.00
+ * @param vlotB -10-+10V -> -10.00 - +10.00
+ */
 void DAC8563_OutPutAB(float vlotA, float vlotB)
 {
 	uint16_t dataA, dataB;
 
 	dataA = DAC8563_NumChangeA(vlotA);
 	dataB = DAC8563_NumChangeB(vlotB);
+	DAC8563_WRITE(CMD_SETA_UPDATEA, dataA);
+	DAC8563_WRITE(CMD_SETB_UPDATEB, dataB);
+	LDAC_L;
+	delay_us(4);
+	LDAC_H;
+}
+
+/**
+ * @brief DAC Output Pattern1
+ * @param dataA 0-10V -> 0-65535
+ * @param dataB -10-+10V ->0-65535
+ */
+void DAC8563_OutPutAB2(uint16_t dataA, uint16_t dataB)
+{
 	DAC8563_WRITE(CMD_SETA_UPDATEA, dataA);
 	DAC8563_WRITE(CMD_SETB_UPDATEB, dataB);
 	LDAC_L;

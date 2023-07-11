@@ -41,7 +41,6 @@ void OLED_WR_DATA(uint8_t data)
 void OLED_Init(void)
 {
 	HAL_Delay(200);
-
 	WriteCmd();
 }
 // «Â∆¡

@@ -7,8 +7,19 @@
  * @date			:2022.07.05
  ******************************************************************************
  */
- 
+
 #include "bsp_math.h"
+
+/**
+ * @brief 正弦码表生成器
+ * @param points 点数 
+ * @param result 码表
+ */
+void bsp_sin(uint16_t points, float *result)
+{
+    for (uint16_t i = 0; i < points; i++)
+        *(result + i) = sin((float)(PI / (points / 2.0f)) * i);
+}
 
 /**
  * @brief 自相关函数

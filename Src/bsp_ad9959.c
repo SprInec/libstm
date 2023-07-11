@@ -305,7 +305,7 @@ void WriteData_AD9959(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_
 Channel:  输出通道
 Freq:     输出频率
 ---------------------------------------*/
-void Write_frequence(uint8_t Channel, uint32_t Freq)
+void AD9959_WriteFreq(uint8_t Channel, uint32_t Freq)
 {
 	uint8_t CFTW0_DATA[4] = {0x00, 0x00, 0x00, 0x00}; // 中间变量
 	uint32_t Temp;
@@ -340,7 +340,7 @@ void Write_frequence(uint8_t Channel, uint32_t Freq)
 Channel:  输出通道
 Ampli:    输出幅度
 ---------------------------------------*/
-void Write_Amplitude(uint8_t Channel, uint16_t Ampli)
+void AD9959_WriteAmpl(uint8_t Channel, uint16_t Ampli)
 {
 	uint16_t A_temp;						  //=0x23ff;
 	uint8_t ACR_DATA[3] = {0x00, 0x00, 0x00}; // default Value = 0x--0000 Rest = 18.91/Iout
@@ -377,7 +377,7 @@ void Write_Amplitude(uint8_t Channel, uint16_t Ampli)
 Channel:  输出通道
 Phase:    输出相位,范围：0~16383(对应角度：0°~360°)
 ---------------------------------------*/
-void Write_Phase(uint8_t Channel, uint16_t Phase)
+void AD9959_WritePhase(uint8_t Channel, uint16_t Phase)
 {
 	uint16_t P_temp = 0;
 	P_temp = (uint16_t)Phase;
@@ -431,19 +431,19 @@ void AD9959_Init(void)
 #endif
 
 	// 写入初始频率
-	Write_frequence(3, SinFre[3]);
-	Write_frequence(0, SinFre[0]);
-	Write_frequence(1, SinFre[1]);
-	Write_frequence(2, SinFre[2]);
+	AD9959_WriteFreq(3, SinFre[3]);
+	AD9959_WriteFreq(0, SinFre[0]);
+	AD9959_WriteFreq(1, SinFre[1]);
+	AD9959_WriteFreq(2, SinFre[2]);
 
-	Write_Phase(3, SinPhr[3]);
-	Write_Phase(0, SinPhr[0]);
-	Write_Phase(1, SinPhr[1]);
-	Write_Phase(2, SinPhr[2]);
+	AD9959_WritePhase(3, SinPhr[3]);
+	AD9959_WritePhase(0, SinPhr[0]);
+	AD9959_WritePhase(1, SinPhr[1]);
+	AD9959_WritePhase(2, SinPhr[2]);
 
-	Write_Amplitude(3, SinAmp[3]);
-	Write_Amplitude(0, SinAmp[0]);
-	Write_Amplitude(1, SinAmp[1]);
-	Write_Amplitude(2, SinAmp[2]);
+	AD9959_WriteAmpl(3, SinAmp[3]);
+	AD9959_WriteAmpl(0, SinAmp[0]);
+	AD9959_WriteAmpl(1, SinAmp[1]);
+	AD9959_WriteAmpl(2, SinAmp[2]);
 }
 #endif

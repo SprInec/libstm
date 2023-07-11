@@ -76,41 +76,41 @@
 
 #ifdef __BSP_STM32F4_ENABLED
 
-#define GPIOA_IDR_Addr (GPIOA_BASE + 10)
-#define GPIOB_IDR_Addr (GPIOB_BASE + 10)
-#define GPIOC_IDR_Addr (GPIOC_BASE + 10)
-#define GPIOD_IDR_Addr (GPIOD_BASE + 10)
-#define GPIOE_IDR_Addr (GPIOE_BASE + 10)
-#define GPIOF_IDR_Addr (GPIOF_BASE + 10)
-#define GPIOG_IDR_Addr (GPIOG_BASE + 10)
+#define GPIOA_IDR_Addr (GPIOA_BASE + 0x10)
+#define GPIOB_IDR_Addr (GPIOB_BASE + 0x10)
+#define GPIOC_IDR_Addr (GPIOC_BASE + 0x10)
+#define GPIOD_IDR_Addr (GPIOD_BASE + 0x10)
+#define GPIOE_IDR_Addr (GPIOE_BASE + 0x10)
+#define GPIOF_IDR_Addr (GPIOF_BASE + 0x10)
+#define GPIOG_IDR_Addr (GPIOG_BASE + 0x10)
 
-#define GPIOA_ODR_Addr (GPIOA_BASE + 14)
-#define GPIOB_ODR_Addr (GPIOB_BASE + 14)
-#define GPIOC_ODR_Addr (GPIOC_BASE + 14)
-#define GPIOD_ODR_Addr (GPIOD_BASE + 14)
-#define GPIOE_ODR_Addr (GPIOE_BASE + 14)
-#define GPIOF_ODR_Addr (GPIOF_BASE + 14)
-#define GPIOG_ODR_Addr (GPIOG_BASE + 14)
+#define GPIOA_ODR_Addr (GPIOA_BASE + 0x14)
+#define GPIOB_ODR_Addr (GPIOB_BASE + 0x14)
+#define GPIOC_ODR_Addr (GPIOC_BASE + 0x14)
+#define GPIOD_ODR_Addr (GPIOD_BASE + 0x14)
+#define GPIOE_ODR_Addr (GPIOE_BASE + 0x14)
+#define GPIOF_ODR_Addr (GPIOF_BASE + 0x14)
+#define GPIOG_ODR_Addr (GPIOG_BASE + 0x14)
 
 #endif
 
 #ifdef __BSP_STM32H7_ENABLED
 
-#define GPIOA_IDR_Addr (GPIOA_BASE + 10)
-#define GPIOB_IDR_Addr (GPIOB_BASE + 10)
-#define GPIOC_IDR_Addr (GPIOC_BASE + 10)
-#define GPIOD_IDR_Addr (GPIOD_BASE + 10)
-#define GPIOE_IDR_Addr (GPIOE_BASE + 10)
-#define GPIOF_IDR_Addr (GPIOF_BASE + 10)
-#define GPIOG_IDR_Addr (GPIOG_BASE + 10)
+#define GPIOA_IDR_Addr (GPIOA_BASE + 0x10)
+#define GPIOB_IDR_Addr (GPIOB_BASE + 0x10)
+#define GPIOC_IDR_Addr (GPIOC_BASE + 0x10)
+#define GPIOD_IDR_Addr (GPIOD_BASE + 0x10)
+#define GPIOE_IDR_Addr (GPIOE_BASE + 0x10)
+#define GPIOF_IDR_Addr (GPIOF_BASE + 0x10)
+#define GPIOG_IDR_Addr (GPIOG_BASE + 0x10)
 
-#define GPIOA_ODR_Addr (GPIOA_BASE + 14)
-#define GPIOB_ODR_Addr (GPIOB_BASE + 14)
-#define GPIOC_ODR_Addr (GPIOC_BASE + 14)
-#define GPIOD_ODR_Addr (GPIOD_BASE + 14)
-#define GPIOE_ODR_Addr (GPIOE_BASE + 14)
-#define GPIOF_ODR_Addr (GPIOF_BASE + 14)
-#define GPIOG_ODR_Addr (GPIOG_BASE + 14)
+#define GPIOA_ODR_Addr (GPIOA_BASE + 0x14)
+#define GPIOB_ODR_Addr (GPIOB_BASE + 0x14)
+#define GPIOC_ODR_Addr (GPIOC_BASE + 0x14)
+#define GPIOD_ODR_Addr (GPIOD_BASE + 0x14)
+#define GPIOE_ODR_Addr (GPIOE_BASE + 0x14)
+#define GPIOF_ODR_Addr (GPIOF_BASE + 0x14)
+#define GPIOG_ODR_Addr (GPIOG_BASE + 0x14)
 
 #endif
 
@@ -139,5 +139,11 @@
 
 #define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) // 输出
 #define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  // 输入
+
+/* 软件复位 */
+#define __BSP_SOFTWARE_RST() {\
+      __set_FAULTMASK(1);\
+      NVIC_SystemReset();\
+}
 
 #endif

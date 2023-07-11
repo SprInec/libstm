@@ -58,7 +58,7 @@ void SDA_Output( uint16_t val )
     }
     else
     {
-        GPIOB->BRR |= GPIO_PIN_7;
+        GPIOB->ODR |= GPIO_PIN_7;
     }
 }
 
@@ -75,7 +75,7 @@ void SCL_Output( uint16_t val )
     }
     else
     {
-        GPIOB->BRR |= GPIO_PIN_6;
+        GPIOB->ODR |= GPIO_PIN_6;
     }
 }
 

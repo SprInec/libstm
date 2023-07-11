@@ -83,9 +83,13 @@
 
 extern uint16_t SineWave_Value[];
 extern uint16_t TriangleWave_Value[];
+extern uint16_t TriangleWave_Value2[];
+extern uint16_t TriangleWave_Value3[];
+
 void DAC8563_IO_Init(void);
 void DAC8563_Init(void);
 void DAC8563_WRITE(uint8_t cmd, uint16_t data);
 void DAC8563_OutPutAB(float vlotA, float vlotB);
+void DAC8563_OutPutAB2(uint16_t dataA, uint16_t dataB);
 
 #endif

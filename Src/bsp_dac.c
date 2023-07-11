@@ -7,11 +7,11 @@
  * @date		:2022.06.27
  ******************************************************************************
  */
- 
+
+#ifdef __BSP_DAC_ENABLED
 #include "bsp_dac.h"
 #include "bsp_dac_code.h"
  
-
 #if		LisaruImage
 uint16_t lisaru_counts = 0;
 #endif
@@ -58,3 +58,4 @@ void bsp_DAC_TriggerTim(void)
     Error_Handler();
   }
 }
+#endif

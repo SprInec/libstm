@@ -8,10 +8,10 @@
  ******************************************************************************
  * @chip		:STM32
  * @pinset	:
- *							GPIOB_PIN_15 	---> FSYNC
- *							GPIOB_PIN_14 	---> SCK
- *							GPIOB_PIN_13 	---> DAT
- *							GPIOB_PIN_12	---> CS
+ *							GPIOE_PIN_0 	---> FSYNC
+ *							GPIOE_PIN_1 	---> SCK
+ *							GPIOE_PIN_2 	---> DAT
+ *							GPIOE_PIN_3   	---> CS
  *
  * @if MULT
  *							GPIOB_PIN_15 	---> FSYNC1
@@ -69,14 +69,14 @@ void AD9833_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
+	__HAL_RCC_GPIOE_CLK_ENABLE();
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_RESET);
 
-	GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
+	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 }
 
 /**

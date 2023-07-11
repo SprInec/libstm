@@ -8,10 +8,10 @@
  ******************************************************************************
  * @chip		:STM32
  * @pinset	:
- *							GPIOB_PIN_15 	---> FSYNC
- *							GPIOB_PIN_14 	---> SCK
- *							GPIOB_PIN_13 	---> DAT
- *							GPIOB_PIN_12	---> CS
+ *							GPIOE_PIN_0 	---> FSYNC
+ *							GPIOE_PIN_1 	---> SCK
+ *							GPIOE_PIN_2 	---> DAT
+ *							GPIOE_PIN_3   	---> CS
  *
  * @if MULT
  *							GPIOB_PIN_15 	---> FSYNC1
@@ -32,8 +32,8 @@
 
 #include "bsp_config.h"
 
-/* ===================================== */
-#define AD9833_DEMULT 1
+/* ============== 双AD9833 ============= */
+#define AD9833_DEMULT 1 /* 1->单 0->双 */
 /* ===================================== */
 
 /* -@- */
@@ -61,10 +61,10 @@
 
 #if AD9833_DEMULT
 /*端口定义 */
-#define FSY(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, n)
-#define SCK(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, n)
-#define DAT(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, n)
-#define CS(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, n)
+#define FSY(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, n)
+#define SCK(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, n)
+#define DAT(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, n)
+#define CS(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, n)
 
 void AD9833_Init(void);
 void AD9833_WaveSeting(double frequence, unsigned int frequence_SFR, unsigned int WaveMode, unsigned int Phase);

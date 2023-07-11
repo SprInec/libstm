@@ -102,24 +102,26 @@ extern uint16_t hmi_point;
 extern uint16_t hmi_point_counts;
 
 /* 指令结束帧 */
-#define __prifend bsprif1("\xff\xff\xff")
+#define __prifend1 bsprif1("\xff\xff\xff")
+#define __prifend2 bsprif2("\xff\xff\xff")
+#define __prifend3 bsprif3("\xff\xff\xff")
 /* 切换页面 */
 #define __switchpage(__PAGE__)                     \
 	{                                              \
 		bsprif1("page %d", hmi_page = (__PAGE__)); \
-		__prifend;                                 \
+		__prifend1;                                 \
 	}
 /* 曲线控件增加一个点 */
 #define __sendpoint(__ID__, __CHNL__, __POINT__)                                                    \
 	{                                                                                               \
 		bsprif1("add %d,%d,%d", hmi_id = (__ID__), hmi_chnl = (__CHNL__), hmi_point = (__POINT__)); \
-		__prifend;                                                                                  \
+		__prifend1;                                                                                  \
 	}
 /* 曲线控件添加多个点(透传) */
 #define __sendpoints(__ID__, __CHNL__, __COUNT__)                                                           \
 	{                                                                                                       \
 		bsprif1("addt %d,%d,%d", hmi_id = (__ID__), hmi_chnl = (__CHNL__), hmi_point_counts = (__COUNT__)); \
-		__prifend;                                                                                          \
+		__prifend1;                                                                                          \
 	}
 
 /* HMI串口指令接收 */

@@ -29,13 +29,16 @@
 /* -@- */
 #if 0
 #define __BSP_USART_Receive
-#if 0
+#if 1
 #define __BSP_USART_VariableReceive
 #endif
 #endif
 #if 1
 #define __BSP_USART_Transmit 1
-#endif
+#if 1
+#define __BSP_USE_PRINTF 0
+#endif /* ！__BSP_USE_PRINTF */
+#endif /* ！__BSP_USART_Transmit */
 /* Select the function END */
 
 typedef enum
@@ -46,9 +49,9 @@ typedef enum
 
 #ifdef __BSP_USART_Receive
 
-#if __BSP_USART_VariableReceive
+#ifdef __BSP_USART_VariableReceive
 #define USART_RX_LEN 200
-#define USART_HANDLE huart2
+#define USART_HANDLE huart1
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;

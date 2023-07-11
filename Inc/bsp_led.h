@@ -96,6 +96,6 @@
 #endif
 #endif
 
-void bsp_led_Init(void);
+void BSP_LED_Init(void);
 
 #endif /* __BSP_LED_H__ */

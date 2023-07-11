@@ -1,7 +1,7 @@
 /**
  * @file bsp_user.h
  * @author July (Email: JulyCub@163.com)
- * @brief User H File
+ * @brief
  * @version 0.1
  * @date xxx
  *

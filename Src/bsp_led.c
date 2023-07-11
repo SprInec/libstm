@@ -12,7 +12,7 @@
 #include "bsp_led.h"
 
 #ifdef __BSP_STM32F4_ENABLED
-void bsp_led_Init(void)
+void BSP_LED_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -29,7 +29,7 @@ void bsp_led_Init(void)
 #endif
 
 #ifdef __BSP_STM32H7_ENABLED
-void bsp_led_Init(void)
+void BSP_LED_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
