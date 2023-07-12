@@ -111,9 +111,8 @@ void BSP_DCMI_Start(uint32_t DCMI_Mode, uint32_t pData, uint32_t Length)
 		LCD_WriteRAM_Prepare();
 	}
 #endif
+	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IER_FRAME_IE);
 	HAL_DCMI_Start_DMA(&hdcmi, DCMI_Mode, pData, Length);
-	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
-	__HAL_DCMI_DISABLE_IT(&hdcmi, DCMI_IT_VSYNC | DCMI_IT_LINE | DCMI_IT_OVF);
 }
 
 /**
@@ -139,13 +138,16 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 		{
 #ifdef __BSP_STM32H7_ENABLED
 			/* 停止DMA数据流传输 */
-			__HAL_DMA_DISABLE(&hdma_dcmi_pssi);
+			// __HAL_DMA_DISABLE(&hdma_dcmi_pssi);
+			HAL_DCMI_Suspend(hdcmi);
+			HAL_DCMI_Stop(hdcmi);
+
 			/* 获取当前帧数据长度 */
 			jpeg_data_len = JPEG_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_dcmi_pssi);
 			/* 重新给DMA传输数据量赋值 */
 			// __HAL_DMA_SET_COUNTER(&hdma_dcmi, JPEG_BUFFER_SIZE);
 			/* 开启DMA数据流传输 */
-			__HAL_DMA_ENABLE(&hdma_dcmi_pssi);
+			// __HAL_DMA_ENABLE(&hdma_dcmi_pssi);
 #else
 			/* 停止DMA数据流传输 */
 			__HAL_DMA_DISABLE(&hdma_dcmi);

@@ -61,11 +61,15 @@ u8 BSP_OV2640_Init(void)
 	OV2640_PWDN(0); // POWER ON
 	delay_ms(10);
 	OV2640_RST(0);									  // 复位OV2640
+	delay_ms(200);
 	OV2640_RST(1);									  // 结束复位
+	delay_ms(200);
+
 	BSP_SCCB_Init();								  // 初始化SCCB 的IO口
 	BSP_SCCB_WriteRegister(OV2640_DSP_RA_DLMT, 0x01); // 操作sensor寄存器
 	BSP_SCCB_WriteRegister(OV2640_SENSOR_COM7, 0x80); // 软复位OV2640
 	delay_ms(50);
+	
 	reg = BSP_SCCB_ReadRegister(OV2640_SENSOR_MIDH); // 读取厂家ID 高八位
 	reg <<= 8;
 	reg |= BSP_SCCB_ReadRegister(OV2640_SENSOR_MIDL); // 读取厂家ID 低八位
