@@ -138,8 +138,9 @@ typedef enum ovxmode
 #define OV2640_SENSOR_HISTO_LOW  0x61
 #define OV2640_SENSOR_HISTO_HIGH 0x62
 
-u8 BSP_OV2640_Init(void);  
-void OV2640_JPEG_Mode(void);
+u8 BSP_OV2640_Init(void);
+void OV2640_YUV422JPEG_Mode(void);
+void OV2640_RGB565JPEG_Mode(void);
 void OV2640_RGB565_Mode(void);
 void OV2640_Auto_Exposure(u8 level);
 void OV2640_Light_Mode(u8 mode);
