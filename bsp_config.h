@@ -136,7 +136,7 @@
 
 /* !< PLL >! */
 /* ADF4351 */
-#if 0
+#if 1
 #define __BSP_ADF4351_ENABLED
 #endif
 
@@ -179,7 +179,7 @@
 #endif
 
 /* HMI */
-#if 0
+#if 1
 #define __BSP_HMI_ENABLED
 #endif
 
