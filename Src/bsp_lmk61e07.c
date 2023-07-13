@@ -86,8 +86,8 @@ void BSP_LMK61E07_WriteEEPROM(void)
     BSP_LMK61E07_WriteREG(R56, 0x00);
 }
 
-# TODO: Complete the code
-void BSP_LMK61E07_SetFreqency()
+// TODO: Complete the code
+void BSP_LMK61E07_SetFreqency(void)
 {
 
 }

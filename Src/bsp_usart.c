@@ -1,11 +1,12 @@
-/*
- ******************************************************************************
- * @file		:bsp_usart.c
- * @brief		:The board support package for USART.
- * @version		:0.1.0
- * @author		:July
- * @date		:2022.06.25
- ******************************************************************************
+/**
+ * @file bsp_usart.c
+ * @author July (Email: JulyCub@163.com)
+ * @brief The support for UART devices
+ * @version 0.1
+ * @date 2022.06.25
+ * 
+ * @copyright Copyright (c) 2023
+ * 
  */
 
 #include "bsp_usart.h"
@@ -22,7 +23,6 @@ volatile uint8_t recv_end_flag = 0;
 uint8_t rx_buffer[USART_RX_LEN];
 
 extern DMA_HandleTypeDef hdma_usart1_rx;
-extern DMA_HandleTypeDef hdma_usart2_rx;
 #endif
 /* Variable declarations END */
 
@@ -44,7 +44,7 @@ __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  * This function need the users to call it at function "USARTX_IRQHandler()"
  * in the file <stm32f1xx_it.c> or <stm32f4xx_it.c>.
  */
-BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
+BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void)
 {
 	uint32_t tmp_flag = 0;
 	uint32_t temp;
@@ -89,22 +89,22 @@ BSP_UsartState bsp_usartVar_ExtraIRQHandler(void)
 /**
  *@brief	USART variable length receiving execution function.
  */
-BSP_UsartState bsp_usartVar_Conduct(void)
+BSP_UsartState BSP_UsartVar_Conduct(void)
 {
 	_Bool uart_state = 0;
 	if (recv_end_flag == 1)
 	{
-#if 0
+#if 1
 		/* 串口接收指示灯 */
 		__BSP_LED1_Ficker(50);
 #endif
 #if 0
 		/* 返回串口接收到的数据 */
-		bsprif1("%sx\n", rx_buffer);
+		bsprif1("%s\n", rx_buffer);
 #endif
 #if 1
 		/* 用户自定义串口回调 */
-		bsp_usartVar_Callback(rx_buffer);
+		BSP_UsartVar_Callback(rx_buffer);
 #endif
 		for (uint8_t i = 0; i < rx_len; i++)
 		{
@@ -123,7 +123,7 @@ BSP_UsartState bsp_usartVar_Conduct(void)
  *@brief	The user redefines this function to handle the information received
  *				by the serial port.
  */
-__weak void bsp_usartVar_Callback(uint8_t *str)
+__weak void BSP_UsartVar_Callback(uint8_t *str)
 {
 	/* User Code */
 }
@@ -143,7 +143,7 @@ int fputc(int ch, FILE *f)
 	return ch;
 }
 
-#if __BSP_USE_PRINTF
+#ifdef __BSP_USE_PRINTF
 /* bsp printf 1 */
 void bsprif1(char *fmt, ...)
 {

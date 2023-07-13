@@ -27,7 +27,7 @@
  * in file "bsp_config.h".
  */
 /* -@- */
-#if 0
+#if 1
 #define __BSP_USART_Receive
 #if 1
 #define __BSP_USART_VariableReceive
@@ -36,7 +36,7 @@
 #if 1
 #define __BSP_USART_Transmit 1
 #if 1
-#define __BSP_USE_PRINTF 0
+#define __BSP_USE_PRINTF
 #endif /* ！__BSP_USE_PRINTF */
 #endif /* ！__BSP_USART_Transmit */
 /* Select the function END */
@@ -51,21 +51,21 @@ typedef enum
 
 #ifdef __BSP_USART_VariableReceive
 #define USART_RX_LEN 200
-#define USART_HANDLE huart1
+#define USART_HANDLE huart2
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;
 extern uint8_t rx_buffer[USART_RX_LEN];
 
-BSP_UsartState bsp_usartVar_ExtraIRQHandler(void);
-BSP_UsartState bsp_usartVar_Conduct(void);
-void bsp_usartVar_Callback(uint8_t *str);
+BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void);
+BSP_UsartState BSP_UsartVar_Conduct(void);
+void BSP_UsartVar_Callback(uint8_t *str);
 #endif
 
 #endif /* __BSP_USART_Receive */
 
 #if __BSP_USART_Transmit >= 1
-#define USART_HANDLE_PRF1 huart3
+#define USART_HANDLE_PRF1 huart1
 #if __BSP_USART_Transmit >= 2
 #define USART_HANDLE_PRF2 huart2
 #if __BSP_USART_Transmit >= 3

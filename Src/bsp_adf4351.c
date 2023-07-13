@@ -1,19 +1,41 @@
-/**********************************************************
-					   康威电子
+/**
+ * @file bsp_adf4351.c
+ * @author July (Email: JulyCub@163.com)
+ * @brief ADF4351 DRIVER
+ * @version 0.1
+ * @date 2023.07.13
+ * @attention ADF4351正弦波点频输出，范围35M-4400M，步进0.1M
+ * @pinset 
+ * 			LE   ->  PC9
+ * 			DATA ->  PC10
+ * 			CLK  ->  PC11
+ * 			CE   ->  PC12
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
-功能：ADF4351正弦波点频输出，范围35M-4400M，步进0.1M，stm32f103rct6控制
-			显示：12864
-接口：CLK-PC11 DATA-PC10 LE-PC9 CE-PC12  按键接口请参照key.h
-时间：2015/11/3
-版本：1.0
-作者：康威电子
-其他：
-
-更多电子需求，请到淘宝店，康威电子竭诚为您服务 ^_^
-https://shop110336474.taobao.com/?spm=a230r.7195193.1997079397.2.Ic3MRJ
-
-**********************************************************/
 #include "bsp_adf4351.h"
+
+/**
+ * @brief ADF4351 初始化
+ */
+void BSP_ADF4351_Init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12, GPIO_PIN_SET);
+
+	GPIO_InitStruct.Pin = GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	ADF4351Init();
+}
 
 // #define
 #define ADF4351_R0 ((uint32_t)0X2C8018)
@@ -181,7 +203,11 @@ void ADF4351_Init_some(void)
 	WriteOneRegToADF4351(ADF4351_R5);
 }
 
-void ADF4351WriteFreq(float Fre) //	fre单位MHz -> (xx.x) M Hz
+/**
+ * @brief ADF4351控制频率输出
+ * @param Fre 输出频率 单位: Mhz
+ */
+void ADF4351WriteFreq(float Fre)
 {
 	uint16_t Fre_temp, N_Mul = 1, Mul_Core = 0;
 	uint16_t INT_Fre, Frac_temp, Mod_temp, i;
