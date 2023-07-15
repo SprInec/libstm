@@ -1,20 +1,20 @@
 /**
- ******************************************************************************
- * @file			: bsp_config.h
- * @brief			: global control file for the BSP library.
- * @version		    : 2.0
- * @author		    : July
- * @date			: v0.1 -> 2022.06.25
- * @update          : v1.0 -> 2023.05.24
- * @update          : v2.0 -> 2023.07.03
- ******************************************************************************
- * @attention
+ * @file bsp_config.h
+ * @author July (Email: JulyCub@163.com)
+ * @brief Global Global control file for the BSP library.
+ * @version 2.1
+ * @date 2022.05.25
+ * @update 2023.05.24
+ * @update 2023.07.03
+ * @update 2023.07.15
+ * @attention 
+ *  --
+ *  This file is the global control file for the BSP library.
+ *  The user could select the relevant files and functions that enable the BSP
+ *  library by setting the macro definition in this file.
+ * 
+ * @copyright Copyright (c) 2023
  *
- *	This file is the global control file for the BSP library.
- *	The user could select the relevant files and functions that enable the BSP
- *	library by setting the macro definition in this file.
- *
- ******************************************************************************
  */
 
 #ifndef __BSP_CONFIG__
