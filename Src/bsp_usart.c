@@ -13,7 +13,7 @@
 #include "usart.h"
 #include "stdarg.h"
 
-#ifndef __RTOS_RTTHREAD_ENABLED
+#if !__RTOS_RTTHREAD_ENABLED
 #ifdef __BSP_USART_Receive
 
 /* Variable declarations BEGIN */
@@ -94,7 +94,7 @@ BSP_UsartState BSP_UsartVar_Conduct(void)
 	_Bool uart_state = 0;
 	if (recv_end_flag == 1)
 	{
-#if 1
+#if 0
 		/* 串口接收指示灯 */
 		__BSP_LED1_Ficker(50);
 #endif

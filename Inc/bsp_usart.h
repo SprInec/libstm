@@ -12,7 +12,7 @@
 #ifndef __BSP_USART_H__
 #define __BSP_USART_H__
 
-#ifndef __RTOS_RTTHREAD_ENABLED
+#if !__RTOS_RTTHREAD_ENABLED
 /* Include BEGIN */
 #include "bsp_config.h"
 #include "stdio.h"
@@ -51,7 +51,7 @@ typedef enum
 
 #ifdef __BSP_USART_VariableReceive
 #define USART_RX_LEN 200
-#define USART_HANDLE huart2
+#define USART_HANDLE huart1
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;

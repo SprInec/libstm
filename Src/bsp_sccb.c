@@ -20,7 +20,7 @@ void BSP_SCCB_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-    __BSP_RCC_GPIOx_CLK_ENABLE(GPIOD);
+    __BSP_RCC_GPIOx_CLK_ENABLE(GPIOB);
 
     GPIO_InitStructure.Pin = BSP_SCCB_SCL | BSP_SCCB_SDA;
     GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
@@ -31,7 +31,7 @@ void BSP_SCCB_Init(void)
     SCCB_SDA_OUT();
 }
 
-#ifndef __BSP_STM32H7_ENABLED
+#if MCU_SELECTION <= 2
 /**
  * @brief SCCB起始信号
  * @attention

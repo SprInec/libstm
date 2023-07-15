@@ -19,11 +19,8 @@ extern __IO uint32_t headok;
 extern __IO uint32_t jpeg_len;
 extern uint8_t *jpeg_file;
 
-#ifdef __BSP_STM32H7_ENABLED
-extern DMA_HandleTypeDef hdma_dcmi_pssi;
-#else
 extern DMA_HandleTypeDef hdma_dcmi;
-#endif /* !__BSP_STM32H7_ENABLED */
+
 typedef enum ovxmode
 {
     OVRGB565 = 0,
@@ -32,9 +29,9 @@ typedef enum ovxmode
 
 /* 补光灯 */
 #define OV2640_FILL_LIGHT 0
-#define OV2640_LED_PIN GPIO_PIN_8
+#define OV2640_LED_PIN GPIO_PIN_5
 
-#ifndef __BSP_STM32H7_ENABLED
+#if MCU_SELECTION <= 2
 #define OV2640_PWDN_PIN GPIO_PIN_9
 #define OV2640_RST_PIN GPIO_PIN_15
 
@@ -42,11 +39,11 @@ typedef enum ovxmode
 #define OV2640_RST  	        PGout(15)		//复位控制信号 
 #define OV2640_LED_light  	    PFout(8)        //补光LED灯控制引脚
 #else
-#define OV2640_PWDN_PIN GPIO_PIN_10
-#define OV2640_RST_PIN GPIO_PIN_12
+#define OV2640_PWDN_PIN GPIO_PIN_7
+#define OV2640_RST_PIN GPIO_PIN_4
 
-#define OV2640_PWDN(__STATE__) HAL_GPIO_WritePin(GPIOG, OV2640_PWDN_PIN, __STATE__) // POWER DOWN控制信号
-#define OV2640_RST(__STATE__) HAL_GPIO_WritePin(GPIOG, OV2640_RST_PIN, __STATE__)   // 复位控制信号
+#define OV2640_PWDN(__STATE__) HAL_GPIO_WritePin(GPIOA, OV2640_PWDN_PIN, __STATE__) // POWER DOWN控制信号
+#define OV2640_RST(__STATE__) HAL_GPIO_WritePin(GPIOC, OV2640_RST_PIN, __STATE__)   // 复位控制信号
 #define OV2640_LED_light(__STATE__) HAL_GPIO_WritePin(GPIOF, OV2640_LED_PIN, __STATE__) // 补光LED灯控制引脚
 #endif
 

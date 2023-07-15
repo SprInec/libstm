@@ -13,7 +13,7 @@
  *  The user could select the relevant files and functions that enable the BSP
  *  library by setting the macro definition in this file.
  * 
- * @copyright Copyright (c) 2023
+ * @copyright Copyright (c) 2023 July
  *
  */
 
@@ -31,7 +31,7 @@
 //      <4=> NUCLEO-H7A3ZI-Q
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 2
+#define MCU_SELECTION 3
 #endif
 
 // MCU AUTO-DEFINE
@@ -58,13 +58,13 @@
 
 // <e> main.h
 #ifndef __BSP_CITE_MAIN
-#define __BSP_CITE_MAIN 0
+#define __BSP_CITE_MAIN 1
 #endif
 // </e> !main.h
 
 // <e> bsp_user.h
 #ifndef __BSP_CITE_USER
-#define __BSP_CITE_USER 0
+#define __BSP_CITE_USER 1
 #endif
 // </e> !bsp_user.h
 // </h> !System configuration
@@ -76,7 +76,7 @@
 
 // <e> stdio.h
 #ifndef __BSP_C_STD_STDIO
-#define __BSP_C_STD_STDIO 0
+#define __BSP_C_STD_STDIO 1
 #endif
 // </e> !stdint.h
 
@@ -98,7 +98,7 @@
 // <e> bsp_sys.h
 //  <i> Default: USING
 #ifndef __BSP_SYS_ENABLED
-#define __BSP_SYS_ENABLED 1
+#define __BSP_SYS_ENABLED 0
 #endif
 // </e>
 
@@ -220,7 +220,7 @@
 // ==================
 // <e> ADF4351
 #ifndef __BSP_ADF4351_ENABLED
-#define __BSP_ADF4351_ENABLED 0
+#define __BSP_ADF4351_ENABLED 1
 #endif
 // </e>
 
@@ -281,7 +281,7 @@
 // ==========
 // <e> OV2640
 #ifndef __BSP_OV2640_ENABLED
-#define __BSP_OV2640_ENABLED 0
+#define __BSP_OV2640_ENABLED 1
 #endif
 // </e>
 // </h> !Camera
@@ -303,19 +303,19 @@
 
 // <e> BSP SCCB
 #ifndef __BSP_SCCB_ENABLED
-#define __BSP_SCCB_ENABLED 0
+#define __BSP_SCCB_ENABLED 1
 #endif
 // </e>
 
 // <e> BSP USART
 #ifndef __BSP_USART_ENABLED
-#define __BSP_USART_ENABLED 0
+#define __BSP_USART_ENABLED 1
 #endif
 // </e>
 
 // <e> BSP DCMI
 #ifndef __BSP_DCMI_ENABLED
-#define __BSP_DCMI_ENABLED 0
+#define __BSP_DCMI_ENABLED 1
 #endif
 // </e>
 // </h> !Communication Protocol

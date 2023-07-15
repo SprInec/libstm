@@ -30,11 +30,7 @@
 #include "bsp_led.h"
 #include "bsp_ov2640.h"
 
-#ifdef __BSP_STM32H7_ENABLED
-extern DMA_HandleTypeDef hdma_dcmi_pssi;
-#else
 extern DMA_HandleTypeDef hdma_dcmi;
-#endif
 /* OV2640 模式 */
 OVx_MODETypeDef OV2640_MODE = OVJPEG;
 /* 帧率 */
@@ -136,14 +132,14 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 	{
 		if (jpeg_data_state == 0)
 		{
-#ifdef __BSP_STM32H7_ENABLED
+#if MCU_SELECTION >= 3
 			/* 停止DMA数据流传输 */
 			// __HAL_DMA_DISABLE(&hdma_dcmi_pssi);
 			HAL_DCMI_Suspend(hdcmi);
 			HAL_DCMI_Stop(hdcmi);
 
 			/* 获取当前帧数据长度 */
-			jpeg_data_len = JPEG_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_dcmi_pssi);
+			jpeg_data_len = JPEG_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&hdma_dcmi);
 			/* 重新给DMA传输数据量赋值 */
 			// __HAL_DMA_SET_COUNTER(&hdma_dcmi, JPEG_BUFFER_SIZE);
 			/* 开启DMA数据流传输 */

@@ -34,15 +34,22 @@ u8 BSP_OV2640_Init(void)
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	__HAL_RCC_GPIOF_CLK_ENABLE();
-	__HAL_RCC_GPIOG_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 
-	// GPIOG10,12初始化设置
-	GPIO_InitStructure.Pin = OV2640_PWDN_PIN | OV2640_RST_PIN; // PG10,12推挽输出
-	GPIO_InitStructure.Mode = GPIO_Mode_OUT;				   // 推挽输出
-	GPIO_InitStructure.Speed = GPIO_Speed_100MHz;			   // 100MHz
-	GPIO_InitStructure.Pull = GPIO_PuPd_UP;					   // 上拉
-	GPIO_Init(GPIOG, &GPIO_InitStructure);					   // 初始化
+	// PWDN
+	GPIO_InitStructure.Pin = OV2640_PWDN_PIN;
+	GPIO_InitStructure.Mode = GPIO_Mode_OUT;	  // 推挽输出
+	GPIO_InitStructure.Speed = GPIO_Speed_100MHz; // 100MHz
+	GPIO_InitStructure.Pull = GPIO_PuPd_UP;		  // 上拉
+	GPIO_Init(GPIOA, &GPIO_InitStructure);		  // 初始化
+
+	// RST
+	GPIO_InitStructure.Pin = OV2640_RST_PIN;
+	GPIO_InitStructure.Mode = GPIO_Mode_OUT;	  // 推挽输出
+	GPIO_InitStructure.Speed = GPIO_Speed_100MHz; // 100MHz
+	GPIO_InitStructure.Pull = GPIO_PuPd_UP;		  // 上拉
+	GPIO_Init(GPIOC, &GPIO_InitStructure);		  // 初始化
 
 #if OV2640_FILL_LIGHT
 	// PF8初始化设置：PF8用于控制摄像头补光高亮LED灯，高电平点亮，低电平灭
@@ -50,7 +57,7 @@ u8 BSP_OV2640_Init(void)
 	GPIO_InitStructure.Mode = GPIO_Mode_OUT;	  // 推挽输出
 	GPIO_InitStructure.Speed = GPIO_Speed_100MHz; // 100MHz
 	GPIO_InitStructure.Pull = GPIO_PuPd_UP;		  // 上拉
-	GPIO_Init(GPIOF, &GPIO_InitStructure);		  // 初始化
+	GPIO_Init(GPIOA, &GPIO_InitStructure);		  // 初始化
 
 	OV2640_LED_light = 0; // 关闭补光LED
 	OV2640_LED_light = 1; // 开启补光LED
@@ -60,16 +67,16 @@ u8 BSP_OV2640_Init(void)
 
 	OV2640_PWDN(0); // POWER ON
 	delay_ms(10);
-	OV2640_RST(0);									  // 复位OV2640
+	OV2640_RST(0); // 复位OV2640
 	delay_ms(200);
-	OV2640_RST(1);									  // 结束复位
+	OV2640_RST(1); // 结束复位
 	delay_ms(200);
 
 	BSP_SCCB_Init();								  // 初始化SCCB 的IO口
 	BSP_SCCB_WriteRegister(OV2640_DSP_RA_DLMT, 0x01); // 操作sensor寄存器
 	BSP_SCCB_WriteRegister(OV2640_SENSOR_COM7, 0x80); // 软复位OV2640
 	delay_ms(50);
-	
+
 	reg = BSP_SCCB_ReadRegister(OV2640_SENSOR_MIDH); // 读取厂家ID 高八位
 	reg <<= 8;
 	reg |= BSP_SCCB_ReadRegister(OV2640_SENSOR_MIDL); // 读取厂家ID 低八位
@@ -512,11 +519,11 @@ u8 OV2640_ImageSize_Set(u16 width, u16 height)
  */
 uint8_t BSP_OV2640_JPEGToUART(void)
 {
-#ifndef __RTOS_RTTHREAD_ENABLED
-	if (huart3.Init.BaudRate != 921600)
+#if !__RTOS_RTTHREAD_ENABLED
+	if (huart1.Init.BaudRate != 921600)
 	{
 		printf("\nError:\n");
-		printf("- The baud rate is %d now.\n", huart3.Init.BaudRate);
+		printf("- The baud rate is %d now.\n", huart1.Init.BaudRate);
 		printf("- The baud rate has to be 921600!!!\n");
 		return ERROR;
 	}
@@ -576,15 +583,14 @@ void BSP_OV2640_Controller(void)
 			jpeg_file += jpeg_head;
 			for (uint32_t x = 0; x < jpeg_len; x++)
 			{
-				while ((USART3->ISR & USART_ISR_TC) == 0);
-				USART3->TDR = jpeg_file[x];
+				while ((USART1->ISR & USART_ISR_TC) == 0)
+					;
+				USART1->TDR = jpeg_file[x];
 			}
-			__BSP_LED2_Ficker(100);
 		}
 		jpeg_data_state = 0;
 		BSP_DCMI_Start(DCMI_MODE_SNAPSHOT, (u32)&jpeg_buf, JPEG_BUFFER_SIZE);
 		/* ! 必要延时 MIN: 50ms ! */
 		delay_ms(100);
-		__BSP_LED1_Ficker(100);
 	}
 }
