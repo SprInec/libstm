@@ -1,7 +1,7 @@
 /**
  * @file bsp_config.h
  * @author July (Email: JulyCub@163.com)
- * @brief Global Global control file for the BSP library.
+ * @brief Global control file for the BSP library.
  * @version 2.1
  * @date 2022.05.25
  * @update 2023.05.24 - Add some drivers
