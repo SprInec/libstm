@@ -1,289 +1,220 @@
 /**
  * @file bsp_sccb.c
  * @author July (Email: JulyCub@163.com)
- * @brief SCCB communication protocol
+ * @brief SCCB Driver
  * @version 0.1
- * @date 2023.05.11
+ * @date 2023.07.16
  *
  * @copyright Copyright (c) 2023
  *
  */
 
 #include "bsp_sccb.h"
+#include "bsp_delay.h"
 #include "gpio.h"
 
-/**
- * @brief ÂàùÂßãÂåñSCCBÁõ∏ÂÖ≥ÂºïËÑö
- *
- */
-void BSP_SCCB_Init(void)
+void SCCB_Delay(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
-
-    __BSP_RCC_GPIOx_CLK_ENABLE(GPIOB);
-
-    GPIO_InitStructure.Pin = BSP_SCCB_SCL | BSP_SCCB_SDA;
-    GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStructure.Pull = GPIO_PULLUP;
-    GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(BSP_SCCB_PORT, &GPIO_InitStructure);
-
-    SCCB_SDA_OUT();
+	u16 i;
+	for (i = 0; i < 0xFF; i++);
 }
 
-#if MCU_SELECTION <= 2
-/**
- * @brief SCCBËµ∑Âßã‰ø°Âè∑
- * @attention
- *  ÂΩìÊó∂Èíü‰∏∫È´òÁöÑÊó∂ÂÄô,Êï∞ÊçÆÁ∫øÁöÑÈ´òÂà∞‰Ωé,‰∏∫SCCBËµ∑Âßã‰ø°Âè∑
- *  Âú®ÊøÄÊ¥ªÁä∂ÊÄÅ‰∏ã,SDAÂíåSCLÂùá‰∏∫‰ΩéÁîµÂπ≥
- */
-static void BSP_SCCB_Start(void)
+void SCCB_Delay_us(u16 D_Time)
 {
-    SCCB_SDA = 1;
-    SCCB_SCL = 1;
-    delay_us(50);
-    SCCB_SDA = 0;
-    delay_us(50);
-    SCCB_SCL = 0; // Êï∞ÊçÆÁ∫øÊÅ¢Â§ç‰ΩéÁîµÂπ≥ÔºåÂçïÊìç‰ΩúÂáΩÊï∞ÂøÖË¶Å
+	u16 i;
+	for (i = 0; i < D_Time; i++);
 }
 
 /**
- * @brief SCCBÂÅúÊ≠¢‰ø°Âè∑
- * @attention
- *  ÂΩìÊó∂Èíü‰∏∫È´òÁöÑÊó∂ÂÄô,Êï∞ÊçÆÁ∫øÁöÑ‰ΩéÂà∞È´ò,‰∏∫SCCBÂÅúÊ≠¢‰ø°Âè∑
- *  Á©∫Èó≤Áä∂ÂÜµ‰∏ã,SDA,SCLÂùá‰∏∫È´òÁîµÂπ≥
+ * @brief SCCB ≥ı ºªØ
  */
-static void BSP_SCCB_Stop(void)
+void SCCB_Init(void)
 {
-    SCCB_SDA = 0;
-    delay_us(50);
-    SCCB_SCL = 1;
-    delay_us(50);
-    SCCB_SDA = 1;
-    delay_us(50);
+	GPIO_InitTypeDef GPIO_Initure;
+	__HAL_RCC_GPIOB_CLK_ENABLE(); //  πƒ‹GPIOB ±÷”
+
+	// PB10--SCL PB11--SDA  ≥ı ºªØ…Ë÷√
+	GPIO_Initure.Pin = GPIO_PIN_10 | GPIO_PIN_11;
+
+	GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;		// Õ∆ÕÏ ‰≥ˆ
+	GPIO_Initure.Pull = GPIO_PULLUP;				// …œ¿≠
+	GPIO_Initure.Speed = GPIO_SPEED_FREQ_VERY_HIGH; // øÏÀŸ
+	HAL_GPIO_Init(GPIOB, &GPIO_Initure);
 }
 
 /**
- * @brief ÂèëÈÄÅ SCCB NONE ACK ‰ø°Âè∑
+ * @brief SCCB SDA …Ë÷√Œ™ ‰»Î
  */
-static void BSP_SCCB_NAck(void)
+void SCCB_SDA_IN(void)
 {
-    delay_us(50);
-    SCCB_SDA = 1;
-    SCCB_SCL = 1;
-    delay_us(50);
-    SCCB_SCL = 0;
-    delay_us(50);
-    SCCB_SDA = 0;
-    delay_us(50);
+	GPIO_InitTypeDef GPIO_Initure;
+	// PB10--SCL PB11--SDA  ≥ı ºªØ…Ë÷√
+	GPIO_Initure.Pin = GPIO_PIN_11;
+	GPIO_Initure.Mode = GPIO_MODE_INPUT;			//  ‰»Îƒ£ Ω
+	GPIO_Initure.Pull = GPIO_PULLUP;				// …œ¿≠
+	GPIO_Initure.Speed = GPIO_SPEED_FREQ_VERY_HIGH; // øÏÀŸ
+	HAL_GPIO_Init(GPIOB, &GPIO_Initure);
 }
 
 /**
- * @brief SCCB ÂÜôÂÖ•‰∏Ä‰∏™Â≠óËäÇ
- * @param dat Êï∞ÊçÆ
- * @return uint8_t 0-ÊàêÂäü 1-Â§±Ë¥•
+ * @brief SCCB SDA …Ë÷√Œ™ ‰≥ˆ
  */
-static uint8_t BSP_SCCB_WriteByte(uint8_t dat)
+void SCCB_SDA_OUT(void)
 {
-    uint8_t j, res;
-    for (j = 0; j < 8; j++) // Âæ™ÁéØ8Ê¨°ÂèëÈÄÅÊï∞ÊçÆ
-    {
-        if (dat & 0x80)
-            SCCB_SDA = 1;
-        else
-            SCCB_SDA = 0;
-        dat <<= 1;
-        delay_us(50);
-        SCCB_SCL = 1;
-        delay_us(50);
-        SCCB_SCL = 0;
-    }
-    SCCB_SDA_IN(); // ËÆæÁΩÆSDA‰∏∫ËæìÂÖ•
-    delay_us(50);
-    SCCB_SCL = 1; // Êé•Êî∂Á¨¨‰πù‰Ωç,‰ª•Âà§Êñ≠ÊòØÂê¶ÂèëÈÄÅÊàêÂäü
-    delay_us(50);
-    if (SCCB_READ_SDA)
-        res = 1; // SDA=1ÂèëÈÄÅÂ§±Ë¥•ÔºåËøîÂõû1
-    else
-        res = 0; // SDA=0ÂèëÈÄÅÊàêÂäüÔºåËøîÂõû0
-    SCCB_SCL = 0;
-    SCCB_SDA_OUT(); // ËÆæÁΩÆSDA‰∏∫ËæìÂá∫
-    return res;
+
+	GPIO_InitTypeDef GPIO_Initure;
+
+	GPIO_Initure.Pin = GPIO_PIN_11;
+	GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;		// Õ∆ÕÏ ‰≥ˆ
+	GPIO_Initure.Pull = GPIO_PULLUP;				// …œ¿≠
+	GPIO_Initure.Speed = GPIO_SPEED_FREQ_VERY_HIGH; // øÏÀŸ
+	HAL_GPIO_Init(GPIOB, &GPIO_Initure);
 }
 
 /**
- * @brief SCCB ËØªÂèñ‰∏Ä‰∏™Â≠óËäÇ
- * @attention Âú®SCLÁöÑ‰∏äÂçáÊ≤ø,Êï∞ÊçÆÈîÅÂ≠ò
- * @return uint8_t ËØªÂèñÂà∞ÁöÑÊï∞ÊçÆ
+ * @brief SCCB∆ º–≈∫≈
+ * @details µ± ±÷”Œ™∏ﬂµƒ ±∫Ú, ˝æ›œﬂµƒ∏ﬂµΩµÕ,Œ™SCCB∆ º–≈∫≈
+ * 			‘⁄º§ªÓ◊¥Ã¨œ¬,SDA∫ÕSCLæ˘Œ™µÕµÁ∆Ω
  */
-static uint8_t BSP_SCCB_ReadByte(void)
+void SCCB_Start(void)
 {
-    uint8_t temp = 0, j;
-    SCCB_SDA_IN();          // ËÆæÁΩÆSDA‰∏∫ËæìÂÖ•
-    for (j = 8; j > 0; j--) // Âæ™ÁéØ8Ê¨°Êé•Êî∂Êï∞ÊçÆ
-    {
-        delay_us(50);
-        SCCB_SCL = 1;
-        temp = temp << 1;
-        if (SCCB_READ_SDA)
-            temp++;
-        delay_us(50);
-        SCCB_SCL = 0;
-    }
-    SCCB_SDA_OUT(); // ËÆæÁΩÆSDA‰∏∫ËæìÂá∫
-    return temp;
-}
-#else
-/**
- * @brief SCCBËµ∑Âßã‰ø°Âè∑
- * @attention
- *  ÂΩìÊó∂Èíü‰∏∫È´òÁöÑÊó∂ÂÄô,Êï∞ÊçÆÁ∫øÁöÑÈ´òÂà∞‰Ωé,‰∏∫SCCBËµ∑Âßã‰ø°Âè∑
- *  Âú®ÊøÄÊ¥ªÁä∂ÊÄÅ‰∏ã,SDAÂíåSCLÂùá‰∏∫‰ΩéÁîµÂπ≥
- */
-static void BSP_SCCB_Start(void)
-{
-    SCCB_SDA(1);
-    SCCB_SCL(1);
-    delay_us(50);
-    SCCB_SDA(0);
-    delay_us(50);
-    SCCB_SCL(0); // Êï∞ÊçÆÁ∫øÊÅ¢Â§ç‰ΩéÁîµÂπ≥ÔºåÂçïÊìç‰ΩúÂáΩÊï∞ÂøÖË¶Å
+	SCCB_SDA(1); //  ˝æ›œﬂ∏ﬂµÁ∆Ω
+	SCCB_SCL(1); // ‘⁄ ±÷”œﬂ∏ﬂµƒ ±∫Ú ˝æ›œﬂ”…∏ﬂ÷¡µÕ
+	SCCB_Delay();
+	SCCB_SDA(0);
+	SCCB_Delay();
+	SCCB_SCL(0); //  ˝æ›œﬂª÷∏¥µÕµÁ∆Ω£¨µ•≤Ÿ◊˜∫Ø ˝±ÿ“™
 }
 
 /**
- * @brief SCCBÂÅúÊ≠¢‰ø°Âè∑
- * @attention
- *  ÂΩìÊó∂Èíü‰∏∫È´òÁöÑÊó∂ÂÄô,Êï∞ÊçÆÁ∫øÁöÑ‰ΩéÂà∞È´ò,‰∏∫SCCBÂÅúÊ≠¢‰ø°Âè∑
- *  Á©∫Èó≤Áä∂ÂÜµ‰∏ã,SDA,SCLÂùá‰∏∫È´òÁîµÂπ≥
+ * @brief SCCBÕ£÷π–≈∫≈
+ * @details µ± ±÷”Œ™∏ﬂµƒ ±∫Ú, ˝æ›œﬂµƒµÕµΩ∏ﬂ,Œ™SCCBÕ£÷π–≈∫≈
+ * 			ø’œ–◊¥øˆœ¬,SDA,SCLæ˘Œ™∏ﬂµÁ∆Ω
  */
-static void BSP_SCCB_Stop(void)
+void SCCB_Stop(void)
 {
-    SCCB_SDA(0);
-    delay_us(50);
-    SCCB_SCL(1);
-    delay_us(50);
-    SCCB_SDA(1);
-    delay_us(50);
+	SCCB_SDA(0);
+	SCCB_Delay();
+	SCCB_SCL(1);
+	SCCB_Delay();
+	SCCB_SDA(1);
+	SCCB_Delay();
 }
 
 /**
- * @brief ÂèëÈÄÅ SCCB NONE ACK ‰ø°Âè∑
+ * @brief ≤˙…˙NA–≈∫≈
  */
-static void BSP_SCCB_NAck(void)
+void SCCB_No_Ack(void)
 {
-    delay_us(50);
-    SCCB_SDA(1);
-    SCCB_SCL(1);
-    delay_us(50);
-    SCCB_SCL(0);
-    delay_us(50);
-    SCCB_SDA(0);
-    delay_us(50);
+	SCCB_Delay();
+	SCCB_SDA(1);
+	SCCB_SCL(1);
+	SCCB_Delay();
+	SCCB_SCL(0);
+	SCCB_Delay();
+	SCCB_SDA(0);
+	SCCB_Delay();
 }
 
 /**
- * @brief SCCB ÂÜôÂÖ•‰∏Ä‰∏™Â≠óËäÇ
- * @param dat Êï∞ÊçÆ
- * @return uint8_t 0-ÊàêÂäü 1-Â§±Ë¥•
+ * @brief SCCB –¥»Î“ª∏ˆ◊÷Ω⁄
+ * @param dat  ˝æ›
+ * @return u8 0-≥…π¶ 1- ß∞‹
  */
-static uint8_t BSP_SCCB_WriteByte(uint8_t dat)
+u8 SCCB_WR_Byte(u8 dat)
 {
-    uint8_t j, res;
-    for (j = 0; j < 8; j++) // Âæ™ÁéØ8Ê¨°ÂèëÈÄÅÊï∞ÊçÆ
-    {
-        if (dat & 0x80)
-            SCCB_SDA(1);
-        else
-            SCCB_SDA(0);
-        dat <<= 1;
-        delay_us(50);
-        SCCB_SCL(1);
-        delay_us(50);
-        SCCB_SCL(0);
-    }
-    SCCB_SDA_IN(); // ËÆæÁΩÆSDA‰∏∫ËæìÂÖ•
-    delay_us(50);
-    SCCB_SCL(1); // Êé•Êî∂Á¨¨‰πù‰Ωç,‰ª•Âà§Êñ≠ÊòØÂê¶ÂèëÈÄÅÊàêÂäü
-    delay_us(50);
-    if (SCCB_READ_SDA)
-        res = 1; // SDA=1ÂèëÈÄÅÂ§±Ë¥•ÔºåËøîÂõû1
-    else
-        res = 0; // SDA=0ÂèëÈÄÅÊàêÂäüÔºåËøîÂõû0
-    SCCB_SCL(0);
-    SCCB_SDA_OUT(); // ËÆæÁΩÆSDA‰∏∫ËæìÂá∫
-    return res;
+	u8 j, res;
+	for (j = 0; j < 8; j++) // —≠ª∑8¥Œ∑¢ÀÕ ˝æ›
+	{
+		if (dat & 0x80)
+			SCCB_SDA(1);
+		else
+			SCCB_SDA(0);
+		dat <<= 1;
+		SCCB_Delay();
+		SCCB_SCL(1);
+		SCCB_Delay();
+		SCCB_SCL(0);
+	}
+	SCCB_SDA_IN(); // …Ë÷√SDAŒ™ ‰»Î
+	SCCB_Delay();
+	SCCB_SCL(1); // Ω” ’µ⁄æ≈Œª,“‘≈–∂œ «∑Ò∑¢ÀÕ≥…π¶
+	SCCB_Delay();
+	if (SCCB_READ_SDA)
+		res = 1; // SDA=1∑¢ÀÕ ß∞‹£¨∑µªÿ1
+	else
+		res = 0; // SDA=0∑¢ÀÕ≥…π¶£¨∑µªÿ0
+	SCCB_SCL(0);
+	SCCB_SDA_OUT(); // …Ë÷√SDAŒ™ ‰≥ˆ
+	return res;
 }
 
 /**
- * @brief SCCB ËØªÂèñ‰∏Ä‰∏™Â≠óËäÇ
- * @attention Âú®SCLÁöÑ‰∏äÂçáÊ≤ø,Êï∞ÊçÆÈîÅÂ≠ò
- * @return uint8_t ËØªÂèñÂà∞ÁöÑÊï∞ÊçÆ
+ * @brief SCCB ∂¡»°“ª∏ˆ◊÷Ω⁄
+ * @details ‘⁄SCLµƒ…œ…˝—ÿ, ˝æ›À¯¥Ê
+ * @return u8 ∂¡»°µΩµƒ ˝æ›
  */
-static uint8_t BSP_SCCB_ReadByte(void)
+u8 SCCB_RD_Byte(void)
 {
-    uint8_t temp = 0, j;
-    SCCB_SDA_IN();          // ËÆæÁΩÆSDA‰∏∫ËæìÂÖ•
-    for (j = 8; j > 0; j--) // Âæ™ÁéØ8Ê¨°Êé•Êî∂Êï∞ÊçÆ
-    {
-        delay_us(50);
-        SCCB_SCL(1);
-        temp = temp << 1;
-        if (SCCB_READ_SDA)
-            temp++;
-        delay_us(50);
-        SCCB_SCL(0);
-    }
-    SCCB_SDA_OUT(); // ËÆæÁΩÆSDA‰∏∫ËæìÂá∫
-    return temp;
-}
-#endif
-/**
- * @brief SCCB ÂÜôÂØÑÂ≠òÂô®
- *
- * @param reg ÂØÑÂ≠òÂô®Âú∞ÂùÄ
- * @param data Êï∞ÊçÆ
- * @return uint8_t 0-Â§±Ë¥• 1-ÊàêÂäü
- */
-uint8_t BSP_SCCB_WriteRegister(uint8_t reg, uint8_t data)
-{
-    uint8_t res = 0;
-    BSP_SCCB_Start(); // ÂêØÂä®SCCB‰º†Ëæì
-    if (BSP_SCCB_WriteByte(SCCB_ID))
-        res = 1; // ÂÜôÂô®‰ª∂ID
-    delay_us(100);
-    if (BSP_SCCB_WriteByte(reg))
-        res = 1; // ÂÜôÂØÑÂ≠òÂô®Âú∞ÂùÄ
-    delay_us(100);
-    if (BSP_SCCB_WriteByte(data))
-        res = 1; // ÂÜôÊï∞ÊçÆ
-    BSP_SCCB_Stop();
-    return res;
+	u8 temp = 0, j;
+	SCCB_SDA_IN();			// …Ë÷√SDAŒ™ ‰»Î
+	for (j = 8; j > 0; j--) // —≠ª∑8¥ŒΩ” ’ ˝æ›
+	{
+		SCCB_Delay();
+		SCCB_SCL(1);
+		temp = temp << 1;
+		if (SCCB_READ_SDA)
+			temp++;
+		SCCB_Delay();
+		SCCB_SCL(0);
+	}
+	SCCB_SDA_OUT(); // …Ë÷√SDAŒ™ ‰≥ˆ
+	return temp;
 }
 
 /**
- * @brief SCCB ËØªÂØÑÂ≠òÂô®
- *
- * @param reg ÂØÑÂ≠òÂô®Âú∞ÂùÄ
- * @return uint8_t ËØªÂèñÂà∞ÁöÑÂØÑÂ≠òÂô®ÂÄº
+ * @brief SCCB –¥ºƒ¥Ê∆˜
+ * @param reg ºƒ¥Ê∆˜µÿ÷∑
+ * @param data  ˝æ›
+ * @return u8 0-≥…π¶ 1- ß∞‹
  */
-uint8_t BSP_SCCB_ReadRegister(uint8_t reg)
+u8 SCCB_WR_Reg(u8 reg, u8 data)
 {
-    uint8_t val = 0;
-    BSP_SCCB_Start();            // ÂêØÂä®SCCB‰º†Ëæì
-    BSP_SCCB_WriteByte(SCCB_ID); // ÂÜôÂô®‰ª∂ID
-    delay_us(100);
-    BSP_SCCB_WriteByte(reg); // ÂÜôÂØÑÂ≠òÂô®Âú∞ÂùÄ
-    delay_us(100);
-    BSP_SCCB_Stop();
-    delay_us(100);
+	u8 res = 0;
+	SCCB_Start(); // ∆Ù∂ØSCCB¥´ ‰
+	if (SCCB_WR_Byte(SCCB_ID))
+		res = 1; // –¥∆˜º˛ID
+	SCCB_Delay_us(100);
+	if (SCCB_WR_Byte(reg))
+		res = 1; // –¥ºƒ¥Ê∆˜µÿ÷∑
+	SCCB_Delay_us(100);
+	if (SCCB_WR_Byte(data))
+		res = 1; // –¥ ˝æ›
+	SCCB_Stop();
+	return res;
+}
 
-    // ËÆæÁΩÆÂØÑÂ≠òÂô®Âú∞ÂùÄÂêéÔºåÊâçÊòØËØª
-    BSP_SCCB_Start();
-    BSP_SCCB_WriteByte(SCCB_ID | 0X01); // ÂèëÈÄÅËØªÂëΩ‰ª§
-    delay_us(100);
-    val = BSP_SCCB_ReadByte(); // ËØªÂèñÊï∞ÊçÆ
-    BSP_SCCB_NAck();
-    BSP_SCCB_Stop();
-    return val;
+/**
+ * @brief ∂¡ºƒ¥Ê∆˜
+ * @param reg ºƒ¥Ê∆˜µÿ÷∑
+ * @return u8 ∂¡»°µƒºƒ¥Ê∆˜÷µ
+ */
+u8 SCCB_RD_Reg(u8 reg)
+{
+	u8 val = 0;
+	SCCB_Start();		   // ∆Ù∂ØSCCB¥´ ‰
+	SCCB_WR_Byte(SCCB_ID); // –¥∆˜º˛ID
+	SCCB_Delay_us(100);
+	SCCB_WR_Byte(reg); // –¥ºƒ¥Ê∆˜µÿ÷∑
+	SCCB_Delay_us(100);
+	SCCB_Stop();
+	SCCB_Delay_us(100);
+	// …Ë÷√ºƒ¥Ê∆˜µÿ÷∑∫Û£¨≤≈ «∂¡
+	SCCB_Start();
+	SCCB_WR_Byte(SCCB_ID | 0X01); // ∑¢ÀÕ∂¡√¸¡Ó
+	SCCB_Delay_us(100);
+	val = SCCB_RD_Byte(); // ∂¡»° ˝æ›
+	SCCB_No_Ack();
+	SCCB_Stop();
+	return val;
 }

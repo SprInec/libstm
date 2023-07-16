@@ -4,6 +4,7 @@
  * @brief The board support package for led.
  * @version 0.1
  * @date 2022.06.26
+ * @updata 2023.07.15 - Add DevEBox-H743 LED support.
  *
  * @copyright Copyright (c) 2023
  *

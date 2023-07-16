@@ -26,23 +26,38 @@ void delay_ms(uint16_t nms)
 #endif
 
 #if BSP_TIMER_DELAY
+volatile uint32_t delay_counter = 0;
+void delay_init(void)
+{
+	HAL_TIM_Base_Start(&DELAYTIMER);
+}
+
 void delay_us(uint32_t nus)
 {
-	uint16_t differ = 0xFFFF - nus - 5;
-
-	__HAL_TIM_SetCounter(&DELAYTIMER, differ);
-	HAL_TIM_Base_Start(&DELAYTIMER);
-	while (differ < 0xFFFF - 5)
+	volatile uint32_t t0, t1;
+	t0 = delay_counter * 65535 + __HAL_TIM_GET_COUNTER(&DELAYTIMER);
+	while(1)
 	{
-		differ = __HAL_TIM_GetCounter(&DELAYTIMER);
-	};
-	HAL_TIM_Base_Stop(&DELAYTIMER);
+		t1 = delay_counter * 65535 + __HAL_TIM_GET_COUNTER(&DELAYTIMER);
+		if (t1 - t0 >= nus){
+			break;
+		}
+	}
 }
 
 void delay_ms(uint16_t nms)
 {
 	uint32_t timer;
-	for (timer = 0; timer < nms; timer++)
+	for (timer = 0; timer < nms; timer++){
 		delay_us(1000);
+	}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == DELAYTIMER.Instance)
+	{
+		delay_counter++;
+	}
 }
 #endif

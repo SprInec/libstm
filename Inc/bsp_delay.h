@@ -15,12 +15,13 @@
 #include "bsp_config.h"
 #include "bsp_sys.h"
 
-#define BSP_SYSTICK_DELAY 1
-#define BSP_TIMER_DELAY 0
+#define BSP_SYSTICK_DELAY 0
+#define BSP_TIMER_DELAY 1
 
 #if BSP_TIMER_DELAY
 #include "tim.h"
 #define DELAYTIMER htim7
+void delay_init(void);
 #endif
 
 void delay_us(uint32_t nus);

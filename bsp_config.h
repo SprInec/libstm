@@ -168,12 +168,6 @@
 #endif
 // </e>
 
-// <e> EEPROM
-#ifndef __BSP_EEPROM_ENABLED
-#define __BSP_EEPROM_ENABLED 0
-#endif
-// </e>
-
 // <h> Programmed DDS
 // ==================
 //  <i> Select the programmed DDS driver you want to use
@@ -287,6 +281,24 @@
 // </h> !Camera
 // </h> !Peripheral drive
 
+// <h> external storage
+// ====================
+// <i> Select the external storage media you use
+
+// <e> EEPROM
+#ifndef __BSP_EEPROM_ENABLED
+#define __BSP_EEPROM_ENABLED 0
+#endif
+// </e>
+
+// <e> W25QXX
+#ifndef __BSP_W25QXX_ENABLED
+#define __BSP_W25QXX_ENABLED 1
+#endif
+// </e>
+
+// </h> !external storage
+
 // <h> Communication Protocol
 // ==========================
 // <e> BSP I2C
@@ -313,9 +325,9 @@
 #endif
 // </e>
 
-// <e> BSP DCMI
-#ifndef __BSP_DCMI_ENABLED
-#define __BSP_DCMI_ENABLED 1
+// <e> BSP QUADSPI
+#ifndef __BSP_QUADSPI_ENABLED
+#define __BSP_QUADSPI_ENABLED 1
 #endif
 // </e>
 // </h> !Communication Protocol
@@ -442,10 +454,6 @@
 #include "bsp_ds18b20.h"
 #endif /* !__BSP_DS18B20_ENABLED */
 
-#if __BSP_EEPROM_ENABLED
-#include "bsp_eeprom.h"
-#endif /* !__BSP_EEPROM_ENABLED */
-
 #if __BSP_AD9833_ENABLED
 #include "bsp_ad9833.h"
 #endif /*! __BSP_AD9833_ENABLED */
@@ -506,6 +514,14 @@
 #include "bsp_ov2640.h"
 #endif /* !__BSP_OV2640_ENABLED */
 
+#if __BSP_EEPROM_ENABLED
+#include "bsp_eeprom.h"
+#endif /* !__BSP_EEPROM_ENABLED */
+
+#if __BSP_W25QXX_ENABLED
+#include "bsp_w25qxx.h"
+#endif /* !__BSP_W25QXX_ENABLED */
+
 #if __BSP_I2C_ENABLED
 #include "bsp_i2c.h"
 #endif /* !__BSP_I2C_ENABLED */
@@ -522,9 +538,9 @@
 #include "bsp_usart.h"
 #endif /* !__BSP_USART_ENABLED */
 
-#if __BSP_DCMI_ENABLED
-#include "bsp_dcmi.h"
-#endif /* !__BSP_DCMI_ENABLED */
+#if __BSP_QUADSPI_ENABLED
+#include "bsp_quadspi.h"
+#endif /* !__BSP_QUADSPI_ENABLED */
 
 #if __BSP_CODING_ENABLED
 #include "bsp_coding.h"

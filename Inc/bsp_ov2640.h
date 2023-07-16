@@ -1,55 +1,49 @@
 /**
- * @file bsp_ov2640.h
+ * @file ov2640.h
  * @author July (Email: JulyCub@163.com)
  * @brief OV2640 Driver
  * @version 0.1
- * @date 2023.05.24
- *
+ * @date 2023.07.16
+ * 
  * @copyright Copyright (c) 2023
- *
+ * 
  */
 
-#ifndef _BSP_OV2640_H
-#define _BSP_OV2640_H
+#ifndef __BSP_OV2640_H__
+#define __BSP_OV2640_H__
 
 #include "bsp_config.h"
 
-extern __IO uint32_t jpeg_head;
-extern __IO uint32_t headok;
-extern __IO uint32_t jpeg_len;
-extern uint8_t *jpeg_file;
+/* 屏幕显示方向 0-水平 1-垂直 */
+#define USE_HORIZONTAL 1
 
-extern DMA_HandleTypeDef hdma_dcmi;
+/* 定义JPEG数据缓存jpeg_buf的大小(RGB_Width*RGB_Height+1024*20 字节) */
+#define JPEG_BUF_SIZE 1024 * 20
+/* 定义JPEG数据缓存jpeg_buf的大小(RGB_Width*RGB_Height+1024*20 字节) */
+#define RGB_BUF_SIZE RGB_Width *RGB_Height
 
-typedef enum ovxmode
-{
-    OVRGB565 = 0,
-    OVJPEG,
-} OVx_MODETypeDef;
-
-/* 补光灯 */
-#define OV2640_FILL_LIGHT 0
-#define OV2640_LED_PIN GPIO_PIN_5
-
-#if MCU_SELECTION <= 2
-#define OV2640_PWDN_PIN GPIO_PIN_9
-#define OV2640_RST_PIN GPIO_PIN_15
-
-#define OV2640_PWDN  	        PGout(9)		//POWER DOWN控制信号
-#define OV2640_RST  	        PGout(15)		//复位控制信号 
-#define OV2640_LED_light  	    PFout(8)        //补光LED灯控制引脚
+/* 根据屏幕方向，设置缓存大小和格式 */
+#if !USE_HORIZONTAL
+#define RGB_WIDTH 320
+#define RGB_HEIGHT 240 
 #else
-#define OV2640_PWDN_PIN GPIO_PIN_7
-#define OV2640_RST_PIN GPIO_PIN_4
-
-#define OV2640_PWDN(__STATE__) HAL_GPIO_WritePin(GPIOA, OV2640_PWDN_PIN, __STATE__) // POWER DOWN控制信号
-#define OV2640_RST(__STATE__) HAL_GPIO_WritePin(GPIOC, OV2640_RST_PIN, __STATE__)   // 复位控制信号
-#define OV2640_LED_light(__STATE__) HAL_GPIO_WritePin(GPIOF, OV2640_LED_PIN, __STATE__) // 补光LED灯控制引脚
+#define RGB_WIDTH 240
+#define RGB_HEIGHT 320
 #endif
+
+typedef union TData
+{
+    uint32_t B32_temp;
+    uint8_t B8_Temp[4];
+} BSP_OVTData_TypeDef;
+
+#define OV2640_PWDN(n)  	(n?HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOA,GPIO_PIN_7,GPIO_PIN_RESET))//POWER DOWN控制信号,由 PA7 控制 
+#define OV2640_RST(n)  	    (n?HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOC,GPIO_PIN_4,GPIO_PIN_RESET))//复位控制信号  PC4 控制复位 
 
 #define OV2640_MID				0X7FA2
 #define OV2640_PID1				0X2642
-#define OV2640_PID2				0X2641 
+#define OV2640_PID2				0X2641
+
 
 /* 当选择DSP地址(0XFF=0X00)时,OV2640的DSP寄存器地址映射表 */
 #define OV2640_DSP_R_BYPASS     0x05
@@ -135,9 +129,9 @@ typedef enum ovxmode
 #define OV2640_SENSOR_HISTO_LOW  0x61
 #define OV2640_SENSOR_HISTO_HIGH 0x62
 
-u8 BSP_OV2640_Init(void);
-void OV2640_YUV422JPEG_Mode(void);
-void OV2640_RGB565JPEG_Mode(void);
+u8 OV2640_Init(void); 
+void OV2640_Flash_Ctrl(u8 sw);
+void OV2640_JPEG_Mode(void);
 void OV2640_RGB565_Mode(void);
 void OV2640_Auto_Exposure(u8 level);
 void OV2640_Light_Mode(u8 mode);
@@ -153,27 +147,9 @@ u8 OV2640_ImageSize_Set(u16 width,u16 height);
 
 uint8_t BSP_OV2640_JPEGToUART(void);
 uint8_t BSP_OV2640_RGB565ToLCD(void);
-void BSP_OV2640_Controller(void);
+void BSP_OV2640_JPEGCONTR(void);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
