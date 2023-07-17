@@ -1,30 +1,30 @@
 /**
- ******************************************************************************
- * @file		:bsp_ad9833.c
- * @brief		:AD9833 module driver.
- * @version	:0.1.1
- * @author	:merchant
- * @date		:--
- ******************************************************************************
- * @chip		:STM32
- * @pinset	:
- *							GPIOE_PIN_0 	---> FSYNC
- *							GPIOE_PIN_1 	---> SCK
- *							GPIOE_PIN_2 	---> DAT
- *							GPIOE_PIN_3   	---> CS
+ * @file bsp_ad9833.c
+ * @author merchant
+ * @brief AD9833 module driver.
+ * @version 0.1
+ * @date 2023.07.16
+ * @pinset
+ * 				-- SIGL 
+ *				GPIOE_PIN_0 	---> FSYNC
+ *				GPIOE_PIN_1 	---> SCK
+ *				GPIOE_PIN_2 	---> DAT
+ *				GPIOE_PIN_3   	---> CS
  *
- * @if MULT
- *							GPIOB_PIN_15 	---> FSYNC1
- *							GPIOB_PIN_14 	---> SCK1
- *							GPIOB_PIN_13 	---> DAT1
- *							GPIOB_PIN_12	---> CS1n
+ *				-- MULT
+ *				GPIOB_PIN_15 	---> FSYNC1
+ *				GPIOB_PIN_14 	---> SCK1
+ *				GPIOB_PIN_13 	---> DAT1
+ *				GPIOB_PIN_12	---> CS1n
  *
- *						 	GPIOC_PIN_0		---> FSYNC2
- *							GPIOC_PIN_1		---> SCK2
- *							GPIOC_PIN_2		---> DAT2
- *							GPIOC_PIN_3		---> CS2
+ *				GPIOC_PIN_0		---> FSYNC2
+ *				GPIOC_PIN_1		---> SCK2
+ *				GPIOC_PIN_2		---> DAT2
+ *				GPIOC_PIN_3		---> CS2
  *
- *******************************************************************************
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
 #include "bsp_ad9833.h"
 #include "gpio.h"
@@ -32,14 +32,9 @@
 #include "spi.h"
 #endif
 
-/*
-*********************************************************************************
-*	函 数 名: AD9833_Delay
-*	功能说明: 时钟延时
-*	形    参: 无
-*	返 回 值: 无
-**********************************************************************************
-*/
+/**
+ * @brief AD9833 延时
+ */
 static void AD9833_Delay(void)
 {
 	uint16_t i;

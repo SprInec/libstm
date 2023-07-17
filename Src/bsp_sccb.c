@@ -13,13 +13,13 @@
 #include "bsp_delay.h"
 #include "gpio.h"
 
-void SCCB_Delay(void)
+static void SCCB_Delay(void)
 {
 	u16 i;
 	for (i = 0; i < 0xFF; i++);
 }
 
-void SCCB_Delay_us(u16 D_Time)
+static void SCCB_Delay_us(u16 D_Time)
 {
 	u16 i;
 	for (i = 0; i < D_Time; i++);

@@ -146,7 +146,6 @@ u8 OV2640_ImageWin_Set(u16 offx,u16 offy,u16 width,u16 height);
 u8 OV2640_ImageSize_Set(u16 width,u16 height);
 
 uint8_t BSP_OV2640_JPEGToUART(void);
-uint8_t BSP_OV2640_RGB565ToLCD(void);
 void BSP_OV2640_JPEGCONTR(void);
 
 #endif

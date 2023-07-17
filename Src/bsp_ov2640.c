@@ -47,8 +47,7 @@ const uint8_t *JPEG_SIZE_TYPE[12] = {
 	(uint8_t *)"XGA", (uint8_t *)"WXGA", (uint8_t *)"WXGA+", (uint8_t *)"SXGA",
 	(uint8_t *)"UXGA", (uint8_t *)"1080P", (uint8_t *)"QXGA", (uint8_t *)"500W"};
 /* JPEG尺寸支持列表 */
-const uint16_t JPEG_SIZE_TBL[][2] =
-	{
+const uint16_t JPEG_SIZE_TBL[][2] = {
 		160, 120,	// QQVGA
 		240, 240,	// QVGA
 		320, 240,	// QVGA
@@ -593,26 +592,12 @@ uint8_t BSP_OV2640_JPEGToUART(void)
 	OV2640_JPEG_Mode();
 	delay_ms(300);
 	/* 设置输出尺寸 */
-	OV2640_OutSize_Set(JPEG_SIZE_TBL[5][0], JPEG_SIZE_TBL[5][1]);
+	OV2640_OutSize_Set(JPEG_SIZE_TBL[3][0], JPEG_SIZE_TBL[3][1]);
 	delay_ms(300);
 	/* 开启帧中断 */
 	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IER_FRAME_IE);
 	/* 开启JPEG拍照传输 */
 	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT, (uint32_t)JPEG_DATA, JPEG_BUF_SIZE);
-	return SUCCESS;
-}
-
-/**
- * @brief OV2640 RGB565 LCD屏幕显示
- * @attention 波特率 115200
- */
-uint8_t BSP_OV2640_RGB565ToLCD(void)
-{
-#if DCMI_USE_LCD
-	OV2640_RGB565_Mode();
-	OV2640_OutSize_Set(lcddev.width, lcddev.height);
-	BSP_DCMI_Start(DCMI_MODE_CONTINUOUS, (uint32_t)&LCD->LCD_RAM, 1);
-#endif /* !DCMI_USE_LCD */
 	return SUCCESS;
 }
 
@@ -632,23 +617,40 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
  */
 void BSP_OV2640_JPEGCONTR(void)
 {
+	static __IO uint32_t HEAD_OK = 0;
+	static __IO uint32_t JPEG_HEAD = 0;
+	static uint8_t *file;
+
 	/* 采集完一帧图像 */
 	if (1 == snape_one)
 	{
 		file = (uint8_t *)JPEG_DATA;
 		JPEG_FILE_LENGTH = JPEG_BUF_SIZE;
-		/* 获取JPEG大小 */
-		while (JPEG_FILE_LENGTH > 0)
+
+		/* 获取有效帧 */
+		for (uint32_t i = 0; i < JPEG_BUF_SIZE * 4; i++)
 		{
-			if (JPEG_DATA[JPEG_FILE_LENGTH - 1] != 0x00000000)
+			if ((JPEG_DATA[i] == 0XFF) && (JPEG_DATA[i + 1] == 0XD8))
+			{
+				JPEG_HEAD = i;
+				HEAD_OK = 1;
+			}
+			if ((JPEG_DATA[i] == 0XFF) && (JPEG_DATA[i + 1] == 0XD9) && HEAD_OK)
+			{
+				JPEG_FILE_LENGTH = i - JPEG_HEAD + 2;
+				HEAD_OK = 0;
 				break;
-			JPEG_FILE_LENGTH--;
+			}
 		}
+
+		file += JPEG_HEAD;
 		JPEG_CHARSIZE = JPEG_FILE_LENGTH * 4;
 		SCB_CleanDCache_by_Addr((uint32_t *)JPEG_DATA, JPEG_CHARSIZE);
-		HAL_UART_Transmit_DMA(&huart1, (uint8_t *)JPEG_DATA, JPEG_CHARSIZE);
-
-		while (HAL_DMA_GetState(&hdma_usart1_tx) == HAL_DMA_STATE_BUSY);
+		for (uint32_t i = 0; i < JPEG_CHARSIZE; i++)
+		{
+			while ((USART1->ISR & USART_ISR_TC) == 0);
+			USART1->TDR = file[i];
+		}	
 		/* JPEG字节长度清零 */
 		JPEG_CHARSIZE = 0;
 		/* 传输完成清除标志 */
@@ -657,6 +659,6 @@ void BSP_OV2640_JPEGCONTR(void)
 		/* 开始下一帧采集 */
 		__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IER_FRAME_IE);
 		HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT, (uint32_t)JPEG_DATA, JPEG_BUF_SIZE);
-		__BSP_LED_Ficker(100);
+		__BSP_LED_Toggle();
 	}
 }
