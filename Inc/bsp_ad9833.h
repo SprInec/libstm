@@ -62,9 +62,9 @@
 #if AD9833_DEMULT
 /*¶Ë¿Ú¶¨Òå */
 #define FSY(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, n)
-#define SCK(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, n)
-#define DAT(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, n)
-#define CS(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, n)
+#define SCK(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, n)
+#define DAT(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, n)
+#define CS(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6, n)
 
 void AD9833_Init(void);
 void AD9833_WaveSeting(double frequence, unsigned int frequence_SFR, unsigned int WaveMode, unsigned int Phase);

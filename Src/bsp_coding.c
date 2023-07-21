@@ -83,12 +83,12 @@ void BSP_FloatTo16BCD(float num, uint16_t code[])
     for (unsigned char i = 0; i < 16; i++)
         code[i] = 0;
 
-    while (Ln > 0 || j >= 8)
+    while (Ln >= 0 && j >= 8)
     {
         code[j--] = Ln % 2;
         Ln /= 2;
     }
-    while (Hn > 0 || j < 8)
+    while (Hn > 0 && j < 8)
     {
         code[j--] = Hn % 2;
         Hn /= 2;

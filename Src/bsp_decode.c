@@ -20,25 +20,27 @@
  */
 float BSP_Arry16ToUFloat(uint16_t arry[])
 {
-    uint8_t temp1 = 0x00u, temp2 = 0x00u;
-    float temp3, result;
+    uint16_t temp = 0;
+    float result = 0;
 
     for (uint8_t i = 0; i < 16; i++)
     {
-        if (i < 8)
+        temp <<= 1;
+        temp += arry[i];
+        switch (i)
         {
-            temp1 += arry[i];
-            temp1 <<= 1;
-        }
-        else
-        {
-            temp2 += arry[i];
-            temp2 <<= 1;
+        case 7:
+            result += temp;
+            temp = 0;
+            break;
+        case 15:
+            result += temp % 100 / 100.0;
+            temp = 0;
+            break;
+        default:
+            break;
         }
     }
-    temp3 = (float)(temp2 / 100.0);
-    result = temp1 / 2 + temp3 / 2;
-
     return result;
 }
 

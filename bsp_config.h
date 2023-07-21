@@ -31,7 +31,7 @@
 //      <4=> NUCLEO-H7A3ZI-Q
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 3
+#define MCU_SELECTION 2
 #endif
 
 // MCU AUTO-DEFINE
@@ -98,7 +98,7 @@
 // <e> bsp_sys.h
 //  <i> Default: USING
 #ifndef __BSP_SYS_ENABLED
-#define __BSP_SYS_ENABLED 0
+#define __BSP_SYS_ENABLED 1
 #endif
 // </e>
 
@@ -175,7 +175,7 @@
 
 // <e> AD9833
 #ifndef __BSP_AD9833_ENABLED
-#define __BSP_AD9833_ENABLED 0
+#define __BSP_AD9833_ENABLED 1
 #endif
 // </e>
 
@@ -187,7 +187,7 @@
 
 // <e> AD9959
 #ifndef __BSP_AD9959_ENABLED
-#define __BSP_AD9959_ENABLED 0
+#define __BSP_AD9959_ENABLED 1
 #endif
 // </e>
 // </h> !Programmed DDS
@@ -266,7 +266,7 @@
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 0
+#define __BSP_UARTHMI_ENABLED 1
 #endif
 // </e>
 // </h> !Display screen selection
@@ -293,7 +293,7 @@
 
 // <e> W25QXX
 #ifndef __BSP_W25QXX_ENABLED
-#define __BSP_W25QXX_ENABLED 1
+#define __BSP_W25QXX_ENABLED 0
 #endif
 // </e>
 
@@ -315,7 +315,7 @@
 
 // <e> BSP SCCB
 #ifndef __BSP_SCCB_ENABLED
-#define __BSP_SCCB_ENABLED 1
+#define __BSP_SCCB_ENABLED 0
 #endif
 // </e>
 
@@ -327,7 +327,7 @@
 
 // <e> BSP QUADSPI
 #ifndef __BSP_QUADSPI_ENABLED
-#define __BSP_QUADSPI_ENABLED 1
+#define __BSP_QUADSPI_ENABLED 0
 #endif
 // </e>
 // </h> !Communication Protocol
@@ -336,13 +336,13 @@
 // ====================
 // <e> CODING
 #ifndef __BSP_CODING_ENABLED
-#define __BSP_CODING_ENABLED 0
+#define __BSP_CODING_ENABLED 1
 #endif
 // </e>
 
 // <e> DEDING
 #ifndef __BSP_DEDING_ENABLED
-#define __BSP_DEDING_ENABLED 0
+#define __BSP_DEDING_ENABLED 1
 #endif
 // </e>
 

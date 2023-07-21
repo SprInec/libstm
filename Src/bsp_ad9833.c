@@ -7,9 +7,9 @@
  * @pinset
  * 				-- SIGL 
  *				GPIOE_PIN_0 	---> FSYNC
- *				GPIOE_PIN_1 	---> SCK
- *				GPIOE_PIN_2 	---> DAT
- *				GPIOE_PIN_3   	---> CS
+ *				GPIOE_PIN_2 	---> SCK
+ *				GPIOE_PIN_4 	---> DAT
+ *				GPIOE_PIN_6   	---> CS
  *
  *				-- MULT
  *				GPIOB_PIN_15 	---> FSYNC1
@@ -65,9 +65,9 @@ void AD9833_Init(void)
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	__HAL_RCC_GPIOE_CLK_ENABLE();
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_6, GPIO_PIN_RESET);
 
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3;
+	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_6;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

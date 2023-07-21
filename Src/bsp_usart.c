@@ -22,7 +22,7 @@ volatile uint8_t rx_len = 0;
 volatile uint8_t recv_end_flag = 0;
 uint8_t rx_buffer[USART_RX_LEN];
 
-extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef USART_DMA_HANDLE;
 #endif
 /* Variable declarations END */
 
@@ -53,18 +53,13 @@ BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void)
 	if ((tmp_flag != RESET))
 	{
 		__HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE);
-		// temp = USART_HANDLE.Instance->SR;
-		// temp = USART_HANDLE.Instance->DR;
-		HAL_UART_DMAStop(&USART_HANDLE); // 与上两句等效
-/* !< The user needs to declare variable "DMA_HandleTypeDef hdma_usart1_rx"
-			outside of file <usart.h> */
-#ifdef __BSP_STM32F1_ENABLED
-		temp = hdma_usart2_rx.Instance->CNDTR;
-#endif /* __BSP_STM32F1 */
-#ifdef __BSP_STM32F4_ENABLED
-		// temp  = hdma_usart2_rx.Instance->NDTR;
-		temp = __HAL_DMA_GET_COUNTER(&hdma_usart1_rx); // 与上一句等效
-#endif												   /* __BSP_STM32F4 */
+		HAL_UART_DMAStop(&USART_HANDLE);
+#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
+		temp = USART_DMA_HANDLE.Instance->CNDTR;
+#endif
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+		temp = __HAL_DMA_GET_COUNTER(&USART_DMA_HANDLE);
+#endif									
 		rx_len = USART_RX_LEN - temp;
 		recv_end_flag = 1;
 	}
@@ -94,7 +89,7 @@ BSP_UsartState BSP_UsartVar_Conduct(void)
 	_Bool uart_state = 0;
 	if (recv_end_flag == 1)
 	{
-#if 0
+#if 1
 		/* 串口接收指示灯 */
 		__BSP_LED1_Ficker(50);
 #endif

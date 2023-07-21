@@ -214,8 +214,7 @@ void AD9959_Drv_Init(void)
 void delay1(uint32_t length)
 {
 	length = length * 12;
-	while (length--)
-		;
+	while (length--);
 }
 // IO¿Ú³õÊ¼»¯
 void Intserve(void)
