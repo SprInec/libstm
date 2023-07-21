@@ -34,7 +34,7 @@
 #endif
 #endif
 #if 1
-#define __BSP_USART_Transmit 2
+#define __BSP_USART_Transmit 3
 #if 1
 #define __BSP_USE_PRINTF
 #endif /* ！__BSP_USE_PRINTF */
@@ -51,8 +51,8 @@ typedef enum
 
 #ifdef __BSP_USART_VariableReceive
 #define USART_RX_LEN 200
-#define USART_HANDLE huart2
-#define USART_DMA_HANDLE hdma_usart2_rx
+#define USART_HANDLE huart3
+#define USART_DMA_HANDLE hdma_usart3_rx
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;

@@ -14,8 +14,8 @@
 
 #include "bsp_config.h"
 
-#define BSP_SEND_PORT 1
-#define BSP_RECV_PORT 0
+#define BSP_SEND_PORT 0
+#define BSP_RECV_PORT 1
 
 #if BSP_SEND_PORT
 
@@ -37,8 +37,22 @@ void BSP_DigitalMess_Send(uint16_t code[], uint8_t len);
 #endif /* BSP_SEND_PORT */
 
 #if BSP_RECV_PORT
+
+/* 载波输出通道 */
+#define CAR_WAVE_CHANNEL 0
+/* 频偏值 */
+#define FREQ_OFFSET 10700000
+/* 电压判断阈值 */
+#define VOLTAGE_THRESHOLD_F 2.0f
+#define VOLTAGE_THRESHOLD_I (VOLTAGE_THRESHOLD_F / 3.3 * 4096)
+
+/* 扫频范围 */
+#define SWEEP_RANGE 200000 /* 200k */
+#define SWEEP_STEP 1000    /* 1k */
+
 void BSP_RecvPort_Init(void);
-void BSP_RecvPort_CONTR(void)
+void BSP_RecvPort_CONTR(void);
+uint8_t BSP_DemoDulation_Judge(void);
 #endif /* BSP_RECV_PORT */
 
 #endif /* _BSP_USER_H_ */

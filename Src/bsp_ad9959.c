@@ -25,19 +25,19 @@
  *							GPIOC_PIN_8		---> SCK
  *
  *				F4ZG:
- *							GPIOC_PIN_7 	---> P0
- *							GPIOD_PIN_7 	---> P1
- *							GPIOC_PIN_10	---> P2
- *							GPIOD_PIN_2		---> P3
- *							GPIOA_PIN_8		---> SD0
- *							GPIOC_PIN_9		---> SD1
- *							GPIOG_PIN_7		---> SD2
- *							GPIOG_PIN_6		---> SD3
- *							GPIOD_PIN_6		---> PDC/PWR
- *							GPIOC_PIN_11	---> UPDATA
- *							GPIOG_PIN_15	---> RST
- *							GPIOC_PIN_12	---> CS
- *							GPIOC_PIN_8		---> SCK
+ *							GPIOD_PIN_9 	---> P0
+ *							GPIOE_PIN_15 	---> P1
+ *							GPIOE_PIN_13	---> P2
+ *							GPIOE_PIN_11	---> P3
+ *							GPIOE_PIN_9		---> SD0
+ *							GPIOE_PIN_7		---> SD1
+ *							GPIOD_PIN_0		---> SD2
+ *							GPIOD_PIN_1		---> SD3
+ *							GPIOD_PIN_8 	---> PDC/PWR
+ *							GPIOE_PIN_12	---> UPDATA
+ *							GPIOE_PIN_14	---> RST
+ *							GPIOE_PIN_10	---> CS
+ *							GPIOE_PIN_8 	---> SCK
  *
  *******************************************************************************
  */
@@ -147,7 +147,7 @@ void AD9959_Drv_Init(void)
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = GPIO_PIN_5 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 |
-						  GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
+							GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -160,49 +160,18 @@ void AD9959_Drv_Init(void)
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	/* GPIO Ports Clock Enable */
-	__HAL_RCC_GPIOF_CLK_ENABLE();
-	__HAL_RCC_GPIOH_CLK_ENABLE();
-	__HAL_RCC_GPIOG_CLK_ENABLE();
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOE_CLK_ENABLE();
 	__HAL_RCC_GPIOD_CLK_ENABLE();
 
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOG, AD9959_SDIO3_Pin | AD9959_SDIO2_Pin | AD9959_Reset_Pin, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOC, AD9959_PS0_Pin | AD9959_SCLK_Pin | AD9959_SDIO1_Pin | AD9959_PS2_Pin | AD9959_UPDATE_Pin | AD9959_CS_Pin, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(AD9959_SDIO0_GPIO_Port, AD9959_SDIO0_Pin, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOD, AD9959_PS3_Pin | AD9959_PWR_Pin | AD9959_PS1_Pin, GPIO_PIN_RESET);
-
-	/*Configure GPIO pins : PGPin PGPin PGPin */
-	GPIO_InitStruct.Pin = AD9959_SDIO3_Pin | AD9959_SDIO2_Pin | AD9959_Reset_Pin;
+	GPIO_InitStruct.Pin = AD9959_PS1_Pin | AD9959_PS2_Pin | AD9959_PS3_Pin |
+							AD9959_SDIO0_Pin | AD9959_SDIO1_Pin | AD9959_UPDATE_Pin |
+							AD9959_CS_Pin | AD9959_SCLK_Pin | AD9959_Reset_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : PCPin PCPin PCPin PCPin
-							 PCPin PCPin */
-	GPIO_InitStruct.Pin = AD9959_PS0_Pin | AD9959_SCLK_Pin | AD9959_SDIO1_Pin | AD9959_PS2_Pin | AD9959_UPDATE_Pin | AD9959_CS_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : PtPin */
-	GPIO_InitStruct.Pin = AD9959_SDIO0_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	HAL_GPIO_Init(AD9959_SDIO0_GPIO_Port, &GPIO_InitStruct);
-
-	/*Configure GPIO pins : PDPin PDPin PDPin */
-	GPIO_InitStruct.Pin = AD9959_PS3_Pin | AD9959_PWR_Pin | AD9959_PS1_Pin;
+	GPIO_InitStruct.Pin = AD9959_PS0_Pin | AD9959_SDIO2_Pin | AD9959_PWR_Pin | AD9959_SDIO3_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -421,12 +390,12 @@ void AD9959_Init(void)
 	WriteData_AD9959(FR2_ADD, 2, FR2_DATA, 1);
 
 #if 0
-  WriteData_AD9959(CFR_ADD,3,CFR_DATA,1);
-  WriteData_AD9959(CPOW0_ADD,2,CPOW0_DATA,0);
-  WriteData_AD9959(ACR_ADD,3,ACR_DATA,0);
-  WriteData_AD9959(LSRR_ADD,2,LSRR_DATA,0);
-  WriteData_AD9959(RDW_ADD,2,RDW_DATA,0);
-  WriteData_AD9959(FDW_ADD,4,FDW_DATA,1);
+	WriteData_AD9959(CFR_ADD,3,CFR_DATA,1);
+	WriteData_AD9959(CPOW0_ADD,2,CPOW0_DATA,0);
+	WriteData_AD9959(ACR_ADD,3,ACR_DATA,0);
+	WriteData_AD9959(LSRR_ADD,2,LSRR_DATA,0);
+	WriteData_AD9959(RDW_ADD,2,RDW_DATA,0);
+	WriteData_AD9959(FDW_ADD,4,FDW_DATA,1);
 #endif
 
 	// –¥»Î≥ı º∆µ¬ 

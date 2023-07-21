@@ -25,19 +25,19 @@
  *							GPIOC_PIN_8		---> SCK
  *
  *				F4ZG:
- *							GPIOC_PIN_7 	---> P0
- *							GPIOD_PIN_7 	---> P1
- *							GPIOC_PIN_10	---> P2
- *							GPIOD_PIN_2		---> P3
- *							GPIOA_PIN_8		---> SD0
- *							GPIOC_PIN_9		---> SD1
- *							GPIOG_PIN_7		---> SD2
- *							GPIOG_PIN_6		---> SD3
- *							GPIOD_PIN_6		---> PDC/PWR
- *							GPIOC_PIN_11	---> UPDATA
- *							GPIOG_PIN_15	---> RST
- *							GPIOC_PIN_12	---> CS
- *							GPIOC_PIN_8		---> SCK
+ *							GPIOD_PIN_9 	---> P0
+ *							GPIOE_PIN_15 	---> P1
+ *							GPIOE_PIN_13	---> P2
+ *							GPIOE_PIN_11	---> P3
+ *							GPIOE_PIN_9		---> SD0
+ *							GPIOE_PIN_7		---> SD1
+ *							GPIOD_PIN_0		---> SD2
+ *							GPIOD_PIN_1		---> SD3
+ *							GPIOD_PIN_8 	---> PDC/PWR
+ *							GPIOE_PIN_12	---> UPDATA
+ *							GPIOE_PIN_14	---> RST
+ *							GPIOE_PIN_10	---> CS
+ *							GPIOE_PIN_8 	---> SCK
  *
  *******************************************************************************
  */
@@ -174,44 +174,44 @@ extern uint32_t ad9959_param;
 #define AD9959_SDIO3_GPIO_Port GPIOC
 #else /* STM32F4 */
 // Òý½Å¶¨Òå
-#define AD9959_PS0_Pin GPIO_PIN_7
-#define AD9959_PS0_GPIO_Port GPIOC
+#define AD9959_PS0_Pin GPIO_PIN_9
+#define AD9959_PS0_GPIO_Port GPIOD
 
-#define AD9959_PS1_Pin GPIO_PIN_7
-#define AD9959_PS1_GPIO_Port GPIOD
+#define AD9959_PS1_Pin GPIO_PIN_15
+#define AD9959_PS1_GPIO_Port GPIOE
 
-#define AD9959_PS2_Pin GPIO_PIN_10
-#define AD9959_PS2_GPIO_Port GPIOC
+#define AD9959_PS2_Pin GPIO_PIN_13
+#define AD9959_PS2_GPIO_Port GPIOE
 
-#define AD9959_PS3_Pin GPIO_PIN_2
-#define AD9959_PS3_GPIO_Port GPIOD
+#define AD9959_PS3_Pin GPIO_PIN_11
+#define AD9959_PS3_GPIO_Port GPIOE
 
-#define AD9959_SDIO0_Pin GPIO_PIN_8
-#define AD9959_SDIO0_GPIO_Port GPIOA
+#define AD9959_SDIO0_Pin GPIO_PIN_9
+#define AD9959_SDIO0_GPIO_Port GPIOE
 
-#define AD9959_SDIO1_Pin GPIO_PIN_9
-#define AD9959_SDIO1_GPIO_Port GPIOC
+#define AD9959_SDIO1_Pin GPIO_PIN_7
+#define AD9959_SDIO1_GPIO_Port GPIOE
 
-#define AD9959_SDIO2_Pin GPIO_PIN_7
-#define AD9959_SDIO2_GPIO_Port GPIOG
+#define AD9959_SDIO2_Pin GPIO_PIN_0
+#define AD9959_SDIO2_GPIO_Port GPIOD
 
-#define AD9959_PWR_Pin GPIO_PIN_6
+#define AD9959_PWR_Pin GPIO_PIN_8
 #define AD9959_PWR_GPIO_Port GPIOD
 
-#define AD9959_UPDATE_Pin GPIO_PIN_11
-#define AD9959_UPDATE_GPIO_Port GPIOC
+#define AD9959_UPDATE_Pin GPIO_PIN_12
+#define AD9959_UPDATE_GPIO_Port GPIOE
 
-#define AD9959_Reset_Pin GPIO_PIN_15
-#define AD9959_Reset_GPIO_Port GPIOG
+#define AD9959_Reset_Pin GPIO_PIN_14
+#define AD9959_Reset_GPIO_Port GPIOE
 
-#define AD9959_CS_Pin GPIO_PIN_12
-#define AD9959_CS_GPIO_Port GPIOC
+#define AD9959_CS_Pin GPIO_PIN_10
+#define AD9959_CS_GPIO_Port GPIOE
 
 #define AD9959_SCLK_Pin GPIO_PIN_8
-#define AD9959_SCLK_GPIO_Port GPIOC
+#define AD9959_SCLK_GPIO_Port GPIOE
 
-#define AD9959_SDIO3_Pin GPIO_PIN_6
-#define AD9959_SDIO3_GPIO_Port GPIOG
+#define AD9959_SDIO3_Pin GPIO_PIN_1
+#define AD9959_SDIO3_GPIO_Port GPIOD
 #endif
 
 /*SET*/
