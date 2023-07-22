@@ -43,12 +43,12 @@ void BSP_DigitalMess_Send(uint16_t code[], uint8_t len);
 /* 频偏值 */
 #define FREQ_OFFSET 10700000
 /* 电压判断阈值 */
-#define VOLTAGE_THRESHOLD_F 2.0f
+#define VOLTAGE_THRESHOLD_F 0.5f
 #define VOLTAGE_THRESHOLD_I (VOLTAGE_THRESHOLD_F / 3.3 * 4096)
 
 /* 扫频范围 */
-#define SWEEP_RANGE 200000 /* 200k */
-#define SWEEP_STEP 1000    /* 1k */
+#define SWEEP_RANGE 100000 /* 100k */
+#define SWEEP_STEP 20000    /* 1k */
 
 void BSP_RecvPort_Init(void);
 void BSP_RecvPort_CONTR(void);

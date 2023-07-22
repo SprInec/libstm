@@ -354,7 +354,7 @@
 
 // <e> BSP MATH
 #ifndef __BSP_MATH_ENABLED
-#define __BSP_MATH_ENABLED 0
+#define __BSP_MATH_ENABLED 1
 #endif
 // </e>
 

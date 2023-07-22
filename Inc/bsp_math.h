@@ -34,5 +34,8 @@
 void bsp_sin(uint16_t points, float *result);
 /* 自相关函数 */
 float bsp_xcorr(float *data, int m, int N);
-
+/* 向上取整 */
+uint16_t bsp_upint(float num);
+/* 向下取整 */
+uint16_t bsp_downint(float num);
 #endif

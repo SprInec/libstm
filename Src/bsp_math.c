@@ -40,5 +40,26 @@ float bsp_xcorr(float *data, int m, int N)
     return r;
 }
 
+/**
+ * @brief 向上取整
+ * @param num 带计算数据
+ * @return uint16_t 结果
+ */
+uint16_t bsp_upint(float num)
+{
+    if (num > (uint16_t)num)
+        return (uint16_t)num + 1;
+    else
+        return (uint16_t)num;
+}
 
+/**
+ * @brief 向下取整
+ * @param num 待计算数据
+ * @return uint16_t 结果
+ */
+uint16_t bsp_downint(float num)
+{
+    return (uint16_t)num;
+}
 
