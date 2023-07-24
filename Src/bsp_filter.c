@@ -16,7 +16,8 @@
 
 /* 滤波因数头文件 */
 /* MATLAB DIGITALFILTERDESIGNER 设计生成 */
-#include "fdacoefs.h"
+// TODO: add the fdacoefs.h file
+// #include "fdacoefs.h"
 
 /**
  * @brief FIR滤波器
@@ -79,6 +80,7 @@ void bsp_arm_fir_f32(float32_t *data_buff,
  * @param err_buff 错误数据地址
  * @param cache_buff 缓存地址, 规定大小: num_taps + block_size - 1
  * @param factor 滤波因数
+ * @param mu_num 步长因数
  * @param sample_num 采样点数
  * @param block_size 每次处理的采样点数
  * @param num_taps 滤波因数个数
@@ -90,6 +92,7 @@ void bsp_arm_lms_f32(float32_t *data_buff,
                      float32_t *err_buff,
                      float32_t *cache_buff,
                      float32_t *factor,
+                     float32_t mu_num,
                      uint32_t sample_num,
                      uint32_t block_size,
                      uint32_t num_taps,
@@ -102,7 +105,7 @@ void bsp_arm_lms_f32(float32_t *data_buff,
                           num_taps,
                           factor,
                           cache_buff,
-                          err_buff,
+                          mu_num,
                           block_size);
 
     /* 实现LMS滤波，这里每次处理 sample_num / block_size 个点 */
@@ -134,7 +137,7 @@ void bsp_arm_lms_f32(float32_t *data_buff,
  */
 float Onepointfilter(int16_t data, const uint16_t fnum)
 {
-    static int16_t buf[fnum];
+    int16_t buf[fnum];
     static int16_t index = 0, flag = 0;
     static float sum = 0;
 

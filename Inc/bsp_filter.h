@@ -42,6 +42,7 @@ void bsp_arm_lms_f32(float32_t *data_buff,
                      float32_t *err_buff,
                      float32_t *cache_buff,
                      float32_t *factor,
+                     float32_t mu_num,
                      uint32_t sample_num,
                      uint32_t block_size,
                      uint32_t num_taps,
@@ -49,8 +50,8 @@ void bsp_arm_lms_f32(float32_t *data_buff,
 
 #endif
 
-/* 平滑滤波算法 */
-float Onepointfilter(int16_t data, uint16_t fnum);
+    /* 平滑滤波算法 */
+    float Onepointfilter(int16_t data, uint16_t fnum);
 void linearSmooth3(double in[], double out[], int N);
 void linearSmooth5(double in[], double out[], int N);
 void linearSmooth7(double in[], double out[], int N);
