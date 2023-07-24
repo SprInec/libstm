@@ -11,15 +11,14 @@
 
 #include "bsp_user.h"
 #include "tim.h"
+#include "arm_math.h"
 
 #if BSP_SEND_PORT
-
-#include "arm_math.h"
 
 /* 干扰频率 */
 float intffreq = 0;
 /* 当前模式 */
-uint8_t nowMode = 1;
+volatile uint8_t nowMode = 1;
 /* 改变标志 */
 uint8_t changeflag = 0;
 /* 数字编码 */
@@ -28,6 +27,8 @@ uint8_t digital_code[16] = {0};
 volatile uint8_t freqPoit = 0;
 /* 跳频表 */
 const float freqTab[] = { 80.7, 81.7, 82.7, 83.7, 84.7, 85.7};
+/* 自定义频率 */
+float diyfreq = 0;
 
 /**
  * @brief 发送端初始化
@@ -77,8 +78,17 @@ void BSP_UsartVar_Callback(uint8_t *str)
     case /* MODE -> Auto */ 'A':
         nowMode = 0;
         break;
+    case 'J':
+        nowMode = 2;
+        break;
     case /* MODE -> Handle */ 'B':
         nowMode = 1;
+        break;
+    case /* MODE -> DIY */'I':
+        nowMode = 2;
+        sscanf((char *)str, "I%f", &diyfreq);
+        BSP_ADF4351_Init();
+        ADF4351WriteFreq(diyfreq);
         break;
     case /* FREQ -> 80MHz */ 'C':
         nowMode = 1;
@@ -90,6 +100,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
         break;
     case /* FREQ -> 81MHz */ 'D':
@@ -102,6 +113,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
         break;
     case /* FREQ -> 82MHz */ 'E':
@@ -114,6 +126,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
         break;
     case /* FREQ -> 83MHz */ 'F':
@@ -126,6 +139,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
         break;
     case /* FREQ -> 84MHz */ 'G':
@@ -138,6 +152,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
         break;
     case /* FREQ -> 85MHz */ 'H':
@@ -150,6 +165,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
             BSP_DigitalMess_Send(digital_code, 16);
         }
 #endif
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
     default:
         break;
@@ -189,21 +205,27 @@ void BSP_FHSS_CONTR(void)
     /* 自动调频 */
     if ((nowMode == 0) && (changeflag == 1))
     {
+        BSP_ADF4351_Init();
         ADF4351WriteFreq(freqTab[freqPoit]);
-        bsprif3("t0.txt=\"%.0f\"", freqTab[freqPoit]);
+        bsprif3("t0.txt=\"%d\"", bsp_downint(freqTab[freqPoit]));
         __prifend3;
         for (uint8_t i = 2; i <= 7; i++)
         {
             bsprif3("bt%d.val=0", i);
             __prifend3;
+            if (nowMode != 0)
+            {
+                break;
+            }
         }
         bsprif3("bt%d.val=1", freqPoit + 2);
         __prifend3;
         changeflag = 0;
-        delay_ms(1000);
+        delay_ms(200);
     }
 }
 
+#if USING_DIGITAL
 /**
  * @brief 数字信号发送 
  */
@@ -235,6 +257,7 @@ void BSP_DigitalMess_Send(uint16_t code[], uint8_t len)
     /* Set low freqence state defaultly */
     AD9959_WriteFreq(DIGT_SIGNAL_CHANNEL, DIGT_SIGNAL_1);
 }
+#endif
 
 /**
  * @brief 发送端控制函数
@@ -321,7 +344,7 @@ uint8_t BSP_DemoDulation_Judge(void)
     adc_val = HAL_ADC_GetValue(&hadc1);
     __prifend3;
     if (adc_val < VOLTAGE_THRESHOLD_I){
-        bsprif3("t0.txt=\"%d\"", bsp_upint((nowFreq - FREQ_OFFSET) / 1000000.0) - 1);
+        bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
         __prifend3;
         bsprif3("t1.txt=\"CONNECT\"");
         __prifend3;
@@ -331,7 +354,7 @@ uint8_t BSP_DemoDulation_Judge(void)
         return 0;
     }
     else{
-        bsprif3("t0.txt=\"%d\"", bsp_upint((nowFreq - FREQ_OFFSET) / 1000000.0) - 1);
+        bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
         __prifend3;
         bsprif3("t1.txt=\"DISCONNECT\"");
         __prifend3;
@@ -356,8 +379,9 @@ uint8_t BSP_Freq_Sweep(uint32_t centerfreq, uint32_t sweepwidth, float sweepstep
     {
         nowFreq = (centerfreq - sweepwidth) + (i * sweepstep);
         AD9959_WriteFreq(CAR_WAVE_CHANNEL, nowFreq);
+        delay_ms(10);
         if (!BSP_DemoDulation_Judge()){
-            bsprif3("t0.txt=\"%d\"", bsp_upint((nowFreq - FREQ_OFFSET) / 1000000.0) - 1);
+            bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
             __prifend3;
             bsprif3("t1.txt=\"CONNECT\"");
             __prifend3;
@@ -398,7 +422,7 @@ void BSP_RecvPort_CONTR(void)
 {
     if (!sync_state)
     {
-        bsprif3("t0.txt=\"%d\"", bsp_upint((nowFreq - FREQ_OFFSET) / 1000000.0) - 1);
+        bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
         __prifend3;
         bsprif3("t1.txt=\"DISCONNECT\"");
         __prifend3;
@@ -410,6 +434,7 @@ void BSP_RecvPort_CONTR(void)
         BSP_Tab_Sync();
     }
     bsprif3("t3.txt=\"%d\"", mess_freq);
+    printf("freq = %d\n", mess_freq);
     __prifend3;
 }
 #endif /* BSP_RECV_PORT */

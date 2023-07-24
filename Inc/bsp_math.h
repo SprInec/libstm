@@ -38,4 +38,7 @@ float bsp_xcorr(float *data, int m, int N);
 uint16_t bsp_upint(float num);
 /* 向下取整 */
 uint16_t bsp_downint(float num);
-#endif
+/* 数组倒置 */
+void bsp_arraytsp(const real64_T arrA[], float32_t arrB[], uint16_t len);
+
+#endif /* !BSP_MATH_H */

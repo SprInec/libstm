@@ -1,11 +1,13 @@
 /**
- ******************************************************************************
- * @file		:bsp_filter.h
- * @brief		:The board support package for filter.
- * @version		:0.1.0
- * @author		:July
- * @date		:2022.07.02
- ******************************************************************************
+ * @file bsp_filter.c
+ * @author July (Email: JulyCub@163.com)
+ * @brief The board support package for filter.
+ * @version 0.1
+ * @date 2022.07.02
+ * @update 2023.07.24
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
 
 #ifndef __BSP_FILTER_H__
@@ -13,28 +15,33 @@
 
 #include "bsp_config.h"
 
-/* 是否引用DSP库  */
-#define arm_dsp 0
-
-#if arm_dsp
+#if __CMSIS_DSP
 #include "arm_math.h"
 
-#define LENGTH_SAMPLES 4096 /* 采样点数 */
-#define BLOCK_SIZE 1        /* 调用一次arm_fir_f32处理的采样点个数 */
-#define NUM_TAPS 32         /* 滤波器系数个数 */
+/* FIR */
+#define FIR_LENGTH_SAMPLES 4096 /* 采样点数 */
+#define FIR_BLOCK_SIZE 1        /* 调用一次arm_fir_f32处理的采样点个数 */
+#define FIR_FACTOR_NUM 32       /* 滤波器系数个数 */
 
-extern float32_t Input_f32_50Hz_200Hz[LENGTH_SAMPLES];   /* 采样点 */
-extern float32_t Output[LENGTH_SAMPLES];                 /* 滤波后的输出 */
-extern float32_t firStateF32[BLOCK_SIZE + NUM_TAPS - 1]; /* 状态缓存，大小numTaps + blockSize - 1*/
+/* LMS */
+#define LMS_LENGTH_SAMPLES 4096 /* 采样点数 */
+#define LMS_BLOCK_SIZE 1        /* 调用一次arm_lms_f32处理的采样点个数 */
+#define LMS_FACTOR_NUM 32       /* 滤波器系数个数 */
 
-void bsp_arm_fir_f32(void);
-void bsp_GettspB(void);
+void bsp_arm_fir_f32(float32_t *data_buff,
+                     float32_t *out_buff,
+                     float32_t *cache_buff,
+                     float32_t *factor,
+                     uint32_t sample_num,
+                     uint32_t block_size,
+                     uint32_t num_taps,
+                     uint8_t debug);
+
+
 #endif
 
-#define FNUM 10
-
 /* 平滑滤波算法 */
-float Onepointfilter(int16_t data);
+float Onepointfilter(int16_t data, uint16_t fnum);
 void linearSmooth3(double in[], double out[], int N);
 void linearSmooth5(double in[], double out[], int N);
 void linearSmooth7(double in[], double out[], int N);

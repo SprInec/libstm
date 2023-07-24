@@ -13,11 +13,13 @@
 #define __BSP_FFT_H__
 
 #include "bsp_config.h"
+
+#if __CMSIS_DSP
 #include "arm_math_types.h"
 
-#define BSP_FFT_SAMPLE_NUMBER 1024
-#define BSP_FFT_SAMPLE_FREQUENCY (84000000/(84 + 100))
-#define BSP_FFT_SAMPLE_STEP ((float)(BSP_FFT_SAMPLE_FREQUENCY / BSP_FFT_SAMPLE_NUMBER))
+#define BSP_FFT_SAMPLE_NUMBER 1024 /* 采样点数 */
+#define BSP_FFT_SAMPLE_FREQUENCY (84000000/(84 + 100)) /* 采样频率 */
+#define BSP_FFT_SAMPLE_STEP ((float)(BSP_FFT_SAMPLE_FREQUENCY / BSP_FFT_SAMPLE_NUMBER)) /* 采样步长 */
 
 /**
  * @brief bsp fft struct
@@ -34,11 +36,11 @@ typedef struct{
     float32_t output[BSP_FFT_SAMPLE_NUMBER];
     float32_t ampltitude;
     float32_t frequency;
-}fftbspTypedef;
+}BSP_FFTTypedef;
 
 extern uint16_t sample_data[BSP_FFT_SAMPLE_NUMBER];
-extern fftbspTypedef bsp_fft_handle;
+extern BSP_FFTTypedef bsp_fft_handle;
 
-void bsp_arm_fft(fftbspTypedef * fft_handle, uint16_t * sample_data);
-
+void bsp_arm_fft(fftbspTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
+#endif
 #endif

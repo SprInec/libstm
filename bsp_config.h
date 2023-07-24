@@ -56,6 +56,12 @@
 // </e> !RT-Thread
 // </e> !RTOS
 
+// <e> CMSIS DSP
+#ifndef __CMSIS_DSP
+#define __CMSIS_DSP 1
+#endif
+// </e> !main.h
+
 // <e> main.h
 #ifndef __BSP_CITE_MAIN
 #define __BSP_CITE_MAIN 1
@@ -348,7 +354,7 @@
 
 // <e> FILTER
 #ifndef __BSP_FILTER_ENABLED
-#define __BSP_FILTER_ENABLED 0
+#define __BSP_FILTER_ENABLED 1
 #endif
 // </e>
 
@@ -360,7 +366,7 @@
 
 // <e> FFT
 #ifndef __BSP_FFT_ENABLED
-#define __BSP_FFT_ENABLED 0
+#define __BSP_FFT_ENABLED 1
 #endif
 // </e>
 
