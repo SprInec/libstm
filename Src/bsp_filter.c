@@ -63,7 +63,7 @@ void bsp_arm_fir_f32(float32_t *data_buff,
     if (debug){
         for (uint32_t i = 0; i < sample_num; i++)
         {
-            printf(":%f, %fn", out_buff[i], data_buff[i]);
+            printf("input&output:%f, %f\n", data_buff[i], out_buff[i]);
         }
     }
 }

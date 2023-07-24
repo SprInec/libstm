@@ -4,6 +4,7 @@
  * @brief
  * @version 0.1
  * @date 2023-04-04
+ * @update 2023.07.24
  *
  * @copyright Copyright (c) 2023
  *
@@ -27,15 +28,15 @@ BSP_FFTTypedef bsp_fft_handle = {
 
 /**
  * @brief 快速傅里叶变换
- * @param fft_handle fft 句柄
+ * @param fft_handle fft句柄
  * @param sample_data 数据
  * @param debug 是否打印
  */
-void bsp_arm_fft(fftbspTypedef * fft_handle, uint16_t * sample_data, uint16_t debug)
+void bsp_arm_fft(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
 {
     if (debug) {
         for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER; i++)
-            bsprif1("%.2f\n", sample_data[i]);
+            bsprif1("sample_data: %.2f\n", sample_data[i]);
     }
 
     for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER; i++)
@@ -46,14 +47,14 @@ void bsp_arm_fft(fftbspTypedef * fft_handle, uint16_t * sample_data, uint16_t de
 
     if (debug) {
         for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER * 2; i++)
-            bsprif1("%.2f\n", fft_handle->input[i * 2 + 1]);
+            bsprif1("input: %.2f\n", fft_handle->input[i * 2 + 1]);
     }
     arm_cfft_f32(&arm_cfft_sR_f32_len1024, fft_handle->input, 0, 1);
     arm_cmplx_mag_f32(fft_handle->input, fft_handle->output, BSP_FFT_SAMPLE_NUMBER);
 
     if (debug) {
         for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER / 2; i++)
-            bsprif1("%.2f\n", fft_handle->output[i]);
+            bsprif1("output: %.2f\n", fft_handle->output[i]);
     }
 
     arm_max_f32(fft_handle->output, BSP_FFT_SAMPLE_NUMBER / 2, &fft_handle->ampltitude, (uint32_t *)&fft_handle->subscript);
