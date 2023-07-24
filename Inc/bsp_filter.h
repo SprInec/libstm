@@ -19,14 +19,13 @@
 #include "arm_math.h"
 
 /* FIR */
-#define FIR_LENGTH_SAMPLES 4096 /* ²ÉÑùµãÊı */
-#define FIR_BLOCK_SIZE 1        /* µ÷ÓÃÒ»´Îarm_fir_f32´¦ÀíµÄ²ÉÑùµã¸öÊı */
-#define FIR_FACTOR_NUM 32       /* ÂË²¨Æ÷ÏµÊı¸öÊı */
+#define FIR_LENGTH_SAMPLES 4096 /* é‡‡æ ·ç‚¹æ•° */
+#define FIR_BLOCK_SIZE 1        /* è°ƒç”¨ä¸€æ¬¡arm_fir_f32å¤„ç†çš„é‡‡æ ·ç‚¹ä¸ªæ•° */
+#define FIR_FACTOR_NUM 32       /* æ»¤æ³¢å™¨ç³»æ•°ä¸ªæ•° */
 
 /* LMS */
-#define LMS_LENGTH_SAMPLES 4096 /* ²ÉÑùµãÊı */
-#define LMS_BLOCK_SIZE 1        /* µ÷ÓÃÒ»´Îarm_lms_f32´¦ÀíµÄ²ÉÑùµã¸öÊı */
-#define LMS_FACTOR_NUM 32       /* ÂË²¨Æ÷ÏµÊı¸öÊı */
+#define LMS_LENGTH_SAMPLES 4096 /* é‡‡æ ·ç‚¹æ•° */
+#define LMS_BLOCK_SIZE 1        /* è°ƒç”¨ä¸€æ¬¡arm_lms_f32å¤„ç†çš„é‡‡æ ·ç‚¹ä¸ªæ•° */
 
 void bsp_arm_fir_f32(float32_t *data_buff,
                      float32_t *out_buff,
@@ -37,10 +36,20 @@ void bsp_arm_fir_f32(float32_t *data_buff,
                      uint32_t num_taps,
                      uint8_t debug);
 
+void bsp_arm_lms_f32(float32_t *data_buff,
+                     float32_t *out_buff,
+                     float32_t *ref_buff,
+                     float32_t *err_buff,
+                     float32_t *cache_buff,
+                     float32_t *factor,
+                     uint32_t sample_num,
+                     uint32_t block_size,
+                     uint32_t num_taps,
+                     uint8_t debug);
 
 #endif
 
-/* Æ½»¬ÂË²¨Ëã·¨ */
+/* å¹³æ»‘æ»¤æ³¢ç®—æ³• */
 float Onepointfilter(int16_t data, uint16_t fnum);
 void linearSmooth3(double in[], double out[], int N);
 void linearSmooth5(double in[], double out[], int N);

@@ -42,6 +42,6 @@ typedef struct{
 extern uint16_t sample_data[BSP_FFT_SAMPLE_NUMBER];
 extern BSP_FFTTypedef bsp_fft_handle;
 
-void bsp_arm_fft(fftbspTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
+void bsp_arm_fft(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug);
 #endif
 #endif

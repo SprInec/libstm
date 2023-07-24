@@ -69,7 +69,7 @@ uint16_t bsp_downint(float num)
  * @param arrB 倒置后的数组
  * @param len 数组长度
  */
-void bsp_arraytsp(const real64_T arrA[], float32_t arrB[], uint16_t len)
+void bsp_arraytsp(const float arrA[], float arrB[], uint16_t len)
 {
     for (uint16_t i = 0, j = len - 1; i < len; i++, j--)
     {

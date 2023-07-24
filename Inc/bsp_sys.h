@@ -19,17 +19,11 @@
 
 #include "bsp_config.h"
 
-#ifdef __BSP_STM32F1_ENABLED
+#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
 #include "stm32f1xx.h"
 #endif
-#ifdef __BSP_STM32F4_ENABLED
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
 #include "stm32f4xx.h"
-#endif
-#ifdef __BSP_STM32G4_ENABLED
-#include "stm32g4xx.h"
-#endif
-#ifdef __BSP_STM32H7_ENABLED
-#include "stm32h7xx.h"
 #endif
 
 /**********************************************************
@@ -54,7 +48,7 @@
                       GPIO地址映射
               基地址加上寄存器偏移地址组成
 **********************************************************/
-#ifdef __BSP_STM32F1_ENABLED
+#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
 
 #define GPIOA_ODR_Addr (GPIOA_BASE + 12) // 0x4001080C
 #define GPIOB_ODR_Addr (GPIOB_BASE + 12) // 0x40010C0C
@@ -74,27 +68,7 @@
 
 #endif
 
-#ifdef __BSP_STM32F4_ENABLED
-
-#define GPIOA_IDR_Addr (GPIOA_BASE + 0x10)
-#define GPIOB_IDR_Addr (GPIOB_BASE + 0x10)
-#define GPIOC_IDR_Addr (GPIOC_BASE + 0x10)
-#define GPIOD_IDR_Addr (GPIOD_BASE + 0x10)
-#define GPIOE_IDR_Addr (GPIOE_BASE + 0x10)
-#define GPIOF_IDR_Addr (GPIOF_BASE + 0x10)
-#define GPIOG_IDR_Addr (GPIOG_BASE + 0x10)
-
-#define GPIOA_ODR_Addr (GPIOA_BASE + 0x14)
-#define GPIOB_ODR_Addr (GPIOB_BASE + 0x14)
-#define GPIOC_ODR_Addr (GPIOC_BASE + 0x14)
-#define GPIOD_ODR_Addr (GPIOD_BASE + 0x14)
-#define GPIOE_ODR_Addr (GPIOE_BASE + 0x14)
-#define GPIOF_ODR_Addr (GPIOF_BASE + 0x14)
-#define GPIOG_ODR_Addr (GPIOG_BASE + 0x14)
-
-#endif
-
-#ifdef __BSP_STM32H7_ENABLED
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
 
 #define GPIOA_IDR_Addr (GPIOA_BASE + 0x10)
 #define GPIOB_IDR_Addr (GPIOB_BASE + 0x10)

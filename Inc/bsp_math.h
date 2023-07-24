@@ -14,7 +14,9 @@
 #include "bsp_config.h"
 #include "math.h"
 
+#ifndef PI
 #define PI acos(-1)
+#endif
 
 /* Take the maximum of two numbers */
 #define __bsp_max(x, y) ({	\
@@ -39,6 +41,6 @@ uint16_t bsp_upint(float num);
 /* 向下取整 */
 uint16_t bsp_downint(float num);
 /* 数组倒置 */
-void bsp_arraytsp(const real64_T arrA[], float32_t arrB[], uint16_t len);
+void bsp_arraytsp(const float arrA[], float arrB[], uint16_t len);
 
 #endif /* !BSP_MATH_H */

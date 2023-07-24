@@ -191,6 +191,12 @@
 #endif
 // </e>
 
+// <e> AD9854
+#ifndef __BSP_AD9854_ENABLED
+#define __BSP_AD9854_ENABLED 0
+#endif
+// </e>
+
 // <e> AD9959
 #ifndef __BSP_AD9959_ENABLED
 #define __BSP_AD9959_ENABLED 1
@@ -467,6 +473,10 @@
 #if __BSP_AD9851_ENABLED
 #include "bsp_ad9851.h"
 #endif /* !__BSP_AD9851_ENABLED */
+
+#if __BSP_AD9854_ENABLED
+#include "bsp_ad9854.h"
+#endif /* !__BSP_AD9854_ENABLED */
 
 #if __BSP_AD9959_ENABLED
 #include "bsp_ad9959.h"

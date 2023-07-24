@@ -20,7 +20,7 @@
 
 /**
  * @brief FIR滤波器
- * @details 改函数调用 CMSIS DSP lib中arm_fir_f32_hp实现高通/低通/带通/带阻滤波器
+ * @details 该函数调用 CMSIS DSP lib中arm_fir_f32_hp实现高通/低通/带通/带阻滤波器
  * @attention 用户需自行通过MATLAB设计生成所需的 factor及相关参数
  *
  * @param data_buff 源数据地址
@@ -33,7 +33,7 @@
  * @param debug 是否打印滤波后结果
  */
 void bsp_arm_fir_f32(float32_t *data_buff,
-                     float32_t *out_buff, 
+                     float32_t *out_buff,
                      float32_t *cache_buff,
                      float32_t *factor,
                      uint32_t sample_num,
@@ -55,12 +55,13 @@ void bsp_arm_fir_f32(float32_t *data_buff,
     {
         arm_fir_f32(&FIR_InitStruct,
                     data_buff + (i * block_size),
-                    out_buff + (i * block_size), 
+                    out_buff + (i * block_size),
                     block_size);
     }
 
     /* 打印滤波后结果 */
-    if (debug){
+    if (debug)
+    {
         for (uint32_t i = 0; i < sample_num; i++)
         {
             printf("input&output:%f, %f\n", data_buff[i], out_buff[i]);
@@ -68,10 +69,60 @@ void bsp_arm_fir_f32(float32_t *data_buff,
     }
 }
 
-// TODO: LMS滤波器
-void bsp_arm_lms_f32(void)
+/**
+ * @brief LMS滤波器
+ * @details 该函数调用 CMSIS DSP lib中arm_lms_f32实现LMS滤波器
+ *
+ * @param data_buff 源数据地址
+ * @param out_buff 输出数据地址
+ * @param ref_buff 参考数据地址
+ * @param err_buff 错误数据地址
+ * @param cache_buff 缓存地址, 规定大小: num_taps + block_size - 1
+ * @param factor 滤波因数
+ * @param sample_num 采样点数
+ * @param block_size 每次处理的采样点数
+ * @param num_taps 滤波因数个数
+ * @param debug 是否打印滤波后结果
+ */
+void bsp_arm_lms_f32(float32_t *data_buff,
+                     float32_t *out_buff,
+                     float32_t *ref_buff,
+                     float32_t *err_buff,
+                     float32_t *cache_buff,
+                     float32_t *factor,
+                     uint32_t sample_num,
+                     uint32_t block_size,
+                     uint32_t num_taps,
+                     uint8_t debug)
 {
+    arm_lms_norm_instance_f32 LMS_InitStruct;
 
+    /* 初始化结构体LMS_InitStruct */
+    arm_lms_norm_init_f32(&LMS_InitStruct,
+                          num_taps,
+                          factor,
+                          cache_buff,
+                          err_buff,
+                          block_size);
+
+    /* 实现LMS滤波，这里每次处理 sample_num / block_size 个点 */
+    for (uint32_t i = 0; i < (sample_num / block_size); i++)
+    {
+        arm_lms_norm_f32(&LMS_InitStruct,
+                         data_buff + (i * block_size),
+                         ref_buff + (i * block_size),
+                         out_buff + (i * block_size),
+                         err_buff + (i * block_size),
+                         block_size);
+    }
+
+    if (debug)
+    {
+        for (uint32_t i = 0; i < sample_num; i++)
+        {
+            printf("input&output:%f, %f\n", data_buff[i], out_buff[i]);
+        }
+    }
 }
 #endif
 
