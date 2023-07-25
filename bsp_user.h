@@ -8,3 +8,11 @@
  * @copyright Copyright (c) 2023
  *
  */
+
+#ifndef __BSP_USER_H__
+#define __BSP_USER_H__
+#include "bsp_config.h"
+
+/* CODE */
+
+#endif /* __BSP_USER_H__ */
