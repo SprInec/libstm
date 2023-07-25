@@ -61,10 +61,10 @@
 
 #if AD9833_DEMULT
 /*端口定义 */
-#define FSY(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, n)
-#define SCK(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, n)
-#define DAT(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, n)
-#define CS(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6, n)
+#define AD9833_FSY(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_0, n)
+#define AD9833_SCK(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, n)
+#define AD9833_DAT(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, n)
+#define AD9833_CS(n) HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6, n)
 
 void AD9833_Init(void);
 void AD9833_WaveSeting(double frequence, unsigned int frequence_SFR, unsigned int WaveMode, unsigned int Phase);
@@ -82,15 +82,15 @@ void bsp_mcp41_set_value(uint8_t pot_id, uint8_t pot_value);
 #endif
 #else
 /*端口定义 */
-#define FSY1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, n)
-#define SCK1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, n)
-#define DAT1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, n)
-#define CS1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, n)
+#define AD9833_FSY1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, n)
+#define AD9833_SCK1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, n)
+#define AD9833_DAT1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, n)
+#define AD9833_CS1(n) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, n)
 
-#define FSY2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, n)
-#define SCK2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, n)
-#define DAT2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, n)
-#define CS2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, n)
+#define AD9833_FSY2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, n)
+#define AD9833_SCK2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, n)
+#define AD9833_DAT2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, n)
+#define AD9833_CS2(n) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, n)
 
 void AD9833_MULT_AmpSet1(unsigned char amp);
 void AD9833_MULT_AmpSet2(unsigned char amp);

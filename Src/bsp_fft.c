@@ -57,7 +57,7 @@ void bsp_arm_fft(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t deb
             bsprif1("output: %.2f\n", fft_handle->output[i]);
     }
 
-    arm_max_f32(fft_handle->output, BSP_FFT_SAMPLE_NUMBER / 2, &fft_handle->ampltitude, (uint32_t *)&fft_handle->subscript);
+    arm_max_f32((fft_handle->output + 1), BSP_FFT_SAMPLE_NUMBER / 2, &fft_handle->ampltitude, (uint32_t *)&fft_handle->subscript);
     fft_handle->ampltitude = fft_handle->ampltitude * 2 / BSP_FFT_SAMPLE_NUMBER;
     fft_handle->frequency = (fft_handle->subscript * BSP_FFT_SAMPLE_STEP);
 

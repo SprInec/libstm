@@ -89,25 +89,25 @@ void AD9833_Write(unsigned int TxData)
 	SpiTxData[1] = (uint8_t)(TxData &  0x00ff);
 	*/
 
-	SCK(_1);
+	AD9833_SCK(_1);
 
-	FSY(_1);
+	AD9833_FSY(_1);
 	AD9833_Delay2();
-	FSY(_0);
+	AD9833_FSY(_0);
 	AD9833_Delay2();
 #if defined(SofeSpi)
 
 	for (i = 0; i < 16; i++)
 	{
 		if (TxData & 0x8000)
-			DAT(_1);
+			AD9833_DAT(_1);
 		else
-			DAT(_0);
+			AD9833_DAT(_0);
 
 		AD9833_Delay2();
-		SCK(_0);
+		AD9833_SCK(_0);
 		AD9833_Delay2();
-		SCK(_1);
+		AD9833_SCK(_1);
 
 		TxData <<= 1;
 	}
@@ -117,7 +117,7 @@ void AD9833_Write(unsigned int TxData)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	FSY(_1);
+	AD9833_FSY(_1);
 	AD9833_Delay2();
 }
 
@@ -140,26 +140,26 @@ void AD9833_AmpSet(unsigned char amp)
 	SpiTxData[1] = (uint8_t)(temp &  0x00ff);
 	*/
 
-	CS(_0);
+	AD9833_CS(_0);
 	AD9833_Delay2();
 
 #if defined(SofeSpi)
 	for (i = 0; i < 16; i++)
 	{
-		SCK(_0);
+		AD9833_SCK(_0);
 		AD9833_Delay2();
 		if (temp & 0x8000)
 		{
-			DAT(_1);
+			AD9833_DAT(_1);
 			AD9833_Delay2();
 		}
 		else
 		{
-			DAT(_0);
+			AD9833_DAT(_0);
 			AD9833_Delay2();
 		}
 		temp <<= 1;
-		SCK(_1);
+		AD9833_SCK(_1);
 		AD9833_Delay();
 	}
 #endif
@@ -168,7 +168,7 @@ void AD9833_AmpSet(unsigned char amp)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	CS(_1);
+	AD9833_CS(_1);
 	AD9833_Delay2();
 }
 
@@ -244,7 +244,7 @@ void MCP41010_SPI_SendOneByte(uint8_t xtemp)
 {
 	uint8_t xnum = 0;
 
-	SCK(_0);
+	AD9833_SCK(_0);
 	AD9833_Delay3();
 	/* DP_SCK发送8个脉冲，在上升沿时送入数据 */
 	for (xnum = 0; xnum < 8; xnum++)
@@ -253,19 +253,19 @@ void MCP41010_SPI_SendOneByte(uint8_t xtemp)
 		// DP_SI = (xtemp & 0x80) >>7;
 		if (xtemp & 0x80)
 		{
-			DAT(_1);
+			AD9833_DAT(_1);
 		}
 		else
-			DAT(_0);
+			AD9833_DAT(_0);
 		xtemp = xtemp << 1;
 
 		// 延时待数据稳定后，在DP_SCK产生上升沿脉冲，数据送入MCP41010
 		AD9833_Delay3();
-		SCK(_1);
+		AD9833_SCK(_1);
 
 		// DP_SCK产生下降沿脉冲
 		AD9833_Delay3();
-		SCK(_0);
+		AD9833_SCK(_0);
 	}
 }
 
@@ -280,11 +280,11 @@ void MCP41010_SPI_SendOneByte(uint8_t xtemp)
  */
 void MCP41010_SetRes(uint8_t xRes)
 {
-	CS(_1);
-	SCK(_1);
+	AD9833_CS(_1);
+	AD9833_SCK(_1);
 	AD9833_Delay2();
 	// MCP41010芯片使能
-	CS(_0);
+	AD9833_CS(_0);
 	AD9833_Delay2();
 	// 发送第一字节，控制方式位
 	// 0x13。写数据，对电位器0，1操作
@@ -294,7 +294,7 @@ void MCP41010_SetRes(uint8_t xRes)
 	MCP41010_SPI_SendOneByte(xRes);
 
 	// MCP41010芯片失能
-	CS(_1);
+	AD9833_CS(_1);
 }
 
 #endif
@@ -385,25 +385,25 @@ void AD9833_MULT_Write1(unsigned int TxData)
 	SpiTxData[1] = (uint8_t)(TxData &  0x00ff);
 	*/
 
-	SCK1(_1);
+	AD9833_SCK1(_1);
 
-	FSY1(_1);
+	AD9833_FSY1(_1);
 	AD9833_Delay2();
-	FSY1(_0);
+	AD9833_FSY1(_0);
 	AD9833_Delay2();
 #if defined(SofeSpi)
 
 	for (i = 0; i < 16; i++)
 	{
 		if (TxData & 0x8000)
-			DAT1(_1);
+			AD9833_DAT1(_1);
 		else
-			DAT1(_0);
+			AD9833_DAT1(_0);
 
 		AD9833_Delay2();
-		SCK1(_0);
+		AD9833_SCK1(_0);
 		AD9833_Delay2();
-		SCK1(_1);
+		AD9833_SCK1(_1);
 
 		TxData <<= 1;
 	}
@@ -413,7 +413,7 @@ void AD9833_MULT_Write1(unsigned int TxData)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	FSY1(_1);
+	AD9833_FSY1(_1);
 	AD9833_Delay2();
 }
 void AD9833_MULT_Write2(unsigned int TxData)
@@ -426,25 +426,25 @@ void AD9833_MULT_Write2(unsigned int TxData)
 	SpiTxData[1] = (uint8_t)(TxData &  0x00ff);
 	*/
 
-	SCK2(_1);
+	AD9833_SCK2(_1);
 
-	FSY2(_1);
+	AD9833_FSY2(_1);
 	AD9833_Delay2();
-	FSY2(_0);
+	AD9833_FSY2(_0);
 	AD9833_Delay2();
 #if defined(SofeSpi)
 
 	for (i = 0; i < 16; i++)
 	{
 		if (TxData & 0x8000)
-			DAT2(_1);
+			AD9833_DAT2(_1);
 		else
-			DAT2(_0);
+			AD9833_DAT2(_0);
 
 		AD9833_Delay2();
-		SCK2(_0);
+		AD9833_SCK2(_0);
 		AD9833_Delay2();
-		SCK2(_1);
+		AD9833_SCK2(_1);
 
 		TxData <<= 1;
 	}
@@ -454,7 +454,7 @@ void AD9833_MULT_Write2(unsigned int TxData)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	FSY2(_1);
+	AD9833_FSY2(_1);
 	AD9833_Delay2();
 }
 /*
@@ -480,26 +480,26 @@ void AD9833_MULT_AmpSet1(unsigned char amp)
 	SpiTxData[1] = (uint8_t)(temp &  0x00ff);
 	*/
 
-	CS1(_0);
+	AD9833_CS1(_0);
 	AD9833_Delay2();
 
 #if defined(SofeSpi)
 	for (i = 0; i < 16; i++)
 	{
-		SCK1(_0);
+		AD9833_SCK1(_0);
 		AD9833_Delay2();
 		if (temp & 0x8000)
 		{
-			DAT1(_1);
+			AD9833_DAT1(_1);
 			AD9833_Delay2();
 		}
 		else
 		{
-			DAT1(_0);
+			AD9833_DAT1(_0);
 			AD9833_Delay2();
 		}
 		temp <<= 1;
-		SCK1(_1);
+		AD9833_SCK1(_1);
 		AD9833_Delay();
 	}
 #endif
@@ -508,7 +508,7 @@ void AD9833_MULT_AmpSet1(unsigned char amp)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	CS1(_1);
+	AD9833_CS1(_1);
 	AD9833_Delay2();
 }
 void AD9833_MULT_AmpSet2(unsigned char amp)
@@ -525,26 +525,26 @@ void AD9833_MULT_AmpSet2(unsigned char amp)
 	SpiTxData[1] = (uint8_t)(temp &  0x00ff);
 	*/
 
-	CS2(_0);
+	AD9833_CS2(_0);
 	AD9833_Delay2();
 
 #if defined(SofeSpi)
 	for (i = 0; i < 16; i++)
 	{
-		SCK2(_0);
+		AD9833_SCK2(_0);
 		AD9833_Delay2();
 		if (temp & 0x8000)
 		{
-			DAT2(_1);
+			AD9833_DAT2(_1);
 			AD9833_Delay2();
 		}
 		else
 		{
-			DAT2(_0);
+			AD9833_DAT2(_0);
 			AD9833_Delay2();
 		}
 		temp <<= 1;
-		SCK2(_1);
+		AD9833_SCK2(_1);
 		AD9833_Delay();
 	}
 #endif
@@ -553,7 +553,7 @@ void AD9833_MULT_AmpSet2(unsigned char amp)
 	HAL_SPI_Transmit(&hspi2, SpiTxData, 2, 1000);
 #endif
 
-	CS2(_1);
+	AD9833_CS2(_1);
 	AD9833_Delay2();
 }
 

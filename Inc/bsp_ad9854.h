@@ -6,28 +6,28 @@
  * @date 2023.07.24
  * @pinset
  *          --
- *          RESET ——PA6;
- *          UDCLK ——PA4;
- *          WR    ——PA5;
- *          RD    ——PA8;
- *          OSK   ——PA2;
- *          FDATA ——PB10;
- *          D0		——PC0;
- *          D1		——PC1;
- *          D2		——PC2;
- *          D3		——PC3;
- *          D4		——PC4;
- *          D5		——PC5;
- *          D6		——PC6;
- *          D7		——PC7;
- *          A0		——PC8;
- *          A1		——PC9;
- *          A2		——PC10;
- *          A3		——PC11;
- *          A4		——PC12;
- *          A5		——PC13;
- *          VDD--逻辑电源(3.3V)
- *          VSS--GND(0V)
+ *          RESET   - PE6;
+ *          UDCLK   - PC13;
+ *          WR      - PE3;
+ *          RD      - PE2;
+ *          OSK     - PE4;
+ *          FSK	  	- PE5;
+ *          D0		- PF0;
+ *          D1		- PF1;
+ *          D2		- PF2;
+ *          D3		- PF3;
+ *          D4		- PF4;
+ *          D5		- PF5;
+ *          D6		- PF6;
+ *          D7		- PF7;
+ *          A0		- PF8;
+ *          A1		- PF9;
+ *          A2		- PF10;
+ *          A3		- PF11;
+ *          A4		- PF12;
+ *          A5		- PF13;
+ *          VDD     逻辑电源(3.3V)
+ *          VSS     GND(0V)
  *
  * @copyright Copyright (c) 2023
  *
@@ -37,24 +37,28 @@
 #include "bsp_config.h"
 #include "bsp_sys.h"
 
-#define AD9854_RST PAout(6)            // AD9854复位端口
-#define AD9854_UDCLK PAout(4)          // AD9854更新时钟
-#define AD9854_WR PAout(5)             // AD9854写使能，低有效
-#define AD9854_RD PAout(8)             // AD9854读使能，低有效
-#define AD9854_OSK PAout(2)            // AD9854 OSK控制端
-#define AD9854_FSK_BPSK_HOLD PBout(10) // AD9854 FSK,BPSK,HOLD控制脚，即AD9854芯片29脚
+#define AD9854_RST PEout(4)           // AD9854复位端口
+#define AD9854_UDCLK PCout(13)        // AD9854更新时钟
+#define AD9854_WR PEout(3)            // AD9854写使能，低有效
+#define AD9854_RD PEout(2)            // AD9854读使能，低有效
+#define AD9854_OSK PEout(6)           // AD9854 OSK控制端
+#define AD9854_FSK_BPSK_HOLD PEout(5) // AD9854 FSK,BPSK,HOLD控制脚，即AD9854芯片29脚
 
-#define AD9854_DataBus GPIOC->BSRR
-#define AD9854_AdrBus GPIOC->BSRR
+#define AD9854_DataBus GPIOF->BSRR
+#define AD9854_AdrBus GPIOF->BSRR
 
 #define AUTO 1   // 自动扫频
 #define MANUAL 0 // FSK控制脚控制扫频
 
+#ifndef uint
 #define uint unsigned int
+#endif
+#ifndef uchar
 #define uchar unsigned char
+#endif
+#ifndef ulong
 #define ulong unsigned long
-
-//**************************以下部分为函数定义********************************
+#endif
 
 void AD9854_IO_Init(void);              // AD9854需要用到的IO口初始化
 void AD9854_WR_Byte(u32 addr, u32 dat); // AD9854并行口写数据

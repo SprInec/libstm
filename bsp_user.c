@@ -26,7 +26,7 @@ uint8_t digital_code[16] = {0};
 /* 当前频率 */
 volatile uint8_t freqPoit = 0;
 /* 跳频表 */
-const float freqTab[] = { 80.7, 81.7, 82.7, 83.7, 84.7, 85.7};
+const float freqTab[] = {80.7, 81.7, 82.7, 83.7, 84.7, 85.7};
 /* 自定义频率 */
 float diyfreq = 0;
 
@@ -47,6 +47,10 @@ void BSP_SendPort_Init(void)
     AD9833_Init();
     AD9833_AmpSet(15);
     AD9833_WaveSeting(10000, 0, SIN_WAVE, 0);
+
+    // AD9854_IO_Init();
+    // AD9854_InitSingle();
+    // AD9854_SetSine(50000000, 2000);
 
     HAL_TIM_Base_Start_IT(&htim7);
 
@@ -84,7 +88,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
     case /* MODE -> Handle */ 'B':
         nowMode = 1;
         break;
-    case /* MODE -> DIY */'I':
+    case /* MODE -> DIY */ 'I':
         nowMode = 2;
         sscanf((char *)str, "I%f", &diyfreq);
         BSP_ADF4351_Init();
@@ -174,7 +178,7 @@ void BSP_UsartVar_Callback(uint8_t *str)
 
 /**
  * @brief 定时器中断回调
- * @param htim 
+ * @param htim
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -194,7 +198,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  */
 void BSP_InterfDetect(void)
 {
-    
 }
 
 /**
@@ -227,7 +230,7 @@ void BSP_FHSS_CONTR(void)
 
 #if USING_DIGITAL
 /**
- * @brief 数字信号发送 
+ * @brief 数字信号发送
  */
 void BSP_DigitalMess_Send(uint16_t code[], uint8_t len)
 {
@@ -274,19 +277,30 @@ void BSP_SendPort_CONTR(void)
 #include "adc.h"
 
 /* 跳频表 */
-const uint32_t freqTab[] = {80700000 + FREQ_OFFSET,
-                            81700000 + FREQ_OFFSET,
-                            82700000 + FREQ_OFFSET,
-                            83700000 + FREQ_OFFSET,
-                            84700000 + FREQ_OFFSET,
-                            85700000 + FREQ_OFFSET};
+const uint32_t freqTab[] = {
+    80700000 + FREQ_OFFSET,
+    81700000 + FREQ_OFFSET,
+    82700000 + FREQ_OFFSET,
+    83700000 + FREQ_OFFSET,
+    84700000 + FREQ_OFFSET,
+    85700000 + FREQ_OFFSET};
+
+const uint32_t freqPoint[] = {
+    80780000 + FREQ_OFFSET,
+    81620000 + FREQ_OFFSET,
+    82620000 + FREQ_OFFSET,
+    83700000 + FREQ_OFFSET,
+    84640000 + FREQ_OFFSET,
+    85620000 + FREQ_OFFSET,
+};
+
 /* 当前表位 */
 uint8_t tabpoint = 0;
 /* 当前频率 */
 uint32_t nowFreq = 80000000 + FREQ_OFFSET;
 /* 连接状态 */
 uint8_t sync_state = 0;
-/* ADC压值 */ 
+/* ADC压值 */
 uint16_t adc_val = 0;
 /* 接收信息 */
 uint16_t mess_freq = 0;
@@ -317,7 +331,6 @@ void BSP_RecvPort_Init(void)
  */
 void BSP_FHSS_Sync(void)
 {
-
 }
 
 /**
@@ -342,8 +355,8 @@ uint8_t BSP_DemoDulation_Judge(void)
 {
     HAL_ADC_Start(&hadc1);
     adc_val = HAL_ADC_GetValue(&hadc1);
-    __prifend3;
-    if (adc_val < VOLTAGE_THRESHOLD_I){
+    if (adc_val < VOLTAGE_THRESHOLD_I)
+    {
         bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
         __prifend3;
         bsprif3("t1.txt=\"CONNECT\"");
@@ -353,7 +366,8 @@ uint8_t BSP_DemoDulation_Judge(void)
         sync_state = 1;
         return 0;
     }
-    else{
+    else
+    {
         bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
         __prifend3;
         bsprif3("t1.txt=\"DISCONNECT\"");
@@ -363,6 +377,36 @@ uint8_t BSP_DemoDulation_Judge(void)
         sync_state = 0;
         return 1;
     }
+}
+
+/**
+ * @brief 跳频点同步
+ * @return uint8_t 0->扫频成功 1->扫频失败
+ */
+uint8_t BSP_Freq_PointSweep(void)
+{
+    for (uint8_t j = 0; j < 3; j++)
+    {
+        for (uint8_t i = 0; i < 5; i++)
+        {
+            AD9959_WriteFreq(CAR_WAVE_CHANNEL, freqPoint[i]);
+            delay_ms(10);
+            if (!BSP_DemoDulation_Judge())
+            {
+                bsprif3("t0.txt=\"%.2f\"", (freqPoint[i] - FREQ_OFFSET) / 1000000.0);
+                __prifend3;
+                bsprif3("t1.txt=\"CONNECT\"");
+                __prifend3;
+                bsprif3("t2.txt=\"- -\"");
+                __prifend3;
+                return 0;
+            }
+            bsprif3("t2.txt=\"SYNCING-%.2f\"", freqTab[tabpoint] / 1000000);
+            __prifend3;
+        }
+    }
+
+    return 1;
 }
 
 /**
@@ -380,7 +424,8 @@ uint8_t BSP_Freq_Sweep(uint32_t centerfreq, uint32_t sweepwidth, float sweepstep
         nowFreq = (centerfreq - sweepwidth) + (i * sweepstep);
         AD9959_WriteFreq(CAR_WAVE_CHANNEL, nowFreq);
         delay_ms(10);
-        if (!BSP_DemoDulation_Judge()){
+        if (!BSP_DemoDulation_Judge())
+        {
             bsprif3("t0.txt=\"%.2f\"", (nowFreq - FREQ_OFFSET) / 1000000.0);
             __prifend3;
             bsprif3("t1.txt=\"CONNECT\"");
@@ -401,19 +446,23 @@ uint8_t BSP_Freq_Sweep(uint32_t centerfreq, uint32_t sweepwidth, float sweepstep
 void BSP_Tab_Sync(void)
 {
     uint8_t count = 0;
+    // if (BSP_Freq_PointSweep())
+    // {
     while (BSP_Freq_Sweep(freqTab[tabpoint], SWEEP_RANGE, SWEEP_STEP))
     {
         tabpoint++;
-        if (tabpoint >= 6){
+        if (tabpoint >= 6)
+        {
             tabpoint = 0;
         }
         count++;
-        if (count >= 6){
+        if (count >= 6)
+        {
             break;
         }
     }
+    // }
 }
-
 
 /**
  * @brief 接收端控制函数

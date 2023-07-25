@@ -193,7 +193,7 @@
 
 // <e> AD9854
 #ifndef __BSP_AD9854_ENABLED
-#define __BSP_AD9854_ENABLED 0
+#define __BSP_AD9854_ENABLED 1
 #endif
 // </e>
 
