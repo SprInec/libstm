@@ -331,7 +331,7 @@ void Intserve(void);
 // AD9959复位
 void IntReset(void);
 // AD9959更新数据
-void IO_Update(void);
+void AD9959_IO_Update(void);
 /*--------------------------------------------
 函数功能：控制器通过SPI向AD9959写数据
 RegisterAddress: 寄存器地址

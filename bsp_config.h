@@ -58,7 +58,7 @@
 
 // <e> CMSIS DSP
 #ifndef __CMSIS_DSP
-#define __CMSIS_DSP 1
+#define __CMSIS_DSP 0
 #endif
 // </e> !main.h
 
@@ -181,7 +181,7 @@
 
 // <e> AD9833
 #ifndef __BSP_AD9833_ENABLED
-#define __BSP_AD9833_ENABLED 1
+#define __BSP_AD9833_ENABLED 0
 #endif
 // </e>
 
@@ -226,7 +226,7 @@
 // ==================
 // <e> ADF4351
 #ifndef __BSP_ADF4351_ENABLED
-#define __BSP_ADF4351_ENABLED 1
+#define __BSP_ADF4351_ENABLED 0
 #endif
 // </e>
 
@@ -278,7 +278,7 @@
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 1
+#define __BSP_UARTHMI_ENABLED 0
 #endif
 // </e>
 // </h> !Display screen selection
@@ -287,7 +287,7 @@
 // ==========
 // <e> OV2640
 #ifndef __BSP_OV2640_ENABLED
-#define __BSP_OV2640_ENABLED 1
+#define __BSP_OV2640_ENABLED 0
 #endif
 // </e>
 // </h> !Camera
@@ -348,31 +348,31 @@
 // ====================
 // <e> CODING
 #ifndef __BSP_CODING_ENABLED
-#define __BSP_CODING_ENABLED 1
+#define __BSP_CODING_ENABLED 0
 #endif
 // </e>
 
 // <e> DEDING
 #ifndef __BSP_DEDING_ENABLED
-#define __BSP_DEDING_ENABLED 1
+#define __BSP_DEDING_ENABLED 0
 #endif
 // </e>
 
 // <e> FILTER
 #ifndef __BSP_FILTER_ENABLED
-#define __BSP_FILTER_ENABLED 1
+#define __BSP_FILTER_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP MATH
 #ifndef __BSP_MATH_ENABLED
-#define __BSP_MATH_ENABLED 1
+#define __BSP_MATH_ENABLED 0
 #endif
 // </e>
 
 // <e> FFT
 #ifndef __BSP_FFT_ENABLED
-#define __BSP_FFT_ENABLED 1
+#define __BSP_FFT_ENABLED 0
 #endif
 // </e>
 

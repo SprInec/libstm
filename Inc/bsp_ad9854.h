@@ -6,28 +6,28 @@
  * @date 2023.07.24
  * @pinset
  *          --
- *          RESET   - PE6;
- *          UDCLK   - PC13;
- *          WR      - PE3;
- *          RD      - PE2;
- *          OSK     - PE4;
- *          FSK	  	- PE5;
- *          D0		- PF0;
- *          D1		- PF1;
- *          D2		- PF2;
- *          D3		- PF3;
- *          D4		- PF4;
- *          D5		- PF5;
- *          D6		- PF6;
- *          D7		- PF7;
- *          A0		- PF8;
- *          A1		- PF9;
- *          A2		- PF10;
- *          A3		- PF11;
- *          A4		- PF12;
- *          A5		- PF13;
- *          VDD     逻辑电源(3.3V)
- *          VSS     GND(0V)
+ *          MRESET      - PE6;
+ *          UD/ICLK     - PC13;
+ *          RSCLK/WR    - PE3;
+ *          RD          - PE2;
+ *          OSK         - PE4;
+ *          FSK	  	    - PE5;
+ *          D0		    - PF0;
+ *          D1		    - PF1;
+ *          D2		    - PF2;
+ *          D3		    - PF3;
+ *          D4		    - PF4;
+ *          D5		    - PF5;
+ *          D6		    - PF6;
+ *          D7		    - PF7;
+ *          A0		    - PF8;
+ *          A1		    - PF9;
+ *          A2		    - PF10;
+ *          A3		    - PF11;
+ *          A4		    - PF12;
+ *          A5		    - PF13;
+ *          VDD         逻辑电源(3.3V)
+ *          VSS         GND(0V)
  *
  * @copyright Copyright (c) 2023
  *
@@ -37,11 +37,11 @@
 #include "bsp_config.h"
 #include "bsp_sys.h"
 
-#define AD9854_RST PEout(4)           // AD9854复位端口
+#define AD9854_RST PEout(6)           // AD9854复位端口
 #define AD9854_UDCLK PCout(13)        // AD9854更新时钟
 #define AD9854_WR PEout(3)            // AD9854写使能，低有效
 #define AD9854_RD PEout(2)            // AD9854读使能，低有效
-#define AD9854_OSK PEout(6)           // AD9854 OSK控制端
+#define AD9854_OSK PEout(4)           // AD9854 OSK控制端
 #define AD9854_FSK_BPSK_HOLD PEout(5) // AD9854 FSK,BPSK,HOLD控制脚，即AD9854芯片29脚
 
 #define AD9854_DataBus GPIOF->BSRR

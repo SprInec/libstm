@@ -216,7 +216,7 @@ void IntReset(void)
 	AD9959_Reset_RESET;
 }
 // AD9959更新数据
-void IO_Update(void)
+void AD9959_IO_Update(void)
 {
 	AD9959_UPDATE_RESET;
 	delay1(2); // 2
@@ -270,7 +270,7 @@ void WriteData_AD9959(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_
 		AD9959_SCLK_RESET;
 	}
 	if (temp != 0)
-		IO_Update();
+		AD9959_IO_Update();
 	AD9959_CS_SET;
 }
 
@@ -278,8 +278,8 @@ void WriteData_AD9959(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_
 ** 函数名称 ：void AD9959_WriteData(u8 RegisterAddress, u8 NumberofRegisters, u8 *RegisterData)
 ** 函数功能 ：使用模拟SPI向AD9959写数据
 ** 入口参数 ：RegisterAddress: 寄存器地址
-						NumberofRegisters: 要写入的字节数
-						*RegisterData: 数据起始地址
+			  NumberofRegisters: 要写入的字节数
+			  *RegisterData: 数据起始地址
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -327,7 +327,7 @@ void AD9959_WriteData(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_
 /************************************************************
 ** 函数名称 ：void Write_CFTW0(uint32_t fre)
 ** 函数功能 ：写CFTW0通道频率转换字寄存器
-** 入口参数 ： Freq:	写入频率，范围0~200 000 000 Hz
+** 入口参数 ： Freq: 写入频率，范围0~200 000 000 Hz
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -346,7 +346,7 @@ void Write_CFTW0(uint32_t fre)
 /************************************************************
 ** 函数名称 ：void Write_ACR(uint16_t Ampli)
 ** 函数功能 ：写ACR通道幅度转换字寄存器
-** 入口参数 ：Ampli:    输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
+** 入口参数 ：Ampli: 输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -364,7 +364,7 @@ void Write_ACR(uint16_t Ampli)
 /************************************************************
 ** 函数名称 ：void Write_CPOW0(uint16_t Phase)
 ** 函数功能 ：写CPOW0通道相位转换字寄存器
-** 入口参数 ：Phase:		输出相位,范围：0~16383(对应角度：0°~360°)
+** 入口参数 ：Phase: 输出相位,范围：0~16383(对应角度：0°~360°)
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -381,7 +381,7 @@ void Write_CPOW0(uint16_t Phase)
 ** 函数名称 ：void Write_LSRR(uint8_t rsrr,uint8_t fsrr)
 ** 函数功能 ：写LSRR线性扫描斜率寄存器
 ** 入口参数 ：	rsrr:	上升斜率,范围：0~255
-							fsrr:	下降斜率,范围：0~255
+			   fsrr:	下降斜率,范围：0~255
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -435,7 +435,7 @@ void Write_FDW(uint32_t f_delta)
 ** 函数名称 ：void Write_Profile_Fre(uint8_t profile,uint32_t data)
 ** 函数功能 ：写Profile寄存器
 ** 入口参数 ：profile:	profile号(0~14)
-			  data:	写入频率，范围0~200 000 000 Hz
+			 data:	写入频率，范围0~200 000 000 Hz
 ** 出口参数 ：无
 ** 函数说明 ：无
 **************************************************************/
@@ -498,23 +498,19 @@ void Write_Profile_Phase(uint8_t profile, uint16_t data)
 	AD9959_WriteData(profileAddr, 4, Profile_data); // 写入32位数据
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_Modulation_Init(uint8_t Channel,uint8_t Modulation,uint8_t Sweep_en,uint8_t Nlevel)
-** 函数功能 ：设置各个通道的调制模式。
-** 入口参数 ： Channel:  	输出通道 CH0-CH3
-							Modulation:	调制模式DISABLE_Mod，ASK，FSK，PSK
-							Sweep_en:		线性扫描模式 SWEEP_ENABLE启用、SWEEP_DISABLE不启用；启用时Nlevel只能是LEVEL_MOD_2
-							Nlevel：		调制电平选择 LEVEL_MOD_2、4、8、16
-** 出口参数 ：无
-** 函数说明 ：如将调制电平设置为2电平调制时，对应的P0-P3引脚上的高低电平分别控制CH0-CH3通道(如果对应通道开启的话)
-							如将调制电平设置为4电平调制时，对应的P0，P1和P2,P3引脚上的高低电平分别控制CH0-CH1通道(如果对应通道开启的话)
-							由于AD9959只有P0-P3,4个用于调制控制的引脚，因此输出在4电平调制时，只能有2个通道同时设置为调制输出；
-							8电平和16电平调制时，只能有1个通道同时设置为调制输出。请适当设置几电平调制以满足应用需求。
-
-**注意！！！：设置成4电平调制时，输出通道只能选择CH0-1
-							设置成8,16电平调制时，输出通道只能选择CH0
-							本函数未做任意通道兼容，具体方法请参考AD9959芯片手册22-23页，操作FR1[14:12]为对应值。
-**************************************************************/
+/**
+ * @brief 设置各个通道的调制模式
+ * @details 如将调制电平设置为2电平调制时，对应的P0-P3引脚上的高低电平分别控制CH0-CH3通道(如果对应通道开启的话)
+ *          如将调制电平设置为4电平调制时，对应的P0，P1和P2,P3引脚上的高低电平分别控制CH0-CH1通道(如果对应通道
+ *          开启的话),由于AD9959只有P0-P3,4个用于调制控制的引脚，因此输出在4电平调制时，只能有2个通道同时设置为
+ *         调制输出;8电平和16电平调制时，只能有1个通道同时设置为调制输出。请适当设置几电平调制以满足应用需求
+ * @attention 设置成4电平调制时，输出通道只能选择CH0-1,设置成8,16电平调制时，输出通道只能选择CH0
+ *            本函数未做任意通道兼容，具体方法请参考AD9959芯片手册22-23页，操作FR1[14:12]为对应值。
+ * @param Channel 输出通道 CH0-CH3
+ * @param Modulation 调制模式DISABLE_Mod，ASK，FSK，PSK
+ * @param Sweep_en 线性扫描模式 SWEEP_ENABLE启用、SWEEP_DISABLE不启用；启用时Nlevel只能是LEVEL_MOD_2
+ * @param Nlevel 调制电平选择 LEVEL_MOD_2、4、8、16
+ */
 void AD9959_Modulation_Init(uint8_t Channel, uint8_t Modulation, uint8_t Sweep_en, uint8_t Nlevel)
 {
 	uint8_t i = 0;
@@ -546,15 +542,13 @@ void AD9959_Modulation_Init(uint8_t Channel, uint8_t Modulation, uint8_t Sweep_e
 	}
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetFSK(uint8_t Channel, uint32_t *data,uint16_t Phase)
-** 函数功能 ：设置FSK调制的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							*data:	调整频率数据的起始地址
-							Phase:	输出相位,范围：0~16383(对应角度：0°~360°)
-** 出口参数 ：无
-** 函数说明 ：FSK时信号幅度默认为最大
-**************************************************************/
+/**
+ * @brief 设置FSK调制的参数
+ * @attention FSK时信号幅度默认为最大
+ * @param Channel 输出通道 CH0-CH3
+ * @param data 调整频率数据的起始地址
+ * @param Phase 输出相位,范围：0~16383(对应角度：0°~360°)
+ */
 void AD9959_SetFSK(uint8_t Channel, uint32_t *data, uint16_t Phase)
 {
 	uint8_t i = 0;
@@ -569,16 +563,13 @@ void AD9959_SetFSK(uint8_t Channel, uint32_t *data, uint16_t Phase)
 		Write_Profile_Fre(i, data[i + 1]);
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetASK(uint8_t Channel, uint32_t *data,uint32_t fre,uint16_t Phase)
-** 函数功能 ：设置ASK调制的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							*data: 调整幅度数据的起始地址
-							Freq:		输出频率，范围0~200 000 000 Hz
-							Phase:	输出相位,范围：0~16383(对应角度：0°~360°)
-** 出口参数 ：无
-** 函数说明 ：无
-**************************************************************/
+/**
+ * @brief 设置ASK调制的参数
+ * @param Channel 输出通道 CH0-CH3
+ * @param data 调整幅度数据的起始地址
+ * @param fre 输出频率，范围0~200 000 000 Hz
+ * @param Phase 输出相位,范围：0~16383(对应角度：0°~360°)
+ */
 void AD9959_SetASK(uint8_t Channel, uint16_t *data, uint32_t fre, uint16_t Phase)
 {
 	uint8_t i = 0;
@@ -594,15 +585,12 @@ void AD9959_SetASK(uint8_t Channel, uint16_t *data, uint32_t fre, uint16_t Phase
 		Write_Profile_Ampli(i, data[i + 1]);
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetPSK(uint8_t Channel, uint16_t *data,uint32_t fre,uint16_t Phase)
-** 函数功能 ：设置PSK调制的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							*data:	调整相位数据的起始地址
-							Freq:		输出频率，范围0~200 000 000 Hz
-** 出口参数 ：无
-** 函数说明 ：无
-**************************************************************/
+/**
+ * @brief 设置PSK调制的参数
+ * @param Channel 输出通道 CH0-CH3
+ * @param data 调整相位数据的起始地址
+ * @param Freq 输出频率，范围0~200 000 000 Hz
+ */
 void AD9959_SetPSK(uint8_t Channel, uint16_t *data, uint32_t Freq)
 {
 	uint8_t i = 0;
@@ -617,23 +605,21 @@ void AD9959_SetPSK(uint8_t Channel, uint16_t *data, uint32_t Freq)
 		Write_Profile_Phase(i, data[i + 1]);
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetFre_Sweep(uint8_t Channel, uint32_t s_data,uint32_t e_data,uint8_t fsrr,uint8_t rsrr,uint32_t r_delta,uint32_t f_delta,uint16_t Phase)
-** 函数功能 ：设置线性扫频的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							s_data:	起始频率，范围0~200 000 000 Hz
-							e_data:	结束频率，范围0~200 000 000 Hz
-							r_delta:上升步长频率,0~200 000 000Hz
-							f_delta:下降步长频率,0~200 000 000Hz
-
-							rsrr:		上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
-							fsrr:		下降斜率,范围：1~255
-							Ampli:	输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
-							Phase:	输出相位,范围：0~16383(对应角度：0°~360°)
-** 出口参数 ：无
-** 函数说明 ：频点与频点间停留时间 dT = Xsrr*8 单位ns，扫描点数=(起始-结束)/步长
-							扫频总时间=总扫描频点数*dT
-**************************************************************/
+/**
+ * @brief 设置线性扫频的参数
+ * @attention  频点与频点间停留时间 dT = Xsrr*8 单位ns，扫描点数=(起始-结束)/步长
+ *             扫频总时间=总扫描频点数*dT
+ *
+ * @param Channel 输出通道 CH0-CH3
+ * @param s_data 起始频率，范围0~200 000 000 Hz
+ * @param e_data 结束频率，范围0~200 000 000 Hz
+ * @param r_delta 上升步长频率,0~200 000 000Hz
+ * @param f_delta 下降步长频率,0~200 000 000Hz
+ * @param rsrr 上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
+ * @param fsrr 下降斜率,范围：1~255
+ * @param Ampli 输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
+ * @param Phase 输出相位,范围：0~16383(对应角度：0°~360°)
+ */
 void AD9959_SetFre_Sweep(uint8_t Channel, uint32_t s_data, uint32_t e_data, uint32_t r_delta, uint32_t f_delta, uint8_t rsrr, uint8_t fsrr, uint16_t Ampli, uint16_t Phase)
 {
 	uint8_t CHANNEL[1] = {0x00};
@@ -655,27 +641,25 @@ void AD9959_SetFre_Sweep(uint8_t Channel, uint32_t s_data, uint32_t e_data, uint
 
 	Write_CFTW0(s_data);		  // 起始频率
 	Write_Profile_Fre(0, e_data); // 结束频率
+
+	AD9959_IO_Update();
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetAmp_Sweep(uint8_t Channel, uint32_t s_Ampli,uint16_t e_Ampli,uint32_t r_delta,uint32_t f_delta,uint8_t rsrr,uint8_t fsrr,uint32_t fre,uint16_t Phase)
-** 函数功能 ：设置线性扫幅的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							s_Ampli:	起始幅度，控制值0~1023对应输出幅度0~500mVpp左右
-							e_Ampli:	结束幅度，
-
-							r_delta:	上升步长幅度,0~1023
-							f_delta:	下降步长幅度,0~1023
-
-							rsrr:			上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
-							fsrr:			下降斜率,范围：1~255
-
-							fre:			输出频率，范围0~200 000 000 Hz
-							Phase:		输出相位,范围：0~16383(对应角度：0°~360°)
-** 出口参数 ：无
-** 函数说明 ：幅点与幅点间停留时间 dT = Xsrr*8 单位ns；扫描点数=(起始-结束)/步长
-							扫幅总时间=总扫描幅点数*dT
-**************************************************************/
+/**
+ * @brief 设置线性扫幅的参数
+ * @attention 幅点与幅点间停留时间 dT = Xsrr*8 单位ns；扫描点数=(起始-结束)/步长
+ *            扫幅总时间=总扫描幅点数*dT
+ *
+ * @param Channel 输出通道 CH0-CH3
+ * @param s_Ampli 起始幅度，控制值0~1023对应输出幅度0~500mVpp左右
+ * @param e_Ampli 结束幅度
+ * @param r_delta 上升步长幅度,0~1023
+ * @param f_delta 下降步长幅度,0~1023
+ * @param rsrr 上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
+ * @param fsrr 下降斜率,范围：1~255
+ * @param fre 输出频率，范围0~200 000 000 Hz
+ * @param Phase 输出相位,范围：0~16383(对应角度：0°~360°)
+ */
 void AD9959_SetAmp_Sweep(uint8_t Channel, uint32_t s_Ampli, uint16_t e_Ampli, uint32_t r_delta, uint32_t f_delta, uint8_t rsrr, uint8_t fsrr, uint32_t fre, uint16_t Phase)
 {
 	uint8_t CHANNEL[1] = {0x00};
@@ -698,25 +682,25 @@ void AD9959_SetAmp_Sweep(uint8_t Channel, uint32_t s_Ampli, uint16_t e_Ampli, ui
 	AD9959_WriteData(ACR_ADD, 3, ACR_data); // ACR 设定起始幅度
 
 	Write_Profile_Ampli(0, e_Ampli); // 结束幅度
+
+	AD9959_IO_Update();
 }
 
-/************************************************************
-** 函数名称 ：void AD9959_SetPhase_Sweep(uint8_t Channel, uint16_t s_data,uint16_t e_data,uint16_t r_delta,uint16_t f_delta,uint8_t rsrr,uint8_t fsrr,uint32_t fre,uint16_t Ampli)
-** 函数功能 ：设置线性扫相的参数
-** 入口参数 ：Channel:  输出通道 CH0-CH3
-							s_data:	起始相位，范围：0~16383(对应角度：0°~360°)
-							e_data:	结束相位，
-							r_delta:上升步长,范围：0~16383(对应角度：0°~360°)
-							f_delta:下降步长,
-
-							rsrr:		上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
-							fsrr:		下降斜率,范围：1~255
-							fre:		输出频率，范围0~200 000 000 Hz
-							Ampli:	输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
-** 出口参数 ：无
-** 函数说明 ：频点与频点间停留时间 dT = Xsrr*8 单位ns；扫描点数=(起始-结束)/步长
-							扫频总时间=总扫描频点数*dT
-**************************************************************/
+/**
+ * @brief 设置线性扫相的参数
+ * @attention 频点与频点间停留时间 dT = Xsrr*8 单位ns；扫描点数=(起始-结束)/步长
+ *            扫频总时间=总扫描频点数*dT
+ *
+ * @param Channel 输出通道 CH0-CH3
+ * @param s_data 起始相位，范围：0~16383(对应角度：0°~360°)
+ * @param e_data 结束相位
+ * @param r_delta 上升步长,范围：0~16383(对应角度：0°~360°)
+ * @param f_delta 下降步长
+ * @param rsrr 上升斜率,范围：1~255，系统时钟为500Mhz时一个控制字约为8ns
+ * @param fsrr 下降斜率,范围：1~255
+ * @param fre 输出频率，范围0~200 000 000 Hz
+ * @param Ampli 输出幅度,范围0~1023，控制值0~1023对应输出幅度0~500mVpp左右
+ */
 void AD9959_SetPhase_Sweep(uint8_t Channel, uint16_t s_data, uint16_t e_data, uint16_t r_delta, uint16_t f_delta, uint8_t rsrr, uint8_t fsrr, uint32_t fre, uint16_t Ampli)
 {
 	uint8_t CHANNEL[1] = {0x00};
@@ -735,13 +719,15 @@ void AD9959_SetPhase_Sweep(uint8_t Channel, uint16_t s_data, uint16_t e_data, ui
 
 	Write_CPOW0(s_data);			// 起始相位
 	Write_Profile_Phase(0, e_data); // 结束相位
+
+	AD9959_IO_Update();
 }
 
-/*---------------------------------------
-函数功能：设置通道输出频率
-Channel:  输出通道
-Freq:     输出频率
----------------------------------------*/
+/**
+ * @brief 设置点频输出频率
+ * @param Channel 输出通道
+ * @param Freq 输出频率 单位Hz
+ */
 void AD9959_WriteFreq(uint8_t Channel, uint32_t Freq)
 {
 	uint8_t CFTW0_DATA[4] = {0x00, 0x00, 0x00, 0x00}; // 中间变量
@@ -772,11 +758,12 @@ void AD9959_WriteFreq(uint8_t Channel, uint32_t Freq)
 		WriteData_AD9959(CFTW0_ADD, 4, CFTW0_DATA, 1); // CTW0 address 0x04.输出CH3设定频率
 	}
 }
-/*---------------------------------------
-函数功能：设置通道输出幅度
-Channel:  输出通道
-Ampli:    输出幅度
----------------------------------------*/
+
+/**
+ * @brief 设置点频输出幅度
+ * @param Channel 输出通道
+ * @param Ampli 输出幅度 0-1023
+ */
 void AD9959_WriteAmpl(uint8_t Channel, uint16_t Ampli)
 {
 	uint16_t A_temp;						  //=0x23ff;
@@ -809,11 +796,12 @@ void AD9959_WriteAmpl(uint8_t Channel, uint16_t Ampli)
 		WriteData_AD9959(ACR_ADD, 3, ACR_DATA, 1);
 	}
 }
-/*---------------------------------------
-函数功能：设置通道输出相位
-Channel:  输出通道
-Phase:    输出相位,范围：0~16383(对应角度：0°~360°)
----------------------------------------*/
+
+/**
+ * @brief 设置点频输出相位
+ * @param Channel 输出通道
+ * @param Phase 输出相位,范围：0~16383(对应角度：0°~360°)
+ */
 void AD9959_WritePhase(uint8_t Channel, uint16_t Phase)
 {
 	uint16_t P_temp = 0;
