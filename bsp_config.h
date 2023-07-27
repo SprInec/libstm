@@ -523,7 +523,7 @@
 #endif /* !__BSP_LCD_ENABLED */
 
 #if __BSP_UARTHMI_ENABLED
-#include "bsp_uart_hmi.h"
+#include "bsp_usart_hmi.h"
 #endif /* !__BSP_HMI_ENABLED */
 
 #if __BSP_OV2640_ENABLED
@@ -559,7 +559,7 @@
 #endif /* !__BSP_QUADSPI_ENABLED */
 
 #if __BSP_CODING_ENABLED
-#include "bsp_coding.h"
+#include "bsp_encode.h"
 #endif /*! __BSP_CODING_ENABLED */
 
 #if __BSP_DECODE_ENABLED
