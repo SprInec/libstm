@@ -312,6 +312,78 @@ void BSP_FloatToBCDv2(double num,
 }
 
 /**
+ * @brief 奇校验编码
+ * @param ori_data 源数据
+ * @param out_date 输出数据
+ * @param len 长度
+ * @return uint8_t 校验码
+ */
+uint8_t BSP_ParityCheck_OddEncode(uint8_t *ori_data, uint8_t *out_date, uint8_t len)
+{
+    uint8_t temp = 0;
+    uint8_t parity = 0;
+
+    for (uint8_t i = 0; i < len; i++)
+    {
+        temp = *(ori_data + i);
+        if (temp == 1)
+        {
+            parity++;
+        }
+    }
+    for (uint8_t i = 0; i < len; i++)
+    {
+        *(out_date + i) = *(ori_data + i);
+    }
+    if (parity % 2 != 0)
+    {
+        *(out_date + len) = 0;
+        return 0;
+    }
+    else
+    {
+        *(out_date + len) = 1;
+        return 1;
+    }
+}
+
+/**
+ * @brief 偶校验编码
+ * @param ori_data 源数据
+ * @param out_date 输出数据
+ * @param len 长度
+ * @return uint8_t 校验码
+ */
+uint8_t BSP_ParityCheck_EvenEncode(uint8_t *ori_data, uint8_t *out_date, uint8_t len)
+{
+    uint8_t temp = 0;
+    uint8_t parity = 0;
+
+    for (uint8_t i = 0; i < len; i++)
+    {
+        temp = *(ori_data + i);
+        if (temp == 1)
+        {
+            parity++;
+        }
+    }
+    for (uint8_t i = 0; i < len; i++)
+    {
+        *(out_date + i) = *(ori_data + i);
+    }
+    if (parity % 2 != 0)
+    {
+        *(out_date + len) = 1;
+        return 1;
+    }
+    else
+    {
+        *(out_date + len) = 0;
+        return 0;
+    }
+}
+
+/**
  * @brief 汉明码编码
  * @param ori_data 源数据
  * @param out_data 编码数据

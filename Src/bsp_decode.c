@@ -536,7 +536,47 @@ void BSP_SumValueStandard(uint16_t *data, uint16_t *result, uint16_t data_len, u
 }
 
 /**
- * @brief 汉明码解码（包含纠错功能）
+ * @brief 奇校验解码
+ * @param ori_data 源数据(奇校验编码)
+ * @param out_date 解码后数据
+ * @param len 源数据长度
+ * @return uint8_t 1-解码成功 0-解码失败
+ */
+uint8_t BSP_ParityCheck_OddDecode(uint8_t *ori_data, uint8_t *out_date, uint8_t len)
+{
+    uint8_t count = 0;
+    for (uint8_t i = 0; i < len - 1; i++)
+    {
+        if (*(ori_data + i) == 1)
+        {
+            count++;
+        }
+    }
+    return (count % 2) != *(ori_data + len - 1);
+}
+
+/**
+ * @brief 偶校验解码
+ * @param ori_data 源数据(奇校验编码)
+ * @param out_date 解码后数据
+ * @param len 源数据长度
+ * @return uint8_t 1-解码成功 0-解码失败
+ */
+uint8_t BSP_ParityCheck_EvenDecode(uint8_t *ori_data, uint8_t *out_date, uint8_t len)
+{
+    uint8_t count = 0;
+    for (uint8_t i = 0; i < len - 1; i++)
+    {
+        if (*(ori_data + i) == 1)
+        {
+            count++;
+        }
+    }
+    return (count % 2) == *(ori_data + len - 1);
+}
+
+/**
+ * @brief 汉明码解码（包含1位纠错功能）
  * @param received_data 接收到的编码数据（汉明码）
  * @param decoded_data 解码后的原始数据
  * @param data_len 数据长度

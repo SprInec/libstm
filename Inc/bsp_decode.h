@@ -33,6 +33,9 @@ uint8_t BSP_ExtractEffectiveData_v3(uint16_t *data, uint16_t *result, uint16_t d
 void BSP_CumMonitorEdgePairs(uint16_t *data, uint16_t *result, uint16_t datalen, uint16_t threshold);
 void BSP_SumValueStandard(uint16_t *data, uint16_t *result, uint16_t data_len, uint8_t bits, uint16_t threshold);
 
+uint8_t BSP_ParityCheck_OddDecode(uint8_t *ori_data, uint8_t *out_date, uint8_t len);
+uint8_t BSP_ParityCheck_EvenDecode(uint8_t *ori_data, uint8_t *out_date, uint8_t len);
+
 uint8_t BSP_HammingDecode(uint8_t *received_data, uint8_t *decoded_data, const uint8_t data_len, uint8_t type);
 
 #endif
