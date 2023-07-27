@@ -12,6 +12,8 @@
 #include "bsp_coding.h"
 #ifdef __BSP_CODING_ENABLED
 #include "string.h"
+#include "stdint.h"
+#include "malloc.h"
 #include "math.h"
 
 /* 巴克码序列 */
@@ -307,6 +309,68 @@ void BSP_FloatToBCDv2(double num,
             break;
         }
     }
+}
+
+/**
+ * @brief 汉明码编码
+ * @param ori_data 源数据
+ * @param out_data 编码数据
+ * @param data_len 源数据长度
+ * @param type 奇偶校验类型 0-偶校验 1-奇校验
+ */
+void BSP_HanmingEncode(uint8_t *ori_data, uint8_t *out_data, const uint8_t data_len, uint8_t type)
+{
+    uint8_t parityLen = 0;
+    uint8_t *paritypos;
+    uint8_t temparry[data_len];
+
+    for (uint16_t i = 0, j = data_len - 1; i < data_len; i++, j--)
+    {
+        temparry[i] = ori_data[j];
+    }
+    while (data_len + parityLen + 1 > pow(2, parityLen))
+    {
+        parityLen++;
+    }
+
+    paritypos = (uint8_t *)malloc(parityLen * sizeof(uint8_t));
+    for (uint8_t i = 0; i < parityLen; i++)
+    {
+        uint8_t pos = 1 << i;
+        *(paritypos + i) = pos - 1;
+    }
+    for (uint8_t i = 0, y = 0; i < data_len + parityLen; i++)
+    {
+        if (i == *(paritypos + y))
+        {
+            y++;
+        }
+        else
+        {
+            *(out_data + i) = *(temparry + i - y);
+        }
+    }
+    for (uint8_t i = 0; i < parityLen; i++)
+    {
+        uint8_t pos = 1 << i;
+        uint8_t count = 0;
+
+        for (uint8_t j = 0; j < data_len + parityLen; j++)
+        {
+            if ((((j + 1) & pos) == pos) && ((j + 1) != pos))
+            {
+                if (*(out_data + j) == 1)
+                {
+                    count++;
+                }
+            }
+        }
+        if (type)
+            *(out_data + pos - 1) = (count + 1) % 2;
+        else
+            *(out_data + pos - 1) = count % 2;
+    }
+    free(paritypos);
 }
 
 #if ENCODING_MODE_SELECT

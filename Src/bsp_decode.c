@@ -534,3 +534,68 @@ void BSP_SumValueStandard(uint16_t *data, uint16_t *result, uint16_t data_len, u
         }
     }
 }
+
+/**
+ * @brief 汉明码解码（包含纠错功能）
+ * @param received_data 接收到的编码数据（汉明码）
+ * @param decoded_data 解码后的原始数据
+ * @param data_len 数据长度
+ * @param type 奇偶校验类型 0-偶校验 1-奇校验
+ * @return true 解码成功，false 解码失败（无法纠正错误）
+ */
+uint8_t BSP_HammingDecode(uint8_t *received_data, uint8_t *decoded_data, const uint8_t data_len, uint8_t type)
+{
+    uint8_t parityLen = 0;
+    while (data_len + parityLen + 1 > pow(2, parityLen))
+    {
+        parityLen++;
+    }
+
+    uint8_t temp_data[data_len + parityLen];
+    for (uint8_t i = 0; i < data_len + parityLen; i++)
+    {
+        temp_data[i] = received_data[i];
+    }
+
+    uint8_t errorPos = 0;
+    for (uint8_t i = 0; i < parityLen; i++)
+    {
+        uint8_t pos = 1 << i;
+        uint8_t count = 0;
+
+        for (uint8_t j = 0; j < data_len + parityLen; j++)
+        {
+            if ((((j + 1) & pos) == pos) && ((j + 1) != pos))
+            {
+                if (temp_data[j] == 1)
+                {
+                    count++;
+                }
+            }
+        }
+
+        if ((type && ((count + 1) % 2 != temp_data[pos - 1])) || (!type && (count % 2 != temp_data[pos - 1])))
+        {
+            errorPos += pos;
+        }
+    }
+
+    if (errorPos > 0)
+    {
+        temp_data[errorPos - 1] = (temp_data[errorPos - 1] + 1) % 2;
+    }
+    uint8_t j = 0, y = 0;
+    for (uint8_t i = 0; i < data_len + parityLen; i++)
+    {
+        if (i == (1 << y) - 1)
+        {
+            y++;
+        }
+        else
+        {
+            decoded_data[j] = temp_data[i];
+            j++;
+        }
+    }
+    return errorPos == 0;
+}

@@ -35,6 +35,9 @@ void BSP_DecToBin(int num, uint16_t code[], unsigned char len);
 void BSP_FloatTo16BCD(float num, uint16_t code[]);
 void BSP_FloatTo24BCD(float num, uint16_t code[]);
 
+void BSP_HanmingEncode(uint8_t *ori_data, uint8_t *out_data, const uint8_t data_len, uint8_t type);
+
+
 #if ENCODING_MODE_SELECT
 /* πÈ¡„±‡¬Î */
 void _RZ(uint16_t str[], uint16_t code[], char len);
