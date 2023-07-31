@@ -193,13 +193,13 @@
 
 // <e> AD9854
 #ifndef __BSP_AD9854_ENABLED
-#define __BSP_AD9854_ENABLED 1
+#define __BSP_AD9854_ENABLED 0
 #endif
 // </e>
 
 // <e> AD9959
 #ifndef __BSP_AD9959_ENABLED
-#define __BSP_AD9959_ENABLED 1
+#define __BSP_AD9959_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed DDS
