@@ -9,7 +9,7 @@
 - `README.md`: 本文件，提供项目说明
 - `Inc/`: BSP头文件
 - `Src/`: BSP源代码
-- `tools/`:一些实用脚本文件
+- `scripts/`:一些实用脚本文件
 - `bsp_user.c`: 用户源文件
 - `bsp_user.h`: 用户头文件
 - `bsp_config.h`: 库配置文件
