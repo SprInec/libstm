@@ -272,13 +272,13 @@
 
 // <e> LCD TFT 
 #ifndef __BSP_LCDTFT_ENABLED
-#define __BSP_LCDTFT_ENABLED 0
+#define __BSP_LCDTFT_ENABLED 1
 #endif
 // </e>
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 0
+#define __BSP_UARTHMI_ENABLED 1
 #endif
 // </e>
 // </h> !Display screen selection
