@@ -1,17 +1,13 @@
 /**
- ******************************************************************************
- * @file			:bsp_usart_hmi.h
- * @brief			:The board support package for USART HMI.
- * @version			:0.1.3
- * @author			:July
- * @date			:2022.06.26
- ******************************************************************************
- * @updata			:ver 0.1.3
- * @refr			:	stuc -> hmitextTypedef
- * 				 		stuc -> hmicurveTypedef
- * @add				:	stuc -> hmibuttonTypedef
- * 				 		stuc -> hmipageTypedef
- ******************************************************************************
+ * @file bsp_usart_hmi.h
+ * @author July (Email: JulyCub@163.com)
+ * @brief The board support package for USART HMI.
+ * @version 1.0
+ * @date 2022.07.06
+ * @update 2023.07.31
+ *
+ * @copyright Copyright (c) 2023
+ *
  */
 
 #ifndef __BSP_USART_HMI_H__
@@ -20,7 +16,7 @@
 #include "bsp_config.h"
 #include "bsp_usart.h"
 
-/* 串口指令较多 */
+/* 串口指令数 */
 #define HMI_MULT_ODR 20
 
 /* 文本控件 */
@@ -94,7 +90,7 @@ typedef struct
 #define HMI_CHANNEL_3 3U
 #define HMI_CHANNEL_4 4U
 
-/* 宏用变量 */
+/* 全局变量 */
 extern uint8_t hmi_chnl;
 extern uint8_t hmi_id;
 extern uint8_t hmi_page;
@@ -109,24 +105,22 @@ extern uint16_t hmi_point_counts;
 #define __switchpage(__PAGE__)                     \
 	{                                              \
 		bsprif1("page %d", hmi_page = (__PAGE__)); \
-		__prifend1;                                 \
+		__prifend1;                                \
 	}
 /* 曲线控件增加一个点 */
 #define __sendpoint(__ID__, __CHNL__, __POINT__)                                                    \
 	{                                                                                               \
 		bsprif1("add %d,%d,%d", hmi_id = (__ID__), hmi_chnl = (__CHNL__), hmi_point = (__POINT__)); \
-		__prifend1;                                                                                  \
+		__prifend1;                                                                                 \
 	}
 /* 曲线控件添加多个点(透传) */
 #define __sendpoints(__ID__, __CHNL__, __COUNT__)                                                           \
 	{                                                                                                       \
 		bsprif1("addt %d,%d,%d", hmi_id = (__ID__), hmi_chnl = (__CHNL__), hmi_point_counts = (__COUNT__)); \
-		__prifend1;                                                                                          \
+		__prifend1;                                                                                         \
 	}
 
-/* HMI串口指令接收 */
-uint8_t bsp_HMI_RxOder(uint8_t *odr);
 /* 单通道特性透传曲线 */
-void bsp_HMI_sendCurveSingle(uint8_t id, uint8_t chnl, uint8_t points[], uint16_t len, uint8_t page);
+void BSP_HMI_SendCurveSingle(uint8_t id, uint8_t chnl, uint8_t points[], uint16_t len, uint8_t page);
 
 #endif /* __BSP_USART_HMI_H__ */
