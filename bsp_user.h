@@ -24,7 +24,7 @@ typedef enum{
 } WAVE_TYPE;
 
 typedef struct output_wave{
-    uint16_t freq;
+    float freq;
     uint16_t amplitude;
     uint8_t phase;
     WAVE_TYPE type;

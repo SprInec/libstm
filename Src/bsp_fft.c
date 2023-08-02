@@ -80,6 +80,8 @@ void bsp_arm_fft(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t deb
 uint16_t place[HARM_FREQ_NUM];
 /* 谐波分量频率 */
 float32_t frequency[HARM_FREQ_NUM];
+/* 谐波分量幅值 */
+float32_t ampl[HARM_FREQ_NUM];
 /**
  * @brief 快速傅里叶变换
  * @param fft_handle fft句柄
@@ -106,7 +108,7 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
     }
 
     /* 频谱图-1 */
-    if (debug)
+    // if (debug)
     {
         for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER / 2; i++)
             bsprif1("output: %.2f\n", fft_handle->output[i]);
@@ -117,11 +119,12 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
     {
         /* 寻找第 i 个谐波分量 */
         arm_max_f32((fft_handle->output + 1), BSP_FFT_SAMPLE_NUMBER / 2, &fft_handle->ampltitude, (uint32_t *)&fft_handle->subscript);
-        fft_handle->ampltitude = fft_handle->ampltitude * 2 / BSP_FFT_SAMPLE_NUMBER;
+        fft_handle->ampltitude = fft_handle->ampltitude / BSP_FFT_SAMPLE_NUMBER / 1.66;
         fft_handle->frequency = (fft_handle->subscript * BSP_FFT_SAMPLE_STEP_READ);
         /* 记录第 i 个谐波分量信息 */
         place[i] = fft_handle->subscript;
         frequency[i] = fft_handle->frequency;
+        ampl[i] = fft_handle->ampltitude;
         /* 陷波器 */
         for (int8_t j = -(NOTCH_NUM / 2); j < (NOTCH_NUM / 2); j++)
         {
@@ -134,6 +137,17 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
     {
         for (uint16_t i = 0; i < BSP_FFT_SAMPLE_NUMBER / 2; i++)
             bsprif1("output: %.2f\n", fft_handle->output[i]);
+    }
+
+    /* 分析结果输出-1 */
+    if (debug)
+    {
+        for (uint8_t i = 0; i < HARM_FREQ_NUM; i++)
+        {
+            bsprif1("place%d:%d \n", i, place[i]);
+            bsprif1("frequency%d:%.2f \n", i, frequency[i]);
+            bsprif1("ampl%d, %.2f\n ", i, ampl[i]);
+        }
     }
 
     /* 频率取整 */
@@ -172,7 +186,7 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
                 frequency[i] = 55000;
             }
         }
-        else
+        else if (temp < 102)
         {
             if (temp >= 58 && temp < 62)
             {
@@ -211,15 +225,188 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
                 frequency[i] = 100000;
             }
         }
+        else if (temp < 147)
+        {
+            if (temp >= 103 && temp < 107)
+            {
+                frequency[i] = 105000;
+            }
+            else if (temp >= 108 && temp < 112)
+            {
+                frequency[i] = 110000;
+            }
+            else if (temp >= 113 && temp < 117)
+            {
+                frequency[i] = 115000;
+            }
+            else if (temp >= 118 && temp < 122)
+            {
+                frequency[i] = 120000;
+            }
+            else if (temp >= 123 && temp < 127)
+            {
+                frequency[i] = 125000;
+            }
+            else if (temp >= 128 && temp < 132)
+            {
+                frequency[i] = 130000;
+            }
+            else if (temp >= 133 && temp < 137)
+            {
+                frequency[i] = 135000;
+            }
+            else if (temp >= 138 && temp < 142)
+            {
+                frequency[i] = 140000;
+            }
+            else
+            {
+                frequency[i] = 145000;
+            }
+        }
+        else if (temp < 197)
+        {
+            if (temp >= 148 && temp < 152)
+            {
+                frequency[i] = 150000;
+            }
+            else if (temp >= 153 && temp < 157)
+            {
+                frequency[i] = 155000;
+            }
+            else if (temp >= 158 && temp < 162)
+            {
+                frequency[i] = 160000;
+            }
+            else if (temp >= 163 && temp < 167)
+            {
+                frequency[i] = 165000;
+            }
+            else if (temp >= 168 && temp < 172)
+            {
+                frequency[i] = 170000;
+            }
+            else if (temp >=173 && temp < 177)
+            {
+                frequency[i] = 175000;
+            }
+            else if (temp >= 178 && temp < 182)
+            {
+                frequency[i] = 180000;
+            }
+            else if (temp >= 183 && temp < 187)
+            {
+                frequency[i] = 185000;
+            }
+            else
+            {
+                frequency[i] = 190000;
+            }
+        }
+        else if (temp < 237)
+        {
+            if (temp >= 193 && temp < 197)
+            {
+                frequency[i] = 195000;
+            }
+            else if (temp >= 198 && temp < 202)
+            {
+                frequency[i] = 200000;
+            }
+            else if (temp >= 203 && temp < 207)
+            {
+                frequency[i] = 205000;
+            }
+            else if (temp >= 208 && temp < 212)
+            {
+                frequency[i] = 210000;
+            }
+            else if (temp >= 213 && temp < 217)
+            {
+                frequency[i] = 215000;
+            }
+            else if (temp >= 218 && temp < 222)
+            {
+                frequency[i] = 220000;
+            }
+            else if (temp >= 223 && temp < 227)
+            {
+                frequency[i] = 225000;
+            }
+            else if (temp >= 228 && temp < 232)
+            {
+                frequency[i] = 230000;
+            }
+            else
+            {
+                frequency[i] = 235000;
+            }
+        }
+        else
+        {
+            if (temp >= 238 && temp < 242)
+            {
+                frequency[i] = 240000;
+            }
+            else if (temp >= 243 && temp < 247)
+            {
+                frequency[i] = 245000;
+            }
+            else if (temp >= 248 && temp < 252)
+            {
+                frequency[i] = 250000;
+            }
+            else if (temp >= 253 && temp < 257)
+            {
+                frequency[i] = 255000;
+            }
+            else if (temp >= 258 && temp < 262)
+            {
+                frequency[i] = 260000;
+            }
+            else if (temp >= 263 && temp < 267)
+            {
+                frequency[i] = 265000;
+            }
+            else if (temp >= 268 && temp < 272)
+            {
+                frequency[i] = 270000;
+            }
+            else if (temp >= 273 && temp < 277)
+            {
+                frequency[i] = 275000;
+            }
+            else if (temp >= 278 && temp < 282)
+            {
+                frequency[i] = 280000;
+            }
+            else if (temp >= 283 && temp < 287)
+            {
+                frequency[i] = 285000;
+            }
+            else if (temp >= 288 && temp < 292)
+            {
+                frequency[i] = 290000;
+            }
+            else if (temp >= 293 && temp < 297)
+            {
+                frequency[i] = 295000;
+            }
+            else
+            {
+                frequency[i] = 300000;
+            }
+        }
     }
 
-    /* 分析结果输出-1 */
-    if (debug)
+    /* 分析结果输出-2 */
+    // if (debug)
     {
         for (uint8_t i = 0; i < HARM_FREQ_NUM; i++)
         {
-            bsprif1("place%d:%d\n", i, place[i]);
-            bsprif1("frequency%d:%.2f\n", i, frequency[i]);
+            bsprif1("place%d:%d \n", i, place[i]);
+            bsprif1("frequency%d:%.2f \n", i, frequency[i]);
+            bsprif1("ampl%d, %.2f\n ", i, ampl[i]);
         }
     }
 
@@ -227,8 +414,8 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
         1,2 -> 双波主频
         3,4 -> 区分正弦与三角
     */
-    wave1.freq = (uint16_t)frequency[0];
-    wave2.freq = (uint16_t)frequency[1];
+    wave1.freq = frequency[0];
+    wave2.freq = frequency[1];
     if ((frequency[2] / 3 == wave1.freq) || frequency[3] / 3 == wave1.freq)
     {
         wave1.type = TRI;
@@ -239,24 +426,24 @@ void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug)
     }
     if ((frequency[2] / 3 == wave2.freq) || frequency[3] / 3 == wave2.freq)
     {
-        wave1.type = TRI;
+        wave2.type = TRI;
     }
     else
     {
-        wave1.type = SIN;
+        wave2.type = SIN;
     }
 
-    /* 分析结果输出-2 */
-    bsprif1("wave 1 freq: %d\n", wave1.freq);
+    /* 分析结果输出-3 */
+    bsprif1("\nwave 1 freq: %.2f \n", wave1.freq);
     if (wave1.type == SIN)
-        bsprif1("wave 1 type: SIN\n");
+        bsprif1("wave 1 type: SIN \n");
     else
-        bsprif1("wave 1 type: TRI\n");
+        bsprif1("wave 1 type: TRI \n");
 
-    bsprif1("wave 2 freq: %d\n", wave2.freq);
+    bsprif1("wave 2 freq: %.2f \n", wave2.freq);
     if (wave2.type == SIN)
-        bsprif1("wave 2 type: SIN\n");
+        bsprif1("wave 2 type: SIN \n");
     else
-        bsprif1("wave 2 type: TRI\n");
+        bsprif1("wave 2 type: TRI \n");
 }
 #endif
