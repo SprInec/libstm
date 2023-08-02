@@ -58,7 +58,7 @@
 
 // <e> CMSIS DSP
 #ifndef __CMSIS_DSP
-#define __CMSIS_DSP 0
+#define __CMSIS_DSP 1
 #endif
 // </e> !main.h
 
@@ -199,7 +199,7 @@
 
 // <e> AD9959
 #ifndef __BSP_AD9959_ENABLED
-#define __BSP_AD9959_ENABLED 0
+#define __BSP_AD9959_ENABLED 1
 #endif
 // </e>
 // </h> !Programmed DDS
@@ -272,7 +272,7 @@
 
 // <e> LCD TFT 
 #ifndef __BSP_LCDTFT_ENABLED
-#define __BSP_LCDTFT_ENABLED 1
+#define __BSP_LCDTFT_ENABLED 0
 #endif
 // </e>
 
@@ -372,7 +372,7 @@
 
 // <e> FFT
 #ifndef __BSP_FFT_ENABLED
-#define __BSP_FFT_ENABLED 0
+#define __BSP_FFT_ENABLED 1
 #endif
 // </e>
 

@@ -13,6 +13,15 @@
 #define __BSP_USER_H__
 #include "bsp_config.h"
 
-/* CODE */
+/* 9959输出通道 */
+#define OUTPUT_CHINNAL 0
+
+/* ADC采集值 */
+extern uint16_t adc_value[1024];
+/* ADC采集完成标志 */
+extern uint8_t adc_flag;
+
+void BSP_Init(void);
+void BSP_SysTemControl(void);
 
 #endif /* __BSP_USER_H__ */

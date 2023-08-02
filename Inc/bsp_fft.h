@@ -19,7 +19,7 @@
 #include "arm_math_types.h"
 
 #define BSP_FFT_SAMPLE_NUMBER 1024 /* 采样点数 */
-#define BSP_FFT_SAMPLE_FREQUENCY (84000000/(84 + 100)) /* 采样频率 */
+#define BSP_FFT_SAMPLE_FREQUENCY (84000000/(5 + 10)) /* 采样频率 */
 #define BSP_FFT_SAMPLE_STEP ((float)(BSP_FFT_SAMPLE_FREQUENCY / BSP_FFT_SAMPLE_NUMBER)) /* 采样步长 */
 
 /**
