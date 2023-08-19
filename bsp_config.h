@@ -31,7 +31,7 @@
 //      <4=> NUCLEO-H7A3ZI-Q
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 2
+#define MCU_SELECTION 3
 #endif
 
 // MCU AUTO-DEFINE
@@ -168,12 +168,6 @@
 #endif
 // </e>
 
-// <e> DS18B20
-#ifndef __BSP_DS18B20_ENABLED
-#define __BSP_DS18B20_ENABLED 0
-#endif
-// </e>
-
 // <h> Programmed DDS
 // ==================
 //  <i> Select the programmed DDS driver you want to use
@@ -199,7 +193,7 @@
 
 // <e> AD9959
 #ifndef __BSP_AD9959_ENABLED
-#define __BSP_AD9959_ENABLED 1
+#define __BSP_AD9959_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed DDS
@@ -282,6 +276,39 @@
 #endif
 // </e>
 // </h> !Display screen selection
+
+// <h> Sensor
+// ==========
+// <e> DS18B20
+#ifndef __BSP_DS18B20_ENABLED
+#define __BSP_DS18B20_ENABLED 0
+#endif
+// </e>
+
+// <e> DHT20
+#ifndef __BSP_DHT20_ENABLED
+#define __BSP_DHT20_ENABLED 0
+#endif 
+// </e> !DHT20
+
+// <e> BMP280
+#ifndef __BSP_BMP280_ENABLED
+#define __BSP_BMP280_ENABLED 0
+#endif
+// </e> !BMP280
+
+// <e> S12SD
+#ifndef __BSP_S12SD_ENABLED
+#define __BSP_S12SD_ENABLED 0
+#endif 
+// </e> !S12SD
+
+// <e> GPS
+#ifndef __BSP_GPS_ENABLED
+#define __BSP_GPS_ENABLED 0
+#endif
+// </e> !GPS
+// </h> !Sensor
 
 // <h> Camera
 // ==========
@@ -372,7 +399,7 @@
 
 // <e> FFT
 #ifndef __BSP_FFT_ENABLED
-#define __BSP_FFT_ENABLED 1
+#define __BSP_FFT_ENABLED 0
 #endif
 // </e>
 
