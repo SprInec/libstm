@@ -11,6 +11,57 @@
 
 #include "bsp_delay.h"
 
+#if __RTOS_RTTHREAD_ENABLED
+
+void delay_us(rt_uint32_t nus)
+{
+	// rt_uint32_t start, now, delta, reload, us_tick;
+
+	// start = SysTick->VAL;
+	// reload = SysTick->LOAD;
+	// us_tick = SystemCoreClock / 1000000UL;
+	// do{
+	// 	now = SysTick->VAL;
+	// 	delta = start > now ? start - now : reload + start - now;
+	// } while (delta < us_tick * nus);
+
+	rt_uint32_t ticks;
+	rt_uint32_t told, tnow, tcnt = 0;
+	rt_uint32_t reload = SysTick->LOAD;
+
+	/* 获得延时经过的 tick 数 */
+	ticks = nus * reload / (1000000 / RT_TICK_PER_SECOND);
+	/* 获得当前时间 */
+	told = SysTick->VAL;
+	while (1)
+	{
+		/* 循环获得当前时间，直到达到指定的时间后退出循环 */
+		tnow = SysTick->VAL;
+		if (tnow != told)
+		{
+			if (tnow < told)
+			{
+				tcnt += told - tnow;
+			}
+			else
+			{
+				tcnt += reload - tnow + told;
+			}
+			told = tnow;
+			if (tcnt >= ticks)
+			{
+				break;
+			}
+		}
+	}
+}
+
+void delay_ms(rt_uint16_t nms)
+{
+	rt_thread_mdelay(nms);
+}
+
+#else
 #if BSP_SYSTICK_DELAY
 void delay_us(uint32_t nus)
 {
@@ -60,4 +111,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		delay_counter++;
 	}
 }
+#endif
 #endif

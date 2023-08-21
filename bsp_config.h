@@ -51,7 +51,7 @@
 //  <i> Enable RT-Thread OS
 //  <i> Default: 0
 #ifndef __RTOS_RTTHREAD_ENABLED
-#define __RTOS_RTTHREAD_ENABLED 0
+#define __RTOS_RTTHREAD_ENABLED 1
 #endif 
 // </e> !RT-Thread
 // </e> !RTOS
@@ -272,7 +272,7 @@
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 1
+#define __BSP_UARTHMI_ENABLED 0
 #endif
 // </e>
 // </h> !Display screen selection
@@ -281,31 +281,31 @@
 // ==========
 // <e> DS18B20
 #ifndef __BSP_DS18B20_ENABLED
-#define __BSP_DS18B20_ENABLED 0
+#define __BSP_DS18B20_ENABLED 1
 #endif
 // </e>
 
 // <e> DHT20
 #ifndef __BSP_DHT20_ENABLED
-#define __BSP_DHT20_ENABLED 0
+#define __BSP_DHT20_ENABLED 1
 #endif 
 // </e> !DHT20
 
 // <e> BMP280
 #ifndef __BSP_BMP280_ENABLED
-#define __BSP_BMP280_ENABLED 0
+#define __BSP_BMP280_ENABLED 1
 #endif
 // </e> !BMP280
 
 // <e> S12SD
 #ifndef __BSP_S12SD_ENABLED
-#define __BSP_S12SD_ENABLED 0
+#define __BSP_S12SD_ENABLED 1
 #endif 
 // </e> !S12SD
 
 // <e> GPS
 #ifndef __BSP_GPS_ENABLED
-#define __BSP_GPS_ENABLED 0
+#define __BSP_GPS_ENABLED 1
 #endif
 // </e> !GPS
 // </h> !Sensor

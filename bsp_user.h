@@ -13,6 +13,10 @@
 #define __BSP_USER_H__
 #include "bsp_config.h"
 
-void bsp_init(void);
+typedef struct WET_DATA
+{
+    float temperature;
+}BSP_WeatherData_TypeDef;
+
 
 #endif /* !__BSP_USER_H__ */
