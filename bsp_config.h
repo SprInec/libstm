@@ -285,9 +285,9 @@
 #endif
 // </e>
 
-// <e> DHT20
-#ifndef __BSP_DHT20_ENABLED
-#define __BSP_DHT20_ENABLED 1
+// <e> DHT11
+#ifndef __BSP_DHT11_ENABLED
+#define __BSP_DHT11_ENABLED 1
 #endif 
 // </e> !DHT20
 
@@ -489,10 +489,6 @@
 #include "bsp_buzzer.h"
 #endif /* !__BSP_BUZZER_ENABLED */
 
-#if __BSP_DS18B20_ENABLED
-#include "bsp_ds18b20.h"
-#endif /* !__BSP_DS18B20_ENABLED */
-
 #if __BSP_AD9833_ENABLED
 #include "bsp_ad9833.h"
 #endif /*! __BSP_AD9833_ENABLED */
@@ -552,6 +548,14 @@
 #if __BSP_UARTHMI_ENABLED
 #include "bsp_usart_hmi.h"
 #endif /* !__BSP_HMI_ENABLED */
+
+#if __BSP_DS18B20_ENABLED
+#include "bsp_ds18b20.h"
+#endif /* !__BSP_DS18B20_ENABLED */
+
+#if __BSP_DHT11_ENABLED
+#include "bsp_dht11.h"
+#endif /* !__BSP_DHT11_ENABLED */
 
 #if __BSP_OV2640_ENABLED
 #include "bsp_ov2640.h"

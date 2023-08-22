@@ -15,16 +15,6 @@
 
 void delay_us(rt_uint32_t nus)
 {
-	// rt_uint32_t start, now, delta, reload, us_tick;
-
-	// start = SysTick->VAL;
-	// reload = SysTick->LOAD;
-	// us_tick = SystemCoreClock / 1000000UL;
-	// do{
-	// 	now = SysTick->VAL;
-	// 	delta = start > now ? start - now : reload + start - now;
-	// } while (delta < us_tick * nus);
-
 	rt_uint32_t ticks;
 	rt_uint32_t told, tnow, tcnt = 0;
 	rt_uint32_t reload = SysTick->LOAD;

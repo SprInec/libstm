@@ -18,5 +18,4 @@ typedef struct WET_DATA
     float temperature;
 }BSP_WeatherData_TypeDef;
 
-
 #endif /* !__BSP_USER_H__ */
