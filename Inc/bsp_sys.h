@@ -1,21 +1,19 @@
-/*
- ******************************************************************************
- * @file    :bsp_sys.h
- * @brief   :The board support package for sys.
- * @version :0.1.0
- * @author  :正点原子
- * @date    :2022.06.28
- ******************************************************************************
- * @attention
+/**
+ * @file bsp_sys.h
+ * @author July (Email: JulyCub@163.com)
+ * @brief
+ * @version 0.1
+ * @date 2022.06.28
  *
- *    位带操作,实现51类似的GPIO控制功能
- *    具体实现思想,参考<<CM3权威指南>>第五章(87页~92页).
+ * @copyright Copyright (c) 2023
  *
- ******************************************************************************
  */
 
 #ifndef __BSP_SYS_H__
 #define __BSP_SYS_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -26,28 +24,15 @@
 #include "stm32f4xx.h"
 #endif
 
-/**********************************************************
-                    JTAG模式设置定义
-**********************************************************/
-
-#define JTAG_SWD_Enable 0x00000000  // 复位值
-#define JNTRST_Disable 0x00000001   // JNTRST引脚释放
-#define SWD_Enable 0x00000010       // JTAG关闭，SWD开启
-#define JTAG_SWD_Disable 0x00000100 // JTAG和SWD都关闭
-
-/**********************************************************
-                    位带操作相关宏定义
-              参考《CM3权威指南》第87 ~ 92页
-**********************************************************/
+#define JTAG_SWD_Enable 0x00000000
+#define JNTRST_Disable 0x00000001
+#define SWD_Enable 0x00000010
+#define JTAG_SWD_Disable 0x00000100
 
 #define BITBAND(addr, bitnum) ((addr & 0xF0000000) + 0X02000000 + ((addr & 0x000FFFFF) << 5) + (bitnum << 2))
 #define MEM_ADDR(addr) *((volatile unsigned long *)(addr))
 #define BIT_ADDR(addr, bitnum) MEM_ADDR(BITBAND(addr, bitnum))
 
-/**********************************************************
-                      GPIO地址映射
-              基地址加上寄存器偏移地址组成
-**********************************************************/
 #ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
 
 #define GPIOA_ODR_Addr (GPIOA_BASE + 12) // 0x4001080C
@@ -88,36 +73,34 @@
 
 #endif
 
-/**********************************************************
-             实现单一IO操作，类似于51的IO操作
-                   n值要小于IO具体数目
-**********************************************************/
+#define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) 
+#define PAin(n) BIT_ADDR(GPIOA_IDR_Addr, n)  
 
-#define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) // 输出
-#define PAin(n) BIT_ADDR(GPIOA_IDR_Addr, n)  // 输入
+#define PBout(n) BIT_ADDR(GPIOB_ODR_Addr, n) 
+#define PBin(n) BIT_ADDR(GPIOB_IDR_Addr, n)  
 
-#define PBout(n) BIT_ADDR(GPIOB_ODR_Addr, n) // 输出
-#define PBin(n) BIT_ADDR(GPIOB_IDR_Addr, n)  // 输入
+#define PCout(n) BIT_ADDR(GPIOC_ODR_Addr, n)
+#define PCin(n) BIT_ADDR(GPIOC_IDR_Addr, n)  
 
-#define PCout(n) BIT_ADDR(GPIOC_ODR_Addr, n) // 输出
-#define PCin(n) BIT_ADDR(GPIOC_IDR_Addr, n)  // 输入
+#define PDout(n) BIT_ADDR(GPIOD_ODR_Addr, n) 
+#define PDin(n) BIT_ADDR(GPIOD_IDR_Addr, n) 
 
-#define PDout(n) BIT_ADDR(GPIOD_ODR_Addr, n) // 输出
-#define PDin(n) BIT_ADDR(GPIOD_IDR_Addr, n)  // 输入
+#define PEout(n) BIT_ADDR(GPIOE_ODR_Addr, n) 
+#define PEin(n) BIT_ADDR(GPIOE_IDR_Addr, n)  
 
-#define PEout(n) BIT_ADDR(GPIOE_ODR_Addr, n) // 输出
-#define PEin(n) BIT_ADDR(GPIOE_IDR_Addr, n)  // 输入
+#define PFout(n) BIT_ADDR(GPIOF_ODR_Addr, n) 
+#define PFin(n) BIT_ADDR(GPIOF_IDR_Addr, n)  
 
-#define PFout(n) BIT_ADDR(GPIOF_ODR_Addr, n) // 输出
-#define PFin(n) BIT_ADDR(GPIOF_IDR_Addr, n)  // 输入
+#define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) 
+#define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  
 
-#define PGout(n) BIT_ADDR(GPIOG_ODR_Addr, n) // 输出
-#define PGin(n) BIT_ADDR(GPIOG_IDR_Addr, n)  // 输入
+#define __BSP_SOFTWARE_RST()    \
+      {                         \
+            __set_FAULTMASK(1); \
+            NVIC_SystemReset(); \
+      }
 
-/* 软件复位 */
-#define __BSP_SOFTWARE_RST() {\
-      __set_FAULTMASK(1);\
-      NVIC_SystemReset();\
+#ifdef __cplusplus
 }
-
+#endif
 #endif

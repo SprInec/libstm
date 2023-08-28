@@ -42,6 +42,9 @@
 
 #ifndef __BSP_AD7606_H__
 #define __BSP_AD7606_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -166,4 +169,7 @@ void bsp_InitAD7606(void);
 
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 #endif

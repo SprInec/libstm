@@ -12,6 +12,9 @@
 
 #ifndef __BSP_FILTER_H__
 #define __BSP_FILTER_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -60,4 +63,7 @@ void quadraticSmooth7(double in[], double out[], int N);
 void cubicSmooth5(double in[], double out[], int N);
 void cubicSmooth7(double in[], double out[], int N);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

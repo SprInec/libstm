@@ -10,6 +10,9 @@
 
 #ifndef __BSP_BUZZER_H__
 #define __BSP_BUZZER_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "gpio.h"
@@ -21,4 +24,7 @@
 								HAL_Delay(500);\
 								HAL_GPIO_WritePin(BSP_BUZZER_Port, BSP_BUZZER_PIN, GPIO_PIN_RESET); })
 
+#ifdef __cplusplus
+}
+#endif
 #endif

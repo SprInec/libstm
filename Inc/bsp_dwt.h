@@ -10,6 +10,9 @@
  */
 #ifndef __BSP_DWT_H_
 #define __BSP_DWT_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "gpio.h"
 
@@ -54,4 +57,7 @@ uint32_t DWT_GetCount(void);
 
 extern DWTCLass Dwt_1;
 
+#ifdef __cplusplus
+}
+#endif
 #endif

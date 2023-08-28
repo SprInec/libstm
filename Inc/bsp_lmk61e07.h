@@ -11,6 +11,9 @@
 
 #ifndef __BSP_LMK61E07_H__
 #define __BSP_LMK61E07_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -99,4 +102,7 @@
 #define INT_LIVE R66
 #define SWRST R72
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_LMK61E07_H__ */

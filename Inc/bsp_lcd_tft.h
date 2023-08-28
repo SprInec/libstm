@@ -15,6 +15,9 @@
 
 #ifndef __BSP_LCD_H
 #define __BSP_LCD_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_sys.h"
 #include "stdlib.h"
@@ -230,4 +233,7 @@ void LCD_Set_Window(u16 sx, u16 sy, u16 width, u16 height); // …Ë÷√¥∞ø⁄
 #define R193 0xC1
 #define R229 0xE5
 
+#ifdef __cplusplus
+}
+#endif
 #endif

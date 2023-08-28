@@ -11,6 +11,10 @@
 
 #ifndef __BSP_COMMON_H__
 #define __BSP_COMMON_H__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "bsp_config.h"
 
@@ -37,36 +41,36 @@
 /*!< STM32x Standard Peripheral Library old types (maintained for legacy purpose) */
 #if 1
     typedef int32_t s32;
-typedef int16_t s16;
-typedef int8_t s8;
+    typedef int16_t s16;
+    typedef int8_t s8;
 
-typedef const int32_t sc32; /*!< Read Only */
-typedef const int16_t sc16; /*!< Read Only */
-typedef const int8_t sc8;   /*!< Read Only */
+    typedef const int32_t sc32; /*!< Read Only */
+    typedef const int16_t sc16; /*!< Read Only */
+    typedef const int8_t sc8;   /*!< Read Only */
 
-typedef __IO int32_t vs32;
-typedef __IO int16_t vs16;
-typedef __IO int8_t vs8;
+    typedef __IO int32_t vs32;
+    typedef __IO int16_t vs16;
+    typedef __IO int8_t vs8;
 
-typedef __I int32_t vsc32; /*!< Read Only */
-typedef __I int16_t vsc16; /*!< Read Only */
-typedef __I int8_t vsc8;   /*!< Read Only */
+    typedef __I int32_t vsc32; /*!< Read Only */
+    typedef __I int16_t vsc16; /*!< Read Only */
+    typedef __I int8_t vsc8;   /*!< Read Only */
 
-typedef uint32_t u32;
-typedef uint16_t u16;
-typedef uint8_t u8;
+    typedef uint32_t u32;
+    typedef uint16_t u16;
+    typedef uint8_t u8;
 
-typedef const uint32_t uc32; /*!< Read Only */
-typedef const uint16_t uc16; /*!< Read Only */
-typedef const uint8_t uc8;   /*!< Read Only */
+    typedef const uint32_t uc32; /*!< Read Only */
+    typedef const uint16_t uc16; /*!< Read Only */
+    typedef const uint8_t uc8;   /*!< Read Only */
 
-typedef __IO uint32_t vu32;
-typedef __IO uint16_t vu16;
-typedef __IO uint8_t vu8;
+    typedef __IO uint32_t vu32;
+    typedef __IO uint16_t vu16;
+    typedef __IO uint8_t vu8;
 
-typedef __I uint32_t vuc32; /*!< Read Only */
-typedef __I uint16_t vuc16; /*!< Read Only */
-typedef __I uint8_t vuc8;   /*!< Read Only */
+    typedef __I uint32_t vuc32; /*!< Read Only */
+    typedef __I uint16_t vuc16; /*!< Read Only */
+    typedef __I uint8_t vuc8;   /*!< Read Only */
 
 #define u8 uint8_t
 #define u16 uint16_t
@@ -124,7 +128,21 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define GPIO_SetBits(n1, n2) HAL_GPIO_WritePin(n1, n2, GPIO_PIN_SET)
 #define GPIO_ResetBits(n1, n2) HAL_GPIO_WritePin(n1, n2, GPIO_PIN_RESET)
 
-#define __BSP_RCC_GPIO_ENABLE(__GPIO__) __HAL_RCC_##__GPIO__##_CLK_ENABLE()
-#define __BSP_RCC_GPIO_DISABLE(__GPIO__) __HAL_RCC_##__GPIO__##_CLK_DISABLE()
+#define __BSP_RCC_GPIO_ENABLE(__GPIO__)   \
+    {                                     \
+        if (__GPIO__ == GPIOA)            \
+            __HAL_RCC_GPIOA_CLK_ENABLE(); \
+        else if (__GPIO__ == GPIOB)       \
+            __HAL_RCC_GPIOB_CLK_ENABLE(); \
+        else if (__GPIO__ == GPIOC)       \
+            __HAL_RCC_GPIOC_CLK_ENABLE(); \
+        else if (__GPIO__ == GPIOD)       \
+            __HAL_RCC_GPIOD_CLK_ENABLE(); \
+        else if (__GPIO__ == GPIOE)       \
+            __HAL_RCC_GPIOE_CLK_ENABLE(); \
+    }
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __BSP_COMMON_H__ */

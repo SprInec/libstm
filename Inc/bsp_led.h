@@ -12,6 +12,9 @@
 
 #ifndef __BSP_LED_H__
 #define __BSP_LED_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "gpio.h"
@@ -116,4 +119,8 @@
 
 void BSP_LED_Init(void);
 
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* __BSP_LED_H__ */

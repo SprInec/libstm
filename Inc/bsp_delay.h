@@ -11,6 +11,9 @@
 
 #ifndef __BSP_DELAY_H__
 #define __BSP_DELAY_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "bsp_sys.h"
@@ -27,4 +30,7 @@ void delay_init(void);
 void delay_us(uint32_t nus);
 void delay_ms(uint16_t nms);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __CORE_DELAY_H */

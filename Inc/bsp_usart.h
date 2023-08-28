@@ -11,6 +11,9 @@
 
 #ifndef __BSP_USART_H__
 #define __BSP_USART_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if !__RTOS_RTTHREAD_ENABLED
 /* Include BEGIN */
@@ -81,5 +84,9 @@ void bsprif3(char *fmt, ...);
 #endif /* __BSP_USART_Transmit */
 /* Function declaration END */
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 #endif /* __BSP_USART_H__ */

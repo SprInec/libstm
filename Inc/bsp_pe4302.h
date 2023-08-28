@@ -11,6 +11,9 @@
 
 #ifndef _PE4302_H_
 #define _PE4302_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_sys.h"
 #include "bsp_delay.h"
@@ -68,4 +71,8 @@ void BSP_PE4302_Init(void);
 void BSP_PE4302_0_Set(unsigned char db);
 void BSP_PE4302_1_Set(unsigned char db);
 #endif /* !PE4302_USING_MULT */
+
+#ifdef __cplusplus
+}
+#endif
 #endif

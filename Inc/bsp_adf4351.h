@@ -17,6 +17,9 @@
 
 #ifndef __BSP_ADF4351_H__
 #define __BSP_ADF4351_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "main.h"
@@ -56,4 +59,7 @@ void WriteOneRegToADF4351(uint32_t Regster);
 void ADF4351_Init_some(void);
 void ADF4351WriteFreq(float Fre);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __BSP_ADF4351_H__ */

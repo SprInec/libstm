@@ -19,6 +19,9 @@
 
 #ifndef __BSP_DAC8563_H__
 #define __BSP_DAC8563_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -92,4 +95,7 @@ void DAC8563_WRITE(uint8_t cmd, uint16_t data);
 void DAC8563_OutPutAB(float vlotA, float vlotB);
 void DAC8563_OutPutAB2(uint16_t dataA, uint16_t dataB);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

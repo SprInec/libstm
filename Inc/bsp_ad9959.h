@@ -44,6 +44,9 @@
 
 #ifndef __BSP_AD9959_H__
 #define __BSP_AD9959_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "bsp_usart.h"
@@ -384,5 +387,9 @@ void AD9959_SetFre_Sweep(uint8_t Channel, uint32_t s_data, uint32_t e_data, uint
 void AD9959_SetAmp_Sweep(uint8_t Channel, uint32_t s_Ampli, uint16_t e_Ampli, uint32_t r_delta, uint32_t f_delta, uint8_t rsrr, uint8_t fsrr, uint32_t fre, uint16_t Phase); // 设置线性扫幅的参数
 void AD9959_SetPhase_Sweep(uint8_t Channel, uint16_t s_data, uint16_t e_data, uint16_t r_delta, uint16_t f_delta, uint8_t rsrr, uint8_t fsrr, uint32_t fre, uint16_t Ampli); // 设置线性扫相的参数
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 #endif

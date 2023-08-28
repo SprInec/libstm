@@ -10,6 +10,9 @@
  
 #ifndef __BSP_TIM_H__
 #define __BSP_TIM_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -26,7 +29,7 @@ typedef struct tim{
 
 extern bsptimTypedef bsptim;
 
-
-
-
+#ifdef __cplusplus
+}
+#endif
 #endif

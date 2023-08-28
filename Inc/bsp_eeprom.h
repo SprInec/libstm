@@ -10,6 +10,9 @@
  */
 #ifndef __BSP_EEPROM
 #define __BSP_EEPROM
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -28,4 +31,7 @@ uint8_t bsp_eeprom_writePage(uint8_t * data, uint8_t data_addr, uint8_t num);
 uint8_t bsp_eeprom_readByte(uint8_t * data, uint8_t data_addr);
 uint8_t bsp_eeprom_readSeqByte(uint8_t * data, uint8_t data_addr, uint8_t num);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

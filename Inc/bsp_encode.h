@@ -12,6 +12,9 @@
 
 #ifndef __BSP_CODING_H__
 #define __BSP_CODING_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -52,4 +55,7 @@ void _MCST(uint16_t str[], uint16_t code[], char len);
 void _DFMCST(uint16_t str[], uint16_t code[], char len);
 #endif /* !ENCODING_MODE_SELECT */
 
+#ifdef __cplusplus
+}
+#endif
 #endif

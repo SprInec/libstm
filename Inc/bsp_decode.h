@@ -11,6 +11,9 @@
 
 #ifndef __BSP_DECODE_H__
 #define __BSP_DECODE_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -38,4 +41,7 @@ uint8_t BSP_ParityCheck_EvenDecode(uint8_t *ori_data, uint8_t *out_date, uint8_t
 
 uint8_t BSP_HammingDecode(uint8_t *received_data, uint8_t *decoded_data, const uint8_t data_len, uint8_t type);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

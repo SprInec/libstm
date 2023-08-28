@@ -10,6 +10,9 @@
 
 #ifndef __BSP_DAC_H__
 #define __BSP_DAC_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -73,4 +76,7 @@ extern uint16_t lisaru_counts;
 void bsp_DAC_TriggerNONE(void);
 void bsp_DAC_TriggerTim(void);
 
+#ifdef __cpluscplus
+}
+#endif
 #endif

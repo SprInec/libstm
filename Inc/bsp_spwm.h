@@ -11,6 +11,9 @@
 
 #ifndef __BSP_SPWM_H__
 #define __BSP_SPWM_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -30,4 +33,7 @@ extern TIM_HandleTypeDef spwm_tim;
 
 void BSP_SPWM_Init(void);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_SPWM_H__ */

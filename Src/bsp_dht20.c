@@ -15,7 +15,7 @@ void DHT20_I2C_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    __BSP_RCC_GPIO_ENABLE(DHT20_GPIO_PORT);
+    __HAL_RCC_GPIOE_CLK_ENABLE();
 
     GPIO_InitStruct.Pin = DHT20_SDA_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
@@ -264,7 +264,7 @@ void BSP_DHT20_Read_CTdata(uint32_t *ct)
     uint32_t RetuData = 0;
     uint16_t cnt = 0;
 
-    DHT20_SDA_PIN();
+    DHT20_SDA_Pin_IN_FLOATING();
     delay_ms(80);
     cnt = 0;
     // 直到状态bit[7]为0，表示为空闲状态，若为1，表示忙状态
@@ -330,14 +330,13 @@ void BSP_DHT20_Read_CTdata_CRC(uint32_t *ct)
     cnt = 0;
     // 直到状态bit[7]为0，表示为空闲状态，若为1，表示忙状态
     while (((DHT20_Read_Status() & 0x80) == 0x80))
-        /
+    {
+        delay_us(1508);
+        if (cnt++ >= 100)
         {
-            delay_us(1508);
-            if (cnt++ >= 100)
-            {
-                break;
-            }
+            break;
         }
+    }
 
     DHT20_I2C_Start();
     DHT20_WR_Byte(0x71);
@@ -438,5 +437,11 @@ void DHT20_Start_Init(void)
 void BSP_DHT20_Init(void)
 {
     DHT20_I2C_Init();
-    DHT20_Start_Init();
+    delay_ms(500);
+
+    if ((DHT20_Read_Status() & 0x18) != 0x18)
+    {
+        DHT20_Start_Init();
+        delay_ms(10);
+    }
 }

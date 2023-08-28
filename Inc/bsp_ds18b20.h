@@ -13,6 +13,9 @@
 
 #ifndef __BSP_DS18B20_H__
 #define __BSP_DS18B20_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "gpio.h"
@@ -43,6 +46,7 @@ typedef struct
 uint8_t DS18B20_Init(void);
 float DS18B20_Get_Temp(void);
 
-
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* __DS18B20_H */

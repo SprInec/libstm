@@ -10,6 +10,9 @@
  */
 #ifndef __OLED_H__
 #define __OLED_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -50,5 +53,8 @@ void OLED_ShowString(uint8_t x,uint8_t y,uint8_t *chr,uint8_t Char_Size);
 void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
 void OLED_ShowUnFloat(uint8_t x, uint8_t y, double num, uint8_t precisenum, uint8_t precisefloat, uint8_t size);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
 

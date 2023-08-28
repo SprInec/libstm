@@ -34,6 +34,10 @@
  */
 #ifndef __AD9854_H
 #define __AD9854_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bsp_config.h"
 #include "bsp_sys.h"
 
@@ -84,4 +88,7 @@ void AD9854_SetBPSK(ulong Freq, uint Shape, uint Phase1, uint Phase2); // AD9854
 void AD9854_InitOSK(void);                       // AD9854的OSK模式初始化
 void AD9854_SetOSK(ulong Freq, uchar RateShape); // AD9854的OSK参数设置
 
+#ifdef __cplusplus
+}
+#endif 
 #endif

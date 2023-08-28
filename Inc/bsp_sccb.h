@@ -10,6 +10,9 @@
  */
 #ifndef __BSP_SCCB_H
 #define __BSP_SCCB_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "main.h"
 #include "bsp_config.h"
@@ -31,4 +34,7 @@ u8 SCCB_RD_Byte(void);
 u8 SCCB_WR_Reg(u8 reg, u8 data);
 u8 SCCB_RD_Reg(u8 reg);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !BSP_SCCB_H */

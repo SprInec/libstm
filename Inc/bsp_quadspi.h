@@ -11,6 +11,9 @@
 
 #ifndef __BSP_QUADSPI_H__
 #define __BSP_QUADSPI_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -25,4 +28,7 @@ void QSPI_Send_CMD( u32 instruction,
 u8 QSPI_Receive(u8 *buf, u32 datalen);
 u8 QSPI_Transmit(u8 *buf, u32 datalen);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_QUADSPI_H__ */

@@ -11,6 +11,9 @@
 
 #ifndef __BSP_OV2640_H__
 #define __BSP_OV2640_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -148,7 +151,7 @@ u8 OV2640_ImageSize_Set(u16 width,u16 height);
 uint8_t BSP_OV2640_JPEGToUART(void);
 void BSP_OV2640_JPEGCONTR(void);
 
+#ifdef __cplusplus
+}
 #endif
-
-
-
+#endif

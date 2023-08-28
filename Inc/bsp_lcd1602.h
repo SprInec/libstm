@@ -10,6 +10,9 @@
 
 #ifndef __BSP_LCD1602_H__
 #define __BSP_LCD1602_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "gpio.h"
@@ -31,4 +34,7 @@ void lcd_write_dat(unsigned char dat);         // 写数据
 void lcd_xy(unsigned char x, unsigned char y); // 写位置
 void lcd_read_busy();                          // 检测标志位
 
+#ifdef __cplusplus
+}
+#endif
 #endif

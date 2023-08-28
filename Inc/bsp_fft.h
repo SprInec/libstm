@@ -12,6 +12,9 @@
 
 #ifndef __BSP_FFT_H__
 #define __BSP_FFT_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -45,5 +48,9 @@ extern BSP_FFTTypedef bsp_fft_handle;
 
 void bsp_arm_fft(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug);
 void BSP_FFT(BSP_FFTTypedef *fft_handle, uint16_t *sample_data, uint16_t debug);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 #endif

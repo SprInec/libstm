@@ -29,6 +29,9 @@
 
 #ifndef __BSP_AD9833_H__
 #define __BSP_AD9833_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -98,4 +101,7 @@ void AD9833_MULT_WaveSeting1(double Freq, unsigned int Freq_SFR, unsigned int Wa
 void AD9833_MULT_WaveSeting2(double Freq, unsigned int Freq_SFR, unsigned int WaveMode, unsigned int Phase);
 #endif
 
+#ifdef __cpluscplus
+}
+#endif
 #endif /* __BSP_AD9833_H__ */

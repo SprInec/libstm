@@ -15,6 +15,9 @@
  */
 #ifndef __F_ADF4002_H
 #define __F_ADF4002_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -142,4 +145,7 @@ void ADF4002_WriteLatch (uint32_t _register);
 void ADF4002_SetFrequency (uint64_t _freq);
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 #endif

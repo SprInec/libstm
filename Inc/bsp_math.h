@@ -10,6 +10,9 @@
 
 #ifndef __BSP_MATH_H__
 #define __BSP_MATH_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "math.h"
@@ -43,4 +46,7 @@ uint16_t bsp_downint(float num);
 /* 数组倒置 */
 void bsp_arraytsp(const float arrA[], float arrB[], uint16_t len);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !BSP_MATH_H */

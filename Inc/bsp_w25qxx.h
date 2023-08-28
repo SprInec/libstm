@@ -11,6 +11,9 @@
 
 #ifndef __BSP_W25QXX_H__
 #define __BSP_W25QXX_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -76,4 +79,8 @@ void W25QXX_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);//Ð´Èëflash
 void W25QXX_Erase_Chip(void);    	  	//ÕûÆ¬²Á³ý
 void W25QXX_Erase_Sector(u32 Dst_Addr);	//ÉÈÇø²Á³ý
 void W25QXX_Wait_Busy(void);           	//µÈ´ý¿ÕÏÐ
+
+#ifdef __cplusplus
+}
+#endif
 #endif

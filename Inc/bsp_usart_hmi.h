@@ -12,6 +12,9 @@
 
 #ifndef __BSP_USART_HMI_H__
 #define __BSP_USART_HMI_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "bsp_usart.h"
@@ -123,4 +126,7 @@ extern uint16_t hmi_point_counts;
 /* 单通道特性透传曲线 */
 void BSP_HMI_SendCurveSingle(uint8_t id, uint8_t chnl, uint8_t points[], uint16_t len, uint8_t page);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* __BSP_USART_HMI_H__ */

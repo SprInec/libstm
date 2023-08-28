@@ -10,9 +10,15 @@
 
 #ifndef __BSP_ADC_H__
 #define __BSP_ADC_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
 _Bool AnlogToDigit(uint16_t data[], uint16_t result[], uint16_t len);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

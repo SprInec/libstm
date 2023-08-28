@@ -22,7 +22,10 @@
  ******************************************************************************
  */
 #ifndef __AD9851_H
-#define __AD9851_H	 
+#define __AD9851_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 #include "gpio.h"
@@ -67,6 +70,10 @@ void AD9851_wr_parrel(u8 w0,double frequence);
 void AD9851_IO_Init(void);
 void AD9851_Setfq(double fq);
 void AD9851_Init(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 #endif
 

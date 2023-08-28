@@ -11,6 +11,10 @@
 
 #ifndef __BSP_DHT20_H__
 #define __BSP_DHT20_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bsp_config.h"
 
 #define DHT20_GPIO_PORT GPIOE
@@ -22,4 +26,7 @@ void BSP_DHT20_Read_CTdata(uint32_t *ct);             // 没有CRC校验，直�
 void BSP_DHT20_Read_CTdata_CRC(uint32_t *ct);         // CRC校验后，读取AHT20的温度和湿度数据
 uint8_t Calc_CRC8(uint8_t *message, uint8_t Num); // CRC校验函数
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_DH20_H__ */

@@ -11,6 +11,10 @@
 
 #ifndef __BSP_DHT11_H__
 #define __BSP_DHT11_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bsp_config.h"
 
 #define DHT11_HIGH GPIO_PIN_SET
@@ -28,14 +32,17 @@
 
 typedef struct DHT11_DATA
 {
-    uint8_t humi_int;  // Êª¶ÈµÄÕûÊý²¿·Ö
-    uint8_t humi_deci; // Êª¶ÈµÄÐ¡Êý²¿·Ö
-    uint8_t temp_int;  // ÎÂ¶ÈµÄÕûÊý²¿·Ö
-    uint8_t temp_deci; // ÎÂ¶ÈµÄÐ¡Êý²¿·Ö
-    uint8_t check_sum; // Ð£ÑéºÍ
+    uint8_t humi_int;  // Êªï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    uint8_t humi_deci; // Êªï¿½Èµï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    uint8_t temp_int;  // ï¿½Â¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    uint8_t temp_deci; // ï¿½Â¶Èµï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    uint8_t check_sum; // Ð£ï¿½ï¿½ï¿½
 } BSP_DHT11Data_TypeDef;
 
 void BSP_DHT11_Init(void);
 uint8_t BSP_DHT11_ReadData(BSP_DHT11Data_TypeDef *DHT11_Data);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_DHT11_H__ */

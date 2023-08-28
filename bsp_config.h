@@ -19,6 +19,9 @@
 
 #ifndef __BSP_CONFIG__
 #define __BSP_CONFIG__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // <<< Use Configuration Wizard in Context Menu >>>
 //
@@ -573,6 +576,14 @@
 #include "bsp_dht20.h"
 #endif /* !__BSP_DHT20_ENABLED */
 
+#if __BSP_BMP280_ENABLED
+#include "bsp_bmp280.h"
+#endif /* !__BSP_BMP280_ENABLED */
+
+#if __BSP_S12SD_ENABLED
+#include "bsp_s12sd.h"
+#endif /* !__BSP_S12SD_ENABLED */
+
 #if __BSP_GP2Y_ENABLED
 #include "bsp_gp2y.h"
 #endif /* !__BSP_GP2Y_ENABLED */
@@ -590,7 +601,7 @@
 #endif /* !__BSP_W25QXX_ENABLED */
 
 #if __BSP_I2C_ENABLED
-#include "bsp_i2c.h"
+#include "bsp_i2c.hpp"
 #endif /* !__BSP_I2C_ENABLED */
 
 #if __BSP_SPI_ENABLED
@@ -633,4 +644,7 @@
 #include "bsp_spwm.h"
 #endif /* !__BSP_SPWM_ENABLED */
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_CONFIG__ */
