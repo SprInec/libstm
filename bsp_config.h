@@ -289,6 +289,12 @@
 #ifndef __BSP_DHT11_ENABLED
 #define __BSP_DHT11_ENABLED 1
 #endif 
+// </e> !DHT11
+
+// <e> DHT20
+#ifndef __BSP_DHT20_ENABLED
+#define __BSP_DHT20_ENABLED 1
+#endif
 // </e> !DHT20
 
 // <e> BMP280
@@ -302,6 +308,12 @@
 #define __BSP_S12SD_ENABLED 1
 #endif 
 // </e> !S12SD
+
+// <e> GP12
+#ifndef __BSP_GP2Y_ENABLED
+#define __BSP_GP2Y_ENABLED 1
+#endif
+// </e> GP12
 
 // <e> GPS
 #ifndef __BSP_GPS_ENABLED
@@ -556,6 +568,14 @@
 #if __BSP_DHT11_ENABLED
 #include "bsp_dht11.h"
 #endif /* !__BSP_DHT11_ENABLED */
+
+#if __BSP_DHT20_ENABLED
+#include "bsp_dht20.h"
+#endif /* !__BSP_DHT20_ENABLED */
+
+#if __BSP_GP2Y_ENABLED
+#include "bsp_gp2y.h"
+#endif /* !__BSP_GP2Y_ENABLED */
 
 #if __BSP_OV2640_ENABLED
 #include "bsp_ov2640.h"

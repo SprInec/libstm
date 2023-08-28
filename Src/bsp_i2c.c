@@ -14,7 +14,7 @@
 #define DELAY_TIME	20
 
 /**
-  * @brief SDA线输入模式配置bsp_
+  * @brief SDA线输入模式配置
   * @param None
   * @retval None
   */

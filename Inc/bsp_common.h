@@ -124,4 +124,7 @@ typedef __I uint8_t vuc8;   /*!< Read Only */
 #define GPIO_SetBits(n1, n2) HAL_GPIO_WritePin(n1, n2, GPIO_PIN_SET)
 #define GPIO_ResetBits(n1, n2) HAL_GPIO_WritePin(n1, n2, GPIO_PIN_RESET)
 
+#define __BSP_RCC_GPIO_ENABLE(__GPIO__) __HAL_RCC_##__GPIO__##_CLK_ENABLE()
+#define __BSP_RCC_GPIO_DISABLE(__GPIO__) __HAL_RCC_##__GPIO__##_CLK_DISABLE()
+
 #endif /* __BSP_COMMON_H__ */
