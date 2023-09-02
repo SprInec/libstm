@@ -11,6 +11,9 @@
 
 #ifndef __BSP_GP2Y_H__
 #define __BSP_GP2Y_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
@@ -47,4 +50,8 @@
 
 void BSP_GP2Y_Init(void);
 double GP2Y_GetDens(void);
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* !__BSP_GP2Y_H__ */

@@ -1,240 +1,64 @@
 /**
- * @file bsp_bmp280.c
+ * @file bsp_bmp280.cpp
  * @author July (Email: JulyCub@163.com)
  * @brief BMP280 Hardware
  * @version 0.1
- * @date 2023.09.02
- * 
+ * @date 2023.08.28
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 #include "bsp_bmp280.h"
 
+BSP_I2C_CLASS bmp280_i2c;
 BMP280 bmp280_inst;
 BMP280 *bmp280 = &bmp280_inst;
 
-void BSP_BMP280_SDA_InputMode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = BMP280_SDA_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(BMP280_GPIO_PORT, &GPIO_InitStruct);
-}
-
-void BSP_BMP280_SDA_OutputMode(void)
-{
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = BMP280_SDA_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    HAL_GPIO_Init(BMP280_GPIO_PORT, &GPIO_InitStruct);
-}
-
-void BSP_BMP280_SDA_SendByte(uint16_t val)
-{
-    if (val) {
-        BMP280_GPIO_PORT->BSRR |= BMP280_SDA_PIN;
-    }
-    else {
-        BMP280_GPIO_PORT->ODR |= BMP280_SDA_PIN;
-    }
-}
-
-void BSP_BMP280_SCL_SendByte(uint16_t val)
-{
-    if (val) {
-        BMP280_GPIO_PORT->BSRR |= BMP280_SCL_PIN;
-    }
-    else {
-        BMP280_GPIO_PORT->ODR |= BMP280_SCL_PIN;
-    }
-}
-
-uint8_t BSP_BMP280_SDA_RecvByte(void)
-{
-    if (HAL_GPIO_ReadPin(BMP280_GPIO_PORT, BMP280_SDA_PIN) == GPIO_PIN_SET)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-static void delay(uint16_t n)
-{
-    uint16_t i;
-    for (i = 0; i > n; i++);
-}
-
-void BSP_BMP280_I2C_Start(void)
-{
-    BSP_BMP280_SDA_SendByte(1);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-    BSP_BMP280_SDA_SendByte(0);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-}
-
-void BSP_BMP280_I2C_Stop(void)
-{
-    BSP_BMP280_SDA_SendByte(0);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-    BSP_BMP280_SDA_SendByte(1);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-}
-
-uint8_t BSP_BMP280_I2C_WaitACK(void)
-{
-    uint8_t cErrTime = 5;
-
-    BSP_BMP280_SDA_InputMode();
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-    while(BSP_BMP280_SDA_RecvByte())
-    {
-        cErrTime--;
-        delay(DELAY_TIME);
-        if (0 == cErrTime)
-        {
-            BSP_BMP280_SDA_OutputMode();
-            BSP_BMP280_I2C_Stop();
-            return ERROR;
-        }
-    }
-    BSP_BMP280_SDA_OutputMode();
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-    return SUCCESS;
-}
-
-uint8_t BSP_BMP280_WaitNotACK(void)
-{
-    uint8_t cErrTime = 5;
-
-    BSP_BMP280_SDA_InputMode();
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-    while (BSP_BMP280_SDA_RecvByte())
-    {
-        cErrTime--;
-        delay(DELAY_TIME);
-        if (0 == cErrTime)
-        {
-            BSP_BMP280_SDA_OutputMode();
-            BSP_BMP280_I2C_Stop();
-            return ERROR;
-        }
-    }
-    BSP_BMP280_SDA_OutputMode();
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-    return SUCCESS;
-}
-
-void BSP_BMP280_I2C_SendACK(void)
-{
-    BSP_BMP280_SDA_SendByte(0);
-    delay(DELAY_TIME * 2);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-}
-
-void BSP_BMP280_I2C_SendNotACK(void)
-{
-    BSP_BMP280_SDA_SendByte(1);
-    delay(DELAY_TIME * 2);
-    BSP_BMP280_SCL_SendByte(1);
-    delay(DELAY_TIME);
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-}
-
-void BSP_BMP280_I2C_SendByte(uint8_t byte)
-{
-    uint8_t i = 8;
-    while (i--)
-    {
-        BSP_BMP280_SCL_SendByte(0);
-        delay(DELAY_TIME);
-        BSP_BMP280_SDA_SendByte(byte & 0x80);
-        delay(DELAY_TIME);
-        byte += byte;
-        delay(DELAY_TIME);
-        BSP_BMP280_SCL_SendByte(1);
-        delay(DELAY_TIME);
-    }
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-}
-
-uint8_t BSP_BMP280_I2C_RecvByte(void)
-{
-    uint8_t i = 8;
-    uint8_t byte = 0;
-
-    BSP_BMP280_SDA_InputMode();
-    while (i--)
-    {
-        byte += byte;
-        BSP_BMP280_SCL_SendByte(0);
-        delay(DELAY_TIME * 2);
-        BSP_BMP280_SCL_SendByte(1);
-        delay(DELAY_TIME);
-        byte |= BSP_BMP280_SDA_RecvByte();
-    }
-    BSP_BMP280_SCL_SendByte(0);
-    delay(DELAY_TIME);
-    BSP_BMP280_SDA_OutputMode();
-    return byte;
-}
-
+/**
+ * @brief bmp280 read one byte
+ * @param reg_addr register address
+ * @return uint8_t read data
+ */
 static uint8_t bmp280_read_byte(uint8_t reg_addr)
 {
     uint8_t data;
 
-    BSP_BMP280_I2C_Start();
-    BSP_BMP280_I2C_SendByte(BMP280_ADDRESS << 1 | 0);
-    BSP_BMP280_I2C_WaitACK();
-    BSP_BMP280_I2C_SendByte(reg_addr);
-    BSP_BMP280_I2C_WaitACK();
+    bmp280_i2c.Start();
+    bmp280_i2c.SendByte(BMP280_ADDRESS << 1 | 0);
+    bmp280_i2c.WaitACK();
+    bmp280_i2c.SendByte(reg_addr);
+    bmp280_i2c.WaitACK();
 
-    BSP_BMP280_I2C_Start();
-    BSP_BMP280_I2C_SendByte(BMP280_ADDRESS << 1 | 1);
-    BSP_BMP280_I2C_WaitACK();
-    data = BSP_BMP280_I2C_RecvByte();
-    BSP_BMP280_I2C_Stop();
+    bmp280_i2c.Start();
+    bmp280_i2c.SendByte(BMP280_ADDRESS << 1 | 1);
+    bmp280_i2c.WaitACK();
+    data = bmp280_i2c.ReceiveByte();
+    bmp280_i2c.Stop();
     return data;
 }
 
+/**
+ * @brief bmp280 send one byte
+ * @param reg_addr register address
+ * @param data send data
+ */
 static void bmp280_write_byte(uint8_t reg_addr, uint8_t data)
 {
-    BSP_BMP280_I2C_Start();
-    BSP_BMP280_I2C_SendByte(BMP280_ADDRESS << 1);
-    BSP_BMP280_I2C_WaitACK();
-    BSP_BMP280_I2C_SendByte(reg_addr);
-    BSP_BMP280_I2C_WaitACK();
+    bmp280_i2c.Start();
+    bmp280_i2c.SendByte(BMP280_ADDRESS << 1);
+    bmp280_i2c.WaitACK();
+    bmp280_i2c.SendByte(reg_addr);
+    bmp280_i2c.WaitACK();
 
-    BSP_BMP280_I2C_SendByte(data);
-    BSP_BMP280_I2C_WaitACK();
-    BSP_BMP280_I2C_Stop();
+    bmp280_i2c.SendByte(data);
+    bmp280_i2c.WaitACK();
+    bmp280_i2c.Stop();
 }
 
 // 设置BMP过采样因子 MODE
 // BMP280_SLEEP_MODE||BMP280_FORCED_MODE||BMP280_NORMAL_MODE
-static void bmp280_set_temoversamp(BMP_OVERSAMPLE_MODE *Oversample_Mode)
+void bmp280_set_temoversamp(BMP_OVERSAMPLE_MODE *Oversample_Mode)
 {
     u8 Regtmp;
     Regtmp = ((Oversample_Mode->T_Osample) << 5) |
@@ -245,7 +69,7 @@ static void bmp280_set_temoversamp(BMP_OVERSAMPLE_MODE *Oversample_Mode)
 }
 
 // 设置保持时间和滤波器分频因子
-static void bmp280_set_standby_filter(BMP_CONFIG *BMP_Config)
+void bmp280_set_standby_filter(BMP_CONFIG *BMP_Config)
 {
     u8 Regtmp;
     Regtmp = ((BMP_Config->T_SB) << 5) |
@@ -347,21 +171,8 @@ uint8_t BSP_BMP280_ReadID(void)
 void BSP_BMP280_Init(void)
 {
     uint8_t Lsb, Msb;
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-    __BSP_RCC_GPIO_ENABLE(BMP280_GPIO_PORT);
-
-    GPIO_InitStruct.Pin = BMP280_SDA_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(BMP280_GPIO_PORT, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = BMP280_SCL_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(BMP280_GPIO_PORT, &GPIO_InitStruct);
+    bmp280_i2c.Init("bmp280", BMP280_GPIO_PORT, BMP280_SDA_PIN, BMP280_SCL_PIN);
 
     // Temperature sensor correction value
     Lsb = bmp280_read_byte(BMP280_DIG_T1_LSB_REG);

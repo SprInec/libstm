@@ -15,39 +15,6 @@ static uint16_t buffer[MAX_NUM]; /*缓冲数组全局变量*/
 ADC_HandleTypeDef ADC_Handle;
 
 /**
- * @brief  数组内缓冲ADC电压采集数据
- * @param  无
- * @retval 无
- */
-void Collect_data(void)
-{
-  uint8_t i;
-
-  for (i = 0; i < 2; i++)
-  {
-    GP2Y_ILED_SET(ILED_HIGH);
-    /*等待模块输出电压稳定*/
-    delay_us(280);
-
-    // 开始adc转换，软件触发
-    HAL_ADC_Start(&ADC_Handle);
-
-    while (__HAL_ADC_GET_FLAG(&ADC_Handle, ADC_FLAG_EOC) != SET);
-
-    /* 数组缓冲ADC转化数值*/
-    GP2Y_GetDate(HAL_ADC_GetValue(&ADC_Handle));
-
-    /* 清空ADC悬起标志位*/
-    __HAL_ADC_CLEAR_FLAG(&ADC_Handle, ADC_FLAG_EOC);
-
-    /*关闭ILED灯*/
-    GP2Y_ILED_SET(ILED_LOW);
-
-    HAL_Delay(5);
-  }
-}
-
-/**
  * @brief  数组缓冲ADC数值
  * @param  valve电压编码值
  * @retval 无
@@ -61,6 +28,39 @@ void GP2Y_GetDate(uint16_t valve)
   if (k == MAX_NUM)
   {
     k = 0;
+  }
+}
+
+/**
+ * @brief  数组内缓冲ADC电压采集数据
+ * @param  无
+ * @retval 无
+ */
+void Collect_data(void)
+{
+  uint8_t i;
+
+  for (i = 0; i < 2; i++)
+  {
+    GP2Y_ILED_SET(ILED_HIGH);
+    /* 等待模块输出电压稳定 */
+    delay_us(280);
+
+    /* 开始adc转换，软件触发 */
+    HAL_ADC_Start(&ADC_Handle);
+
+    while (__HAL_ADC_GET_FLAG(&ADC_Handle, ADC_FLAG_EOC) != SET);
+
+    /* 数组缓冲ADC转化数值*/
+    GP2Y_GetDate(HAL_ADC_GetValue(&ADC_Handle));
+
+    /* 清空ADC悬起标志位*/
+    __HAL_ADC_CLEAR_FLAG(&ADC_Handle, ADC_FLAG_EOC);
+
+    /* 关闭ILED灯 */
+    GP2Y_ILED_SET(ILED_LOW);
+
+    HAL_Delay(5);
   }
 }
 
@@ -79,7 +79,7 @@ double GP2Y_Convert(void)
   {
     sum += buffer[i];
   }
-  voltage = (sum / 10.0) * (3300 / 4096.0) * 11; /*实际平均电压值*/
+  voltage = (sum / 10.0) * (3300 / 4096.0) * 11; /* 实际平均电压值 */
 
   if (voltage <= NO_DUST_VOLTAGE)
   {
@@ -87,7 +87,7 @@ double GP2Y_Convert(void)
   }
   else
   {
-    dens = (voltage - NO_DUST_VOLTAGE) * RATIO; /*电压值换算成灰尘浓度值*/
+    dens = (voltage - NO_DUST_VOLTAGE) * RATIO; /* 电压值换算成灰尘浓度值 */
     return dens;
   }
 }
@@ -166,7 +166,7 @@ static void ADC_Mode_Config(void)
   GP2Y_ADC_CLK_ENABLE();
   ADC_Handle.Instance = GP2Y_ADC;
   // 使能Boost模式
-  ADC_Handle.Init.BoostMode = ENABLE;
+  // ADC_Handle.Init.BoostMode = ENABLE;
   // ADC时钟1分频
   ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   // 使能连续转换模式

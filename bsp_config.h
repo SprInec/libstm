@@ -357,7 +357,7 @@ extern "C" {
 // ==========================
 // <e> BSP I2C
 #ifndef __BSP_I2C_ENABLED
-#define __BSP_I2C_ENABLED 0
+#define __BSP_I2C_ENABLED 1
 #endif
 // </e>
 
@@ -601,7 +601,7 @@ extern "C" {
 #endif /* !__BSP_W25QXX_ENABLED */
 
 #if __BSP_I2C_ENABLED
-#include "bsp_i2c.hpp"
+#include "bsp_i2c.h"
 #endif /* !__BSP_I2C_ENABLED */
 
 #if __BSP_SPI_ENABLED

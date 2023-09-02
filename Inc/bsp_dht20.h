@@ -24,7 +24,7 @@ extern "C" {
 void BSP_DHT20_Init(void);
 void BSP_DHT20_Read_CTdata(uint32_t *ct);             // 没有CRC校验，直接读取AHT20的温度和湿度数据
 void BSP_DHT20_Read_CTdata_CRC(uint32_t *ct);         // CRC校验后，读取AHT20的温度和湿度数据
-uint8_t Calc_CRC8(uint8_t *message, uint8_t Num); // CRC校验函数
+uint8_t Calc_CRC8(uint8_t *message, uint8_t Num);     // CRC校验函数
 
 #ifdef __cplusplus
 }

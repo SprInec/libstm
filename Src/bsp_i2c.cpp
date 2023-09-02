@@ -1,5 +1,5 @@
 /**
- * @file bsp_i2c.cpp
+ * @file bsp_i2c.c
  * @author July (Email: JulyCub@163.com)
  * @brief i2C Hardware
  * @version 0.1
@@ -8,9 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "bsp_i2c.hpp"
-
-#define DELAY_TIME 20
+#include "bsp_i2c.h"
 
 /**
  * @brief ³õÊ¼»¯I2C
@@ -21,7 +19,7 @@
  * @param scl_pin SCLÒý½Å
  */
 void BSP_I2C_CLASS::Init(const std::string &name,
-                         GPIO_TypeDef port,
+                         GPIO_TypeDef *port,
                          uint16_t sda_pin,
                          uint16_t scl_pin)
 {
@@ -133,8 +131,7 @@ uint8_t BSP_I2C_CLASS::SDA_Input(void)
 void BSP_I2C_CLASS::delay(uint16_t n)
 {
   uint32_t i;
-  for (i = 0; i < n; ++i)
-    ;
+  for (i = 0; i < n; ++i);
 }
 
 /**
@@ -209,6 +206,7 @@ uint8_t BSP_I2C_CLASS::WaitACK(void)
 uint8_t BSP_I2C_CLASS::WaitNotACK(void)
 {
   unsigned short cErrTime = 5;
+  
   BSP_I2C_CLASS::SDA_Input_Mode();
   BSP_I2C_CLASS::delay(DELAY_TIME);
   BSP_I2C_CLASS::SCL_Output(1);
