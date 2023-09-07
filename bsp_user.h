@@ -16,11 +16,15 @@ extern "C" {
 #endif
 
 #include "bsp_config.h"
+
+#define SENSOR_DELAY_TIME 1000 * 10
 typedef struct WET_DATA
 {
     uint8_t uv;
     float temperature;
     uint32_t ct[2];
+    double PM2_5;
+    double pressure;
 } BSP_WeatherData_TypeDef;
 
 #ifdef __cplusplus

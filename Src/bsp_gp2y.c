@@ -10,6 +10,7 @@
  */
 
 #include "bsp_gp2y.h"
+#include "adc.h"
 
 static uint16_t buffer[MAX_NUM]; /*缓冲数组全局变量*/
 ADC_HandleTypeDef ADC_Handle;
@@ -139,71 +140,73 @@ static void ADC_GPIO_Mode_Config(void)
  */
 static void ADC_Mode_Config(void)
 {
-  ADC_ChannelConfTypeDef ADC_Config;
+  MX_ADC2_Init();
 
-  RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;
-  /*            配置ADC3时钟源             */
-  /*    HSE Frequency(Hz)    = 25000000   */
-  /*         PLL_M                = 5     */
-  /*         PLL_N                = 160   */
-  /*         PLL_P                = 25    */
-  /*         PLL_Q                = 2     */
-  /*         PLL_R                = 2     */
-  /*     ADC_ker_clk         = 32000000   */
-  RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
-  RCC_PeriphClkInit.PLL2.PLL2M = 5;
-  RCC_PeriphClkInit.PLL2.PLL2N = 160;
-  RCC_PeriphClkInit.PLL2.PLL2P = 25;
-  RCC_PeriphClkInit.PLL2.PLL2Q = 2;
-  RCC_PeriphClkInit.PLL2.PLL2R = 2;
-  RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
-  RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
-  RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLL3;
-  HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit);
+  // ADC_ChannelConfTypeDef ADC_Config;
 
-  /* 使能ADC时钟 */
-  GP2Y_ADC_CLK_ENABLE();
-  ADC_Handle.Instance = GP2Y_ADC;
-  // 使能Boost模式
-  // ADC_Handle.Init.BoostMode = ENABLE;
-  // ADC时钟1分频
-  ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-  // 使能连续转换模式
-  ADC_Handle.Init.ContinuousConvMode = ENABLE;
-  // 数据存放在数据寄存器中
-  ADC_Handle.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
-  // 关闭不连续转换模式
-  ADC_Handle.Init.DiscontinuousConvMode = DISABLE;
-  // 单次转换
-  ADC_Handle.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  // 软件触发
-  ADC_Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  // 关闭低功耗自动等待
-  ADC_Handle.Init.LowPowerAutoWait = DISABLE;
-  // 数据溢出时，覆盖写入
-  ADC_Handle.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
-  // 不使能过采样模式
-  ADC_Handle.Init.OversamplingMode = DISABLE;
-  // 分辨率为：16bit
-  ADC_Handle.Init.Resolution = ADC_RESOLUTION_12B;
-  // 不使能多通道扫描
-  ADC_Handle.Init.ScanConvMode = DISABLE;
-  // 初始化 ADC
-  HAL_ADC_Init(&ADC_Handle);
+  // RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;
+  // /*            配置ADC3时钟源             */
+  // /*    HSE Frequency(Hz)    = 25000000   */
+  // /*         PLL_M                = 5     */
+  // /*         PLL_N                = 160   */
+  // /*         PLL_P                = 25    */
+  // /*         PLL_Q                = 2     */
+  // /*         PLL_R                = 2     */
+  // /*     ADC_ker_clk         = 32000000   */
+  // RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  // RCC_PeriphClkInit.PLL2.PLL2FRACN = 0;
+  // RCC_PeriphClkInit.PLL2.PLL2M = 5;
+  // RCC_PeriphClkInit.PLL2.PLL2N = 160;
+  // RCC_PeriphClkInit.PLL2.PLL2P = 25;
+  // RCC_PeriphClkInit.PLL2.PLL2Q = 2;
+  // RCC_PeriphClkInit.PLL2.PLL2R = 2;
+  // RCC_PeriphClkInit.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+  // RCC_PeriphClkInit.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+  // RCC_PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLL3;
+  // HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphClkInit);
 
-  // 使用通道6
-  ADC_Config.Channel = GP2Y_ADC_CHANNEL;
-  // 转换顺序为1
-  ADC_Config.Rank = ADC_REGULAR_RANK_1;
-  // 采样周期为64.5个周期
-  ADC_Config.SamplingTime = ADC_SAMPLETIME_64CYCLES_5;
-  // 不使用差分输入的功能
-  ADC_Config.SingleDiff = ADC_SINGLE_ENDED;
-  // 配置ADC通道
-  HAL_ADC_ConfigChannel(&ADC_Handle, &ADC_Config);
-  // 使能ADC1、2
-  ADC_Enable(&ADC_Handle);
+  // /* 使能ADC时钟 */
+  // GP2Y_ADC_CLK_ENABLE();
+  // ADC_Handle.Instance = GP2Y_ADC;
+  // // 使能Boost模式
+  // // ADC_Handle.Init.BoostMode = ENABLE;
+  // // ADC时钟1分频
+  // ADC_Handle.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  // // 使能连续转换模式
+  // ADC_Handle.Init.ContinuousConvMode = ENABLE;
+  // // 数据存放在数据寄存器中
+  // ADC_Handle.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
+  // // 关闭不连续转换模式
+  // ADC_Handle.Init.DiscontinuousConvMode = DISABLE;
+  // // 单次转换
+  // ADC_Handle.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  // // 软件触发
+  // ADC_Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  // // 关闭低功耗自动等待
+  // ADC_Handle.Init.LowPowerAutoWait = DISABLE;
+  // // 数据溢出时，覆盖写入
+  // ADC_Handle.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  // // 不使能过采样模式
+  // ADC_Handle.Init.OversamplingMode = DISABLE;
+  // // 分辨率为：16bit
+  // ADC_Handle.Init.Resolution = ADC_RESOLUTION_12B;
+  // // 不使能多通道扫描
+  // ADC_Handle.Init.ScanConvMode = DISABLE;
+  // // 初始化 ADC
+  // HAL_ADC_Init(&ADC_Handle);
+
+  // // 使用通道6
+  // ADC_Config.Channel = GP2Y_ADC_CHANNEL;
+  // // 转换顺序为1
+  // ADC_Config.Rank = ADC_REGULAR_RANK_1;
+  // // 采样周期为64.5个周期
+  // ADC_Config.SamplingTime = ADC_SAMPLETIME_64CYCLES_5;
+  // // 不使用差分输入的功能
+  // ADC_Config.SingleDiff = ADC_SINGLE_ENDED;
+  // // 配置ADC通道
+  // HAL_ADC_ConfigChannel(&ADC_Handle, &ADC_Config);
+  // // 使能ADC1、2
+  // ADC_Enable(&ADC_Handle);
 }
 
 /**

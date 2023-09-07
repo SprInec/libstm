@@ -17,9 +17,9 @@ extern "C" {
 
 #include "bsp_config.h"
 
-#define BMP280_GPIO_PORT GPIOE
-#define BMP280_SDA_PIN GPIO_PIN_2
-#define BMP280_SCL_PIN GPIO_PIN_4
+#define BMP280_GPIO_PORT GPIOB
+#define BMP280_SDA_PIN GPIO_PIN_5
+#define BMP280_SCL_PIN GPIO_PIN_7
 
 // BMP工作模式 
 typedef enum {

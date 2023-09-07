@@ -23,8 +23,8 @@ extern "C" {
 #define Bit_RESET 0
 #define Bit_SET 1
 
-#define DHT11_PORT GPIOE
-#define DHT11_PIN GPIO_PIN_1
+#define DHT11_PORT GPIOB
+#define DHT11_PIN GPIO_PIN_9
 #define DHT11_GPIO_CLK_ENABLE() __HAL_RCC_GPIOE_CLK_ENABLE()
 
 #define DHT11_DATA_IN() HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN)
@@ -32,11 +32,11 @@ extern "C" {
 
 typedef struct DHT11_DATA
 {
-    uint8_t humi_int;  // ʪ�ȵ���������
-    uint8_t humi_deci; // ʪ�ȵ�С������
-    uint8_t temp_int;  // �¶ȵ���������
-    uint8_t temp_deci; // �¶ȵ�С������
-    uint8_t check_sum; // У���
+    uint8_t humi_int;  
+    uint8_t humi_deci; 
+    uint8_t temp_int;  
+    uint8_t temp_deci; 
+    uint8_t check_sum; 
 } BSP_DHT11Data_TypeDef;
 
 void BSP_DHT11_Init(void);
