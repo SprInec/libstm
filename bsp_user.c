@@ -208,6 +208,7 @@ static void data_interface_entry(void *parameter)
     MX_UART5_Init();
     while(1)
     {
+        #TODO: perfect the data interface
         // sprintf((char *)str_send, "\nHello %s! This is a sample test for the UART communication between linux and stm32.", user);
         // HAL_UART_Transmit(&huart5, (uint8_t *)str_send, strlen((const char *)str_send), 0xFFFF);
 
