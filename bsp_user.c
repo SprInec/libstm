@@ -15,19 +15,7 @@
 #include "usart.h"
 #include "string.h"
 
-BSP_WeatherData_TypeDef wet_data = {
-    .uv = 0,
-    .ct[0] = 0,
-    .ct[1] = 0,
-    .PM2_5 = 0.0,
-    .temperature = 0,
-    .pressure = 0.0
-};
-BSP_DHT11Data_TypeDef dht11_data = {0};
-
-#define THREAD_PRIORITY         10
-#define THREAD_STACK_SIZE       512
-#define THREAD_TIMESLICE        20
+BSP_WeatherData_TypeDef wet_data = {0};
 
 /**
  * @brief DS18B20 温度信息采集
@@ -37,18 +25,19 @@ static void ds18b20_thread_entry(void *parameter)
 {
     DS18B20_Init();
     rt_kprintf("\n- DS18B20 Start Successful.");
-    while(1)
+    while (1)
     {
         wet_data.temperature = DS18B20_Get_Temp();
         rt_uint16_t data = (rt_uint16_t)wet_data.temperature;
         rt_kprintf("\nds18b20->temp: %d", data);
         delay_ms(SENSOR_DELAY_TIME);
-    }   
+    }
 }
 
 /**
  * @brief DHT11 温度/湿度信息采集
  */
+BSP_DHT11Data_TypeDef dht11_data = {0};
 static rt_thread_t dht11 = RT_NULL;
 static void dht11_thread_entry(void *parameter)
 {
@@ -78,7 +67,7 @@ static void dht20_thread_entry(void *parameter)
 {
     BSP_DHT20_Init();
     rt_kprintf("\n- DHT20 Start Successful.");
-    while(1)
+    while (1)
     {
         BSP_DHT20_Read_CTdata_CRC(wet_data.ct);
         rt_kprintf("\ndht20->temp: %d", wet_data.ct[1]);
@@ -97,7 +86,7 @@ static void s12sd_thread_entry(void *parameter)
     rt_kprintf("\n- S12SD Start Successful.");
     while (1)
     {
-        wet_data.uv =  BSP_S12SD_UV_Index(BSP_S12SD_Read());
+        wet_data.uv = BSP_S12SD_UV_Index(BSP_S12SD_Read());
         rt_kprintf("\ns12sd->uv: %d", wet_data.uv);
         delay_ms(SENSOR_DELAY_TIME);
     }
@@ -114,7 +103,7 @@ static void bmp280_thread_entry(void *parameter)
     while (1)
     {
         wet_data.pressure = BSP_BMP280_Get_Pressure();
-        rt_kprintf("\nbmp280->P: %d",(uint16_t)wet_data.pressure);
+        rt_kprintf("\nbmp280->P: %d", (uint16_t)wet_data.pressure);
         delay_ms(SENSOR_DELAY_TIME);
     }
 }
@@ -127,7 +116,7 @@ static void gp2y_thread_entry(void *parameter)
 {
     BSP_GP2Y_Init();
     rt_kprintf("\n- GP2Y Start Successful.");
-    while(1)
+    while (1)
     {
         wet_data.PM2_5 = GP2Y_GetDens();
         rt_kprintf("\ngp2y->PM2.5: %d", (uint16_t)(wet_data.PM2_5));
@@ -146,16 +135,14 @@ void thread_start(void)
     if (ds18b20 != RT_NULL)
         rt_thread_startup(ds18b20);
 
-
     dht11 = rt_thread_create("dht11",
-                             dht11_thread_entry,        
+                             dht11_thread_entry,
                              RT_NULL,
                              THREAD_STACK_SIZE,
                              THREAD_PRIORITY,
                              THREAD_TIMESLICE);
     if (dht11 != RT_NULL)
         rt_thread_startup(dht11);
-
 
     dht20 = rt_thread_create("dht20",
                              dht20_thread_entry,
@@ -176,11 +163,11 @@ void thread_start(void)
         rt_thread_startup(s12sd);
 
     _bmp280 = rt_thread_create("bmp280",
-                              bmp280_thread_entry,
-                              RT_NULL,
-                              THREAD_STACK_SIZE,
-                              THREAD_PRIORITY,
-                              THREAD_TIMESLICE);
+                               bmp280_thread_entry,
+                               RT_NULL,
+                               THREAD_STACK_SIZE,
+                               THREAD_PRIORITY,
+                               THREAD_TIMESLICE);
     if (_bmp280 != RT_NULL)
         rt_thread_startup(_bmp280);
 
@@ -196,30 +183,56 @@ void thread_start(void)
 MSH_CMD_EXPORT(thread_start, thread start);
 
 /**
- * @brief 数据接口
+ * @brief data interface
  */
+rt_uint8_t data_recv[200];
 static rt_thread_t data_interface = RT_NULL;
+static void data_interface_receive(rt_uint8_t *str_recv);
+static void data_interface_send(rt_uint8_t *str_send);
+static void data_interface_timedelay(rt_uint16_t mins);
 static void data_interface_entry(void *parameter)
 {
-    uint8_t str_send[200];
-    uint8_t str_recv[200];
-    uint8_t user[] = "SprIne";
-
     MX_UART5_Init();
-    while(1)
+    while (1)
     {
-        #TODO: perfect the data interface
-        // sprintf((char *)str_send, "\nHello %s! This is a sample test for the UART communication between linux and stm32.", user);
-        // HAL_UART_Transmit(&huart5, (uint8_t *)str_send, strlen((const char *)str_send), 0xFFFF);
-
-        HAL_UART_Receive(&huart5, (uint8_t *)str_recv, 2, 0xFFFF);
-        rt_kprintf("\n get the message from linux: %s", str_recv);
-
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-        delay_ms(500);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
-        delay_ms(1000);
+        data_interface_send();
+        data_interface_receive(data_recv);
+        /* Timedelay 1 min */
+        data_interface_timedelay(1);
     }
+}
+
+/**
+ * @brief receive message from linux device
+ * @param str_recv received data
+ */
+void data_interface_receive(rt_uint8_t *str_recv)
+{
+    // TODO : Complete processing of received data
+    HAL_UART_Receive(&DATA_INTERFACE_UART_PORT, (uint8_t *)str_recv, , 0xFFFF);
+}
+
+/**
+ * @brief send weather message to linux device
+ * @param data weather data
+ */
+void data_interface_send(BSP_WeatherData_TypeDef *data)
+{
+    // TODO : Complete the data interface send part
+    rt_uint8_t str_send[200];
+    sprintf(str_send, "")
+}
+
+/**
+ * @brief data interface time delay
+ * @param mins
+ */
+void data_interface_timedelay(rt_uint16_t mins)
+{
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+    delay_ms(500);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+    delay_ms(1000);
 }
 
 void data_interface_start(void)
