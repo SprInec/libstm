@@ -12,7 +12,8 @@
 #ifndef __BSP_USER_H__
 #define __BSP_USER_H__
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include "bsp_config.h"
@@ -27,15 +28,15 @@ extern "C" {
 /* the sensor gather gap time */
 #define SENSOR_DELAY_TIME 1000 * 10
 
-/* weather data stuct */
-typedef struct WET_DATA
-{
-    uint8_t UVR;    /* 紫外线辐射 */
-    float TS;       /* 温度 */
-    float HS;       /* 湿度 */
-    double PM2_5;   /* 空气质量 */
-    double BPS;     /* 气压 */
-} BSP_WeatherData_TypeDef;
+    /* weather data stuct */
+    typedef struct WET_DATA
+    {
+        uint8_t UVR;  /* 紫外线辐射 */
+        float TS;     /* 温度 */
+        uint32_t HS;  /* 湿度 */
+        double PM2_5; /* 空气质量 */
+        double BPS;   /* 气压 */
+    } BSP_WeatherData_TypeDef;
 
 #ifdef __cplusplus
 }
