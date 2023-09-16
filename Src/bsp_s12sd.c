@@ -27,6 +27,7 @@ void BSP_S12SD_Init(void)
 uint16_t BSP_S12SD_Read(void)
 {
     HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
     return (uint16_t)((HAL_ADC_GetValue(&hadc1) * 3300) / 4096);
 }
 
