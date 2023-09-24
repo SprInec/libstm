@@ -21,7 +21,7 @@ extern "C"
 /* data interface usart/serial port */
 #define DATA_INTERFACE_UART_PORT huart5
 
-#define THREAD_PRIORITY 10
+#define THREAD_PRIORITY 22
 #define THREAD_STACK_SIZE 512
 #define THREAD_TIMESLICE 20
 

@@ -26,7 +26,7 @@ static void ds18b20_thread_entry(void *parameter)
 {
     DS18B20_Init();
     rt_kprintf("\n- DS18B20 Start Successful.");
-    delay_ms(100);
+    delay_ms(1000);
     while (1)
     {
         wet_data.TS = DS18B20_Get_Temp();
@@ -36,40 +36,6 @@ static void ds18b20_thread_entry(void *parameter)
     }
 }
 
-/**
- * @brief DHT11 温度/湿度信息采集
- */
-// BSP_DHT11Data_TypeDef dht11_data = {0};
-static rt_thread_t dht11 = RT_NULL;
-static void dht11_thread_entry(void *parameter)
-{
-    uint16_t dht11_temp = 0;
-    uint16_t dht11_humi = 0;
-
-    if (DHT11_Init()){
-        rt_kprintf("\n- DHT11 Start Failure!");
-    }
-    else{
-        rt_kprintf("\n- DHT11 Start Successful.");
-        delay_ms(100);
-
-        while (1)
-        {
-            // BSP_DHT11_ReadData(&dht11_data);
-            DHT11_Read_Data(&dht11_temp, &dht11_humi);
-            // rt_kprintf("\ndht11->temp: %d.%d", dht11_data.temp_int, dht11_data.temp_deci);
-            // rt_kprintf("\ndht11->humi: %d.%d", dht11_data.humi_int, dht11_data.humi_deci);
-            rt_kprintf("\ndht11-> %d, %d", dht11_temp, dht11_humi);
-            delay_ms(SENSOR_DELAY_TIME);
-
-            // BSP_DHT11_ReadData(wet_data.dht11_data);
-            // delay_ms(10);
-            // rt_kprintf("\ndht11->temp: %d.%d", wet_data.dht11_data->temp_int, wet_data.dht11_data->temp_deci);
-            // rt_kprintf("\ndht11->humi: %d.%d", wet_data.dht11_data->humi_int, wet_data.dht11_data->humi_deci);
-            // delay_ms(1000);
-        }
-    }
-}
 
 /**
  * @brief DHT20 温度/湿度信息采集
@@ -79,7 +45,7 @@ static void dht20_thread_entry(void *parameter)
 {
     BSP_DHT20_Init();
     rt_kprintf("\n- DHT20 Start Successful.");
-    delay_ms(100);
+    delay_ms(1000);
     while (1)
     {
         BSP_DHT20_Read_CTdata_CRC(&wet_data.HS);
@@ -91,6 +57,7 @@ static void dht20_thread_entry(void *parameter)
 /**
  * @brief 紫外线辐射信息采集
  */
+// TODO: must transfor rtthread adc register style
 static rt_thread_t s12sd = RT_NULL;
 static void s12sd_thread_entry(void *parameter)
 {
@@ -98,7 +65,7 @@ static void s12sd_thread_entry(void *parameter)
 
     BSP_S12SD_Init();
     rt_kprintf("\n- S12SD Start Successful.");
-    delay_ms(100);
+    delay_ms(1000);
     while (1)
     {
         temp_data = BSP_S12SD_Read();
@@ -117,7 +84,7 @@ static void bmp280_thread_entry(void *parameter)
 {
     BSP_BMP280_Init();
     rt_kprintf("\n- BMP280 Start Successful.");
-    delay_ms(100);
+    delay_ms(1000);
     while (1)
     {
         wet_data.BPS = BSP_BMP280_Get_Pressure();
@@ -129,12 +96,13 @@ static void bmp280_thread_entry(void *parameter)
 /**
  * @brief PM2.5传感器
  */
+// TODO: had no test
 static rt_thread_t gp2y = RT_NULL;
 static void gp2y_thread_entry(void *parameter)
 {
     BSP_GP2Y_Init();
     rt_kprintf("\n- GP2Y Start Successful.");
-    delay_ms(100);
+    delay_ms(1000);
     while (1)
     {
         wet_data.PM2_5 = GP2Y_GetDens();
@@ -151,17 +119,9 @@ void thread_start(void)
                                THREAD_STACK_SIZE,
                                THREAD_PRIORITY,
                                THREAD_TIMESLICE);
-    if (ds18b20 != RT_NULL)
-        rt_thread_startup(ds18b20);
+    // if (ds18b20 != RT_NULL)
+    //     rt_thread_startup(ds18b20);
 
-    dht11 = rt_thread_create("dht11",
-                             dht11_thread_entry,
-                             RT_NULL,
-                             THREAD_STACK_SIZE,
-                             THREAD_PRIORITY,
-                             THREAD_TIMESLICE);
-    if (dht11 != RT_NULL)
-    rt_thread_startup(dht11);
 
     dht20 = rt_thread_create("dht20",
                              dht20_thread_entry,
@@ -169,8 +129,8 @@ void thread_start(void)
                              THREAD_STACK_SIZE,
                              THREAD_PRIORITY,
                              THREAD_TIMESLICE);
-    // if (dht20 != RT_NULL)
-    // rt_thread_startup(dht20);
+    if (dht20 != RT_NULL)
+    rt_thread_startup(dht20);
 
     s12sd = rt_thread_create("s12sd",
                              s12sd_thread_entry,
@@ -178,8 +138,8 @@ void thread_start(void)
                              THREAD_STACK_SIZE,
                              THREAD_PRIORITY,
                              THREAD_TIMESLICE);
-    if (s12sd != RT_NULL)
-        rt_thread_startup(s12sd);
+    // if (s12sd != RT_NULL)
+    //     rt_thread_startup(s12sd);
 
     _bmp280 = rt_thread_create("bmp280",
                                bmp280_thread_entry,
@@ -187,8 +147,8 @@ void thread_start(void)
                                THREAD_STACK_SIZE,
                                THREAD_PRIORITY,
                                THREAD_TIMESLICE);
-    if (_bmp280 != RT_NULL)
-    rt_thread_startup(_bmp280);
+    // if (_bmp280 != RT_NULL)
+    // rt_thread_startup(_bmp280);
 
     gp2y = rt_thread_create("gp2y",
                             gp2y_thread_entry,
@@ -200,6 +160,25 @@ void thread_start(void)
     // rt_thread_startup(gp2y);
 }
 MSH_CMD_EXPORT(thread_start, thread start);
+
+/**
+ * @brief kill all threads
+ */
+static void kill_threads(void)
+{
+    rt_thread_detach(ds18b20);
+    rt_thread_detach(dht20);
+    rt_thread_detach(s12sd);
+    rt_thread_detach(_bmp280);
+    rt_thread_detach(gp2y);
+
+    rt_thread_delete(ds18b20);
+    rt_thread_delete(dht20);
+    rt_thread_delete(s12sd);
+    rt_thread_delete(_bmp280);
+    rt_thread_delete(gp2y);
+}
+MSH_CMD_EXPORT(kill_threads, kill all threads);
 
 /**
  * @brief data interface
