@@ -101,6 +101,7 @@ extern uint16_t hmi_point;
 extern uint16_t hmi_point_counts;
 
 /* ÷∏¡ÓΩ· ¯÷° */
+#define __prifend(_huart_) bsprif(&_huart_, "\xff\xff\xff");
 #define __prifend1 bsprif1("\xff\xff\xff")
 #define __prifend2 bsprif2("\xff\xff\xff")
 #define __prifend3 bsprif3("\xff\xff\xff")

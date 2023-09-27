@@ -54,8 +54,8 @@ typedef enum
 
 #ifdef __BSP_USART_VariableReceive
 #define USART_RX_LEN 200
-#define USART_HANDLE huart1
-#define USART_DMA_HANDLE hdma_usart1_rx
+#define USART_HANDLE huart4
+#define USART_DMA_HANDLE hdma_uart4_rx
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;
@@ -78,6 +78,7 @@ void BSP_UsartVar_Callback(uint8_t *str);
 #endif
 
 int fputc(int ch, FILE *f);
+void bsprif(UART_HandleTypeDef *huart, char *fmt, ...);
 void bsprif1(char *fmt, ...);
 void bsprif2(char *fmt, ...);
 void bsprif3(char *fmt, ...);

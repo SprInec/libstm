@@ -56,8 +56,7 @@ BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void)
 		HAL_UART_DMAStop(&USART_HANDLE);
 #ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
 		temp = USART_DMA_HANDLE.Instance->CNDTR;
-#endif
-#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+#else
 		temp = __HAL_DMA_GET_COUNTER(&USART_DMA_HANDLE);
 #endif									
 		rx_len = USART_RX_LEN - temp;
@@ -89,7 +88,7 @@ BSP_UsartState BSP_UsartVar_Conduct(void)
 	_Bool uart_state = 0;
 	if (recv_end_flag == 1)
 	{
-#if 1
+#if 0
 		/* 串口接收指示灯 */
 		__BSP_LED1_Ficker(50);
 #endif
@@ -139,6 +138,18 @@ int fputc(int ch, FILE *f)
 }
 
 #ifdef __BSP_USE_PRINTF
+void bsprif(UART_HandleTypeDef *huart, char *fmt, ...)
+{
+	va_list va;
+	int i = 0;
+	char buffer[256];
+
+	va_start(va, fmt);
+	i = vsprintf(buffer, fmt, va);
+	va_end(va);
+	HAL_UART_Transmit(huart, (uint8_t *)buffer, i, 0XFF);
+}
+
 /* bsp printf 1 */
 void bsprif1(char *fmt, ...)
 {

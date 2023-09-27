@@ -29,7 +29,7 @@ static void DS18B20_GPIO_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOE_CLK_ENABLE();
 
 	GPIO_InitStructure.Pin = DS18B20_PIN;
 	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP; // ÍÆÍìÊä³ö

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef __BSP_CONFIG__
-#define __BSP_CONFIG__
+#ifndef __BSP_CONFIG__H__
+#define __BSP_CONFIG__H__
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,14 +54,14 @@ extern "C" {
 //  <i> Enable RT-Thread OS
 //  <i> Default: 0
 #ifndef __RTOS_RTTHREAD_ENABLED
-#define __RTOS_RTTHREAD_ENABLED 1
+#define __RTOS_RTTHREAD_ENABLED 0
 #endif 
 // </e> !RT-Thread
 // </e> !RTOS
 
 // <e> CMSIS DSP
 #ifndef __CMSIS_DSP
-#define __CMSIS_DSP 1
+#define __CMSIS_DSP 0
 #endif
 // </e> !main.h
 
@@ -275,7 +275,7 @@ extern "C" {
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 0
+#define __BSP_UARTHMI_ENABLED 1
 #endif
 // </e>
 // </h> !Display screen selection
@@ -320,9 +320,16 @@ extern "C" {
 
 // <e> GPS
 #ifndef __BSP_GPS_ENABLED
-#define __BSP_GPS_ENABLED 1
+#define __BSP_GPS_ENABLED 0
 #endif
 // </e> !GPS
+
+// <e> VMS WIND SPEED SENSOR
+#ifndef __BSP_VMSWIND_ENABLED
+#define __BSP_VMSWIND_ENABLED 1
+#endif 
+// </e> !VMS WIND SPEED SENSOR
+
 // </h> !Sensor
 
 // <h> Camera
@@ -378,6 +385,12 @@ extern "C" {
 #define __BSP_USART_ENABLED 1
 #endif
 // </e>
+
+// <e> BSP RS485
+#ifndef __BSP_RS485_ENABLED
+#define __BSP_RS485_ENABLED 1
+#endif
+// </e> 
 
 // <e> BSP QUADSPI
 #ifndef __BSP_QUADSPI_ENABLED
@@ -588,6 +601,14 @@ extern "C" {
 #include "bsp_gp2y.h"
 #endif /* !__BSP_GP2Y_ENABLED */
 
+#if __BSP_GPS_ENABLED
+#include "bsp_gps.h"
+#endif /* !__BSP_GPS_ENABLED */
+
+#if __BSP_VMSWIND_ENABLED
+#include "bsp_vms_windsensor.h"
+#endif /* !__BSP_VMSWIND_ENABLED */
+
 #if __BSP_OV2640_ENABLED
 #include "bsp_ov2640.h"
 #endif /* !__BSP_OV2640_ENABLED */
@@ -615,6 +636,10 @@ extern "C" {
 #if __BSP_USART_ENABLED
 #include "bsp_usart.h"
 #endif /* !__BSP_USART_ENABLED */
+
+#if __BSP_RS485_ENABLED
+#include "bsp_rs485.h"
+#endif /* !__BSP_RS485_ENABLED */
 
 #if __BSP_QUADSPI_ENABLED
 #include "bsp_quadspi.h"

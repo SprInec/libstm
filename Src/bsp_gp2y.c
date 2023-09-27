@@ -13,7 +13,8 @@
 #include "adc.h"
 
 static uint16_t buffer[MAX_NUM]; /*缓冲数组全局变量*/
-ADC_HandleTypeDef ADC_Handle;
+// ADC_HandleTypeDef ADC_Handle;
+#define ADC_Handle hadc2
 
 /**
  * @brief  数组缓冲ADC数值
