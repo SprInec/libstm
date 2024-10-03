@@ -26,6 +26,7 @@
  * @copyright Copyright (c) 2023
  *
  */
+
 #include "bsp_ad9833.h"
 #include "gpio.h"
 #if 0
