@@ -115,21 +115,21 @@ extern "C" {
 // <e> bsp_sys.h
 //  <i> Default: USING
 #ifndef __BSP_SYS_ENABLED
-#define __BSP_SYS_ENABLED 0
+#define __BSP_SYS_ENABLED 1
 #endif
 // </e>
 
 // <e> bsp_common.h
 //  <i> Default: USING
 #ifndef __BSP_COMMON_ENABLED
-#define __BSP_COMMON_ENABLED 0
+#define __BSP_COMMON_ENABLED 1
 #endif
 // </e>
 
 // <e> bsp_delay.h
 //  <i> Default: USING
 #ifndef __BSP_DELAY_ENABLED
-#define __BSP_DELAY_ENABLED 0
+#define __BSP_DELAY_ENABLED 1
 #endif
 // </e>
 // </h> !std support files
