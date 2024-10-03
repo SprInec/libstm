@@ -16,8 +16,11 @@ extern "C" {
 #endif
 #include "bsp_config.h"
 
+
 /* USER CODE AREA */
+
 
 #ifdef __cplusplus
 }
+#endif
 #endif /* _BSP_USER_H */

@@ -34,7 +34,7 @@ extern "C" {
 //      <4=> NUCLEO-H7A3ZI-Q
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 3
+#define MCU_SELECTION 2
 #endif
 
 // MCU AUTO-DEFINE
@@ -364,7 +364,7 @@ extern "C" {
 // ==========================
 // <e> BSP I2C
 #ifndef __BSP_I2C_ENABLED
-#define __BSP_I2C_ENABLED 1
+#define __BSP_I2C_ENABLED 0
 #endif
 // </e>
 
@@ -388,7 +388,7 @@ extern "C" {
 
 // <e> BSP RS485
 #ifndef __BSP_RS485_ENABLED
-#define __BSP_RS485_ENABLED 1
+#define __BSP_RS485_ENABLED 0
 #endif
 // </e> 
 
