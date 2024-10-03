@@ -1,9 +1,9 @@
 /**
  * @file bsp_user.h
- * @author July (Email: JulyCub@163.com)
+ * @author 
  * @brief
  * @version 0.1
- * @date 2023.08.19
+ * @date 
  *
  * @copyright Copyright (c) 2023
  *
@@ -16,8 +16,7 @@ extern "C" {
 #endif
 #include "bsp_config.h"
 
-extern uint8_t datetime[20];
-extern uint8_t timeflag;
+/* USER CODE AREA */
 
 #ifdef __cplusplus
 }
