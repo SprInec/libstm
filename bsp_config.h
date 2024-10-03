@@ -1,6 +1,6 @@
 /**
  * @file bsp_config.h
- * @author July (Email: JulyCub@163.com)
+ * @author SprInec (julycubspring@gmail.com)
  * @brief Global control file for the BSP library.
  * @version 2.1
  * @date 2022.05.25
@@ -13,7 +13,7 @@
  *  The user could select the relevant files and functions that enable the BSP
  *  library by setting the macro definition in this file.
  * 
- * @copyright Copyright (c) 2023 July
+ * @copyright Copyright (c) 2023 SprInec. All rights reserved.
  *
  */
 
