@@ -34,7 +34,7 @@ extern "C" {
 //      <4=> NUCLEO-H7A3ZI-Q
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 3
+#define MCU_SELECTION 2
 #endif
 
 // MCU AUTO-DEFINE
@@ -57,6 +57,14 @@ extern "C" {
 #define __RTOS_RTTHREAD_ENABLED 0
 #endif 
 // </e> !RT-Thread
+
+// <e> FreeRTOS
+//  <i> Enable FreeRTOS OS
+//  <i> Default: 0
+#ifndef __RTOS_FREERTOS_ENABLED
+#define __RTOS_FREERTOS_ENABLED 0
+#endif 
+// </e> !FreeRTOS
 // </e> !RTOS
 
 // <e> CMSIS DSP
@@ -67,7 +75,7 @@ extern "C" {
 
 // <e> main.h
 #ifndef __BSP_CITE_MAIN
-#define __BSP_CITE_MAIN 1
+#define __BSP_CITE_MAIN 0
 #endif
 // </e> !main.h
 
@@ -85,7 +93,7 @@ extern "C" {
 
 // <e> stdio.h
 #ifndef __BSP_C_STD_STDIO
-#define __BSP_C_STD_STDIO 1
+#define __BSP_C_STD_STDIO 0
 #endif
 // </e> !stdint.h
 
@@ -275,7 +283,7 @@ extern "C" {
 
 // <e> UART HMI
 #ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 1
+#define __BSP_UARTHMI_ENABLED 0
 #endif
 // </e>
 // </h> !Display screen selection
@@ -284,37 +292,37 @@ extern "C" {
 // ==========
 // <e> DS18B20
 #ifndef __BSP_DS18B20_ENABLED
-#define __BSP_DS18B20_ENABLED 1
+#define __BSP_DS18B20_ENABLED 0
 #endif
 // </e>
 
 // <e> DHT11
 #ifndef __BSP_DHT11_ENABLED
-#define __BSP_DHT11_ENABLED 1
+#define __BSP_DHT11_ENABLED 0
 #endif 
 // </e> !DHT11
 
 // <e> DHT20
 #ifndef __BSP_DHT20_ENABLED
-#define __BSP_DHT20_ENABLED 1
+#define __BSP_DHT20_ENABLED 0
 #endif
 // </e> !DHT20
 
 // <e> BMP280
 #ifndef __BSP_BMP280_ENABLED
-#define __BSP_BMP280_ENABLED 1
+#define __BSP_BMP280_ENABLED 0
 #endif
 // </e> !BMP280
 
 // <e> S12SD
 #ifndef __BSP_S12SD_ENABLED
-#define __BSP_S12SD_ENABLED 1
+#define __BSP_S12SD_ENABLED 0
 #endif 
 // </e> !S12SD
 
 // <e> GP12
 #ifndef __BSP_GP2Y_ENABLED
-#define __BSP_GP2Y_ENABLED 1
+#define __BSP_GP2Y_ENABLED 0
 #endif
 // </e> GP12
 
@@ -326,7 +334,7 @@ extern "C" {
 
 // <e> VMS WIND SPEED SENSOR
 #ifndef __BSP_VMSWIND_ENABLED
-#define __BSP_VMSWIND_ENABLED 1
+#define __BSP_VMSWIND_ENABLED 0
 #endif 
 // </e> !VMS WIND SPEED SENSOR
 
@@ -364,7 +372,7 @@ extern "C" {
 // ==========================
 // <e> BSP I2C
 #ifndef __BSP_I2C_ENABLED
-#define __BSP_I2C_ENABLED 1
+#define __BSP_I2C_ENABLED 0
 #endif
 // </e>
 
@@ -382,13 +390,13 @@ extern "C" {
 
 // <e> BSP USART
 #ifndef __BSP_USART_ENABLED
-#define __BSP_USART_ENABLED 1
+#define __BSP_USART_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP RS485
 #ifndef __BSP_RS485_ENABLED
-#define __BSP_RS485_ENABLED 1
+#define __BSP_RS485_ENABLED 0
 #endif
 // </e> 
 
