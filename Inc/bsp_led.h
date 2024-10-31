@@ -39,6 +39,16 @@ extern "C" {
 										rt_thread_mdelay(__TIME__);	\
 										__BSP_LED2_Toggle(); 		\
 										rt_thread_mdelay(__TIME__); })
+#elif __RTOS_FREERTOS_ENABLED
+#define __BSP_LED1_Ficker(__TIME__) ({	__BSP_LED1_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED1_Toggle(); 		\
+										vTaskDelay(__TIME__); })
+
+#define __BSP_LED2_Ficker(__TIME__) ({	__BSP_LED2_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED2_Toggle(); 		\
+										vTaskDelay(__TIME__); })
 #else
 #define __BSP_LED1_Ficker(__TIME__) ({	__BSP_LED1_Toggle(); \
 										delay_ms(__TIME__);  \
@@ -81,6 +91,19 @@ extern "C" {
 										rt_thread_mdelay(__TIME__); \
 										__BSP_LED3_Toggle(); 		\
 										rt_thread_mdelay(__TIME__); })
+#elif __RTOS_FREERTOS_ENABLED
+#define __BSP_LED1_Ficker(__TIME__) ({	__BSP_LED1_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED1_Toggle(); 		\
+										vTaskDelay(__TIME__); })
+#define __BSP_LED2_Ficker(__TIME__) ({	__BSP_LED2_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED2_Toggle(); 		\
+										vTaskDelay(__TIME__); })
+#define __BSP_LED3_Ficker(__TIME__) ({	__BSP_LED3_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED3_Toggle(); 		\
+										vTaskDelay(__TIME__); })
 #else
 #define __BSP_LED1_Ficker(__TIME__) ({	__BSP_LED1_Toggle(); \
 										delay_ms(__TIME__);  \
@@ -109,6 +132,11 @@ extern "C" {
 										rt_thread_mdelay(__TIME__); \
 										__BSP_LED_Toggle(); 		\
 										rt_thread_mdelay(__TIME__); })
+#elif __RTOS_FREERTOS_ENABLED
+#define __BSP_LED_Ficker(__TIME__) ({	__BSP_LED_Toggle(); 		\
+										vTaskDelay(__TIME__); 	    \
+										__BSP_LED_Toggle(); 		\
+										vTaskDelay(__TIME__); })	
 #else
 #define __BSP_LED_Ficker(__TIME__) ({	__BSP_LED_Toggle(); 		\
 										delay_ms(__TIME__); 		\

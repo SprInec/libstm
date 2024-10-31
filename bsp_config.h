@@ -46,26 +46,26 @@ extern "C" {
 #define __BSP_MCU_DEVEBOX_STM32H743VIT6
 #elif MCU_SELECTION == 4
 #define __BSP_MCU_NUCLEO_H7A3ZIQ
-#endif 
+#endif
 
-// <e> RTOS
-// ========
-//  <e> RT-Thread
-//  <i> Enable RT-Thread OS
-//  <i> Default: 0
+// <h> RTOS
+// =======================
+//  <o> Select the RTOS
+//      <0=> NOUSE
+//      <1=> RT-Thread
+//      <2=> FreeRTOS
+#define __ENABLE_RTOS 2
+// </h> !RTOS
+
+#if __ENABLE_RTOS == 1
 #ifndef __RTOS_RTTHREAD_ENABLED
-#define __RTOS_RTTHREAD_ENABLED 0
+#define __RTOS_RTTHREAD_ENABLED 1
 #endif 
-// </e> !RT-Thread
-
-// <e> FreeRTOS
-//  <i> Enable FreeRTOS OS
-//  <i> Default: 0
+#elif __ENABLE_RTOS == 2
 #ifndef __RTOS_FREERTOS_ENABLED
-#define __RTOS_FREERTOS_ENABLED 0
+#define __RTOS_FREERTOS_ENABLED 2
 #endif 
-// </e> !FreeRTOS
-// </e> !RTOS
+#endif
 
 // <e> CMSIS DSP
 #ifndef __CMSIS_DSP
@@ -75,7 +75,7 @@ extern "C" {
 
 // <e> main.h
 #ifndef __BSP_CITE_MAIN
-#define __BSP_CITE_MAIN 0
+#define __BSP_CITE_MAIN 1
 #endif
 // </e> !main.h
 
@@ -93,7 +93,7 @@ extern "C" {
 
 // <e> stdio.h
 #ifndef __BSP_C_STD_STDIO
-#define __BSP_C_STD_STDIO 0
+#define __BSP_C_STD_STDIO 1
 #endif
 // </e> !stdint.h
 
@@ -115,14 +115,14 @@ extern "C" {
 // <e> bsp_sys.h
 //  <i> Default: USING
 #ifndef __BSP_SYS_ENABLED
-#define __BSP_SYS_ENABLED 1
+#define __BSP_SYS_ENABLED 0
 #endif
 // </e>
 
 // <e> bsp_common.h
 //  <i> Default: USING
 #ifndef __BSP_COMMON_ENABLED
-#define __BSP_COMMON_ENABLED 1
+#define __BSP_COMMON_ENABLED 0
 #endif
 // </e>
 
@@ -390,7 +390,7 @@ extern "C" {
 
 // <e> BSP USART
 #ifndef __BSP_USART_ENABLED
-#define __BSP_USART_ENABLED 0
+#define __BSP_USART_ENABLED 1
 #endif
 // </e>
 
@@ -468,6 +468,11 @@ extern "C" {
 #if __RTOS_RTTHREAD_ENABLED
 #include "rtthread.h"
 #endif /* !RTOS_RTTHREAD_ENABLED */
+
+#if __RTOS_FREERTOS_ENABLED
+#include "FreeRTOS.h"
+#include "task.h"
+#endif /* !RTOS_FREERTOS_ENABLED */
 
 #if __BSP_CITE_MAIN
 #include "main.h"

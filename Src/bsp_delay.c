@@ -51,6 +51,8 @@ void delay_ms(rt_uint16_t nms)
 	rt_thread_mdelay(nms);
 }
 
+#elif __RTOS_FREERTOS_ENABLED
+
 #else
 #if BSP_SYSTICK_DELAY
 void delay_us(uint32_t nus)
