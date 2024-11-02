@@ -2,7 +2,7 @@
 
 ## 简介
 
-该项目是基于 STM32 HAL 库的 BSP（Board Support Package），整合了本人搜集整理和自编的相关 BSP 代码，并包含一个 `bsp_config.h` 头文件，以便统一配置与管理所有资源。此项目旨在加速和提高 STM32 应用的开发效率。
+该项目是基于 STM32 HAL 库的 BSP（Board Support Package），整合了本人搜集和自编的相关 BSP 代码，并包含一个 `bsp_config.h` 头文件，以便统一配置与管理所有资源。此项目旨在加速和提高 STM32 应用的开发效率。
 
 - `bsp_config.h` 支持 *Configuration Wizard* 可视化配置
 - 支持 CMSIS DSP 库
@@ -57,7 +57,7 @@
 1. 克隆或下载该项目源代码。
 
     ```bash
-    git clone <https://github.com/JulyCub/stm32-bsp-library.git>
+    git clone <git@github.com:SprInec/libstm.git>
     ```
 
 2. 直接将 libstm 整个文件夹复制到你的项目根目录。
