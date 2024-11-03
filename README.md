@@ -57,7 +57,7 @@
 1. 克隆或下载该项目源代码。
 
     ```bash
-    git clone <git@github.com:SprInec/libstm.git>
+    git clone https://github.com/SprInec/libstm.git
     ```
 
 2. 直接将 libstm 整个文件夹复制到你的项目根目录。
