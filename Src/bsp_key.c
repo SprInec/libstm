@@ -1,7 +1,7 @@
 /**
- * @file bsp_statemac.c
+ * @file bsp_key.c
  * @author July (Email: JulyCub@163.com)
- * @brief state machine
+ * @brief key driver
  * @version 0.1
  * @date 2023-04-06
  *
@@ -9,7 +9,9 @@
  *
  */
 
-#include "bsp_statemac.h"
+#include "bsp_key.h"
+
+#if (__STATEMAC_KEY == 1)
 
 BSP_KEY_HandleTypeDef key[KEY_NUM];
 
@@ -17,9 +19,30 @@ BSP_KEY_HandleTypeDef key[KEY_NUM];
  * @brief 按键引脚初始化
  *
  */
-void BSP_KEY_GPIO_Init(void)
+static void BSP_KEY_GPIO_Init(void)
 {
     BSP_KEY_InitTypeDef key_init[KEY_NUM];
+
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    key_init[0].GPIOx = GPIOB;
+    key_init[1].GPIOx = GPIOB;
+
+    key_init[0].GPIO_Init.Pin = GPIO_PIN_9;
+    key_init[0].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[0].GPIO_Init.Pull = GPIO_NOPULL;
+    key[0].Init = key_init[0];
+    HAL_GPIO_Init(key_init[0].GPIOx, &key_init[0].GPIO_Init);
+
+    key_init[1].GPIO_Init.Pin = GPIO_PIN_8;
+    key_init[1].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[1].GPIO_Init.Pull = GPIO_NOPULL;
+    key[1].Init = key_init[1];
+    HAL_GPIO_Init(key_init[1].GPIOx, &key_init[1].GPIO_Init);
+
+#elif defined(__BSP_MCU_LANQIAO_GXCT_STM32G431)
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -29,29 +52,42 @@ void BSP_KEY_GPIO_Init(void)
     key_init[2].GPIOx = GPIOB;
     key_init[3].GPIOx = GPIOB;
 
-    key_init[0].GPIO_Init->Pin = GPIO_PIN_8;
-    key_init[0].GPIO_Init->Mode = GPIO_MODE_INPUT;
-    key_init[0].GPIO_Init->Pull = GPIO_NOPULL;
+    key_init[0].GPIO_Init.Pin = GPIO_PIN_8;
+    key_init[0].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[0].GPIO_Init.Pull = GPIO_NOPULL;
     key[0].Init = key_init[0];
     HAL_GPIO_Init(key_init[0].GPIOx, key_init[0].GPIO_Init);
 
-    key_init[1].GPIO_Init->Pin = GPIO_PIN_9;
-    key_init[1].GPIO_Init->Mode = GPIO_MODE_INPUT;
-    key_init[1].GPIO_Init->Pull = GPIO_NOPULL;
+    key_init[1].GPIO_Init.Pin = GPIO_PIN_9;
+    key_init[1].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[1].GPIO_Init.Pull = GPIO_NOPULL;
     key[1].Init = key_init[1];
     HAL_GPIO_Init(key_init[1].GPIOx, key_init[1].GPIO_Init);
 
-    key_init[2].GPIO_Init->Pin = GPIO_PIN_2;
-    key_init[2].GPIO_Init->Mode = GPIO_MODE_INPUT;
-    key_init[2].GPIO_Init->Pull = GPIO_NOPULL;
+    key_init[2].GPIO_Init.Pin = GPIO_PIN_2;
+    key_init[2].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[2].GPIO_Init.Pull = GPIO_NOPULL;
     key[2].Init = key_init[2];
     HAL_GPIO_Init(key_init[2].GPIOx, key_init[2].GPIO_Init);
 
-    key_init[3].GPIO_Init->Pin = GPIO_PIN_3;
-    key_init[3].GPIO_Init->Mode = GPIO_MODE_INPUT;
-    key_init[3].GPIO_Init->Pull = GPIO_NOPULL;
+    key_init[3].GPIO_Init.Pin = GPIO_PIN_3;
+    key_init[3].GPIO_Init.Mode = GPIO_MODE_INPUT;
+    key_init[3].GPIO_Init.Pull = GPIO_NOPULL;
     key[3].Init = key_init[3];
     HAL_GPIO_Init(key_init[3].GPIOx, key_init[3].GPIO_Init);
+
+#endif
+}
+
+/**
+ * @brief  按键读取函数
+ *
+ * @param key_init 按键初始化结构体
+ * @return GPIO_PinState 按键状态
+ */
+static GPIO_PinState BSP_Key_ReadPin(BSP_KEY_InitTypeDef key_init)
+{
+    return HAL_GPIO_ReadPin(key_init.GPIOx, key_init.GPIO_Init.Pin);
 }
 
 /**
@@ -65,7 +101,7 @@ void BSP_KEY_Init(void)
     {
         key[i].id = i;
         key[i].Lock = HAL_UNLOCKED;
-        if (key[i].Init.GPIO_Init->Pull == GPIO_PULLUP)
+        if (key[i].Init.GPIO_Init.Pull == GPIO_PULLUP)
             key[i].IO_VALID = GPIO_PIN_RESET;
         else
             key[i].IO_VALID = GPIO_PIN_SET;
@@ -185,7 +221,9 @@ void BSP_KEY_StateTransition(void)
             }
             break;
         case KEY_DOUB_PRESSED:
-            default: break;
+        default: break;
         }
     }
 }
+
+#endif /* !__STATEMAC_KEY */

@@ -1,4 +1,4 @@
-/**
+ /**
  * @file bsp_config.h
  * @author SprInec (julycubspring@gmail.com)
  * @brief Global control file for the BSP library.
@@ -32,6 +32,7 @@ extern "C" {
 //      <2=> DevEBox-STM32F407VET6
 //      <3=> DevEBox-STM32H743VIT6
 //      <4=> NUCLEO-H7A3ZI-Q
+//      <5=> LANQIAO-GXCT-STM32G431
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
 #define MCU_SELECTION 2
@@ -46,6 +47,8 @@ extern "C" {
 #define __BSP_MCU_DEVEBOX_STM32H743VIT6
 #elif MCU_SELECTION == 4
 #define __BSP_MCU_NUCLEO_H7A3ZIQ
+#elif MCU_SELECTION == 5
+#define __BSP_MCU_LANQIAO_GXCT_STM32G431
 #endif
 
 // <h> RTOS
@@ -179,6 +182,18 @@ extern "C" {
 #endif
 // </e>
 
+// <e> KEY
+#ifndef __BSP_KEY_ENABLED
+#define __BSP_KEY_ENABLED 1
+#endif
+// ==================
+// <e> STATEMAC KEY
+#ifndef __STATEMAC_KEY
+#define __STATEMAC_KEY 0
+#endif 
+// </e> !statemac key
+// </e> !KEY
+
 // <h> Programmed DDS
 // ==================
 //  <i> Select the programmed DDS driver you want to use
@@ -275,7 +290,7 @@ extern "C" {
 #endif
 // </e>
 
-// <e> LCD TFT 
+// <e> LCD TFT
 #ifndef __BSP_LCDTFT_ENABLED
 #define __BSP_LCDTFT_ENABLED 0
 #endif
@@ -529,6 +544,10 @@ extern "C" {
 #if __BSP_BUZZER_ENABLED
 #include "bsp_buzzer.h"
 #endif /* !__BSP_BUZZER_ENABLED */
+
+#if __BSP_KEY_ENABLED
+#include "bsp_key.h"
+#endif /* !__BSP_KEY_ENABLED */
 
 #if __BSP_AD9833_ENABLED
 #include "bsp_ad9833.h"

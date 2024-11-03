@@ -1,20 +1,24 @@
 /**
- * @file bsp_statemac.h
+ * @file bsp_key.h
  * @author July (Email: JulyCub@163.com)
- * @brief state machine 
- * @version 0.1
+ * @brief key driver header file.
+ * @version 1.1
  * @date 2023-04-06
+ * @update 2024-11-03 -> v1.1 
  * 
  * @copyright Copyright (c) 2023
  * 
  */
 
-#ifndef __BSP_STATEMAC_H__
-#define __BSP_STATEMAC_H__
+#ifndef __BSP_KEY_H__
+#define __BSP_KEY_H__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bsp_config.h"
 
-#ifndef __STATEMAC_KEY
+#if (__STATEMAC_KEY == 1)
 
 #define BSP_KEY_LONG_TIMEOUT 20
 #define BSP_KEY_DOUB_TIMEOUT 5
@@ -39,6 +43,14 @@ typedef enum
     KEY_LONG_RELEASE
 } BSP_KeyEvent;
 
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+typedef enum
+{
+    KEY0 = 0,
+    KEY1,
+    KEY_NUM
+} BSP_KeyList;
+#elif defined(__BSP_MCU_LANQIAO_GXCT_STM32G431)
 typedef enum
 {
     KEY0 = 0,
@@ -47,6 +59,7 @@ typedef enum
     KEY3,
     KEY_NUM
 } BSP_KeyList;
+#endif /* !__BSP_MCU_DEVEBOX_STM32F407VET6 */
 
 typedef enum
 {
@@ -57,13 +70,13 @@ typedef enum
 typedef struct
 {
     GPIO_TypeDef *GPIOx;
-    GPIO_InitTypeDef *GPIO_Init;
+    GPIO_InitTypeDef GPIO_Init;
 } BSP_KEY_InitTypeDef;
 
 typedef struct
 {
     HAL_LockTypeDef Lock;
-    int8_t timstamp;
+    int32_t timstamp;
     BSP_KeyList id;
     GPIO_PinState IO_VALID;
     BSP_IoState io_state;
@@ -74,13 +87,14 @@ typedef struct
     GPIO_PinState (*ReadPin)(BSP_KEY_InitTypeDef key_init);
 } BSP_KEY_HandleTypeDef;
 
-static GPIO_PinState BSP_Key_ReadPin(BSP_KEY_InitTypeDef key_init)
-{
-    return HAL_GPIO_ReadPin(key_init.GPIOx, key_init.GPIO_Init->Pin);
-}
+extern BSP_KEY_HandleTypeDef key[KEY_NUM];
 
 void BSP_KEY_Init(void);
 void BSP_KEY_StateTransition(void);
 
-#endif /* __STATEMAC_KEY */
-#endif /* __BSP_STATEMAC_H */
+#endif /* !__STATEMAC_KEY */
+
+#ifdef __cplusplus
+}
+#endif /* !__cplusplus */
+#endif /* !__BSP_KEY_H */
