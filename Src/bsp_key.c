@@ -11,7 +11,53 @@
 
 #include "bsp_key.h"
 
-#if (__STATEMAC_KEY == 1)
+#if (__NORMAL_KEY == 1)
+
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+
+void BSP_KEY_Init(void)
+{
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    GPIO_InitStructure.Pin = BSP_KEY0_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(BSP_KEY0_PORT, &GPIO_InitStructure);
+
+    GPIO_InitStructure.Pin = BSP_KEY1_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(BSP_KEY1_PORT, &GPIO_InitStructure);
+
+}
+
+GPIO_PinState BSP_KEY_Read(uint8_t key_num)
+{
+    GPIO_TypeDef *port = (key_num == 0) ? BSP_KEY0_PORT : BSP_KEY1_PORT;
+    uint16_t pin = (key_num == 0) ? BSP_KEY0_PIN : BSP_KEY1_PIN;
+
+    if (HAL_GPIO_ReadPin(port, pin) == BSP_KEY_PRESSED)
+    {
+#if __RTOS_FREERTOS_ENABLED
+        vTaskDelay(pdMS_TO_TICKS(KEY_DEBOUNCE_DELAY));
+#elif __RTOS_RTTHREAD_ENABLED
+        rt_thread_mdelay(KEY_DEBOUNCE_DELAY)
+#else
+        HAL_Delay(KEY_DEBOUNCE_DELAY);
+#endif
+        if (HAL_GPIO_ReadPin(port, pin) == BSP_KEY_PRESSED) {
+            return BSP_KEY_PRESSED;
+        }
+    }
+
+    return BSP_KEY_RELEASE;
+}
+
+#endif /* !__BSP_MCU_DEVEBOX_STM32F407VET6 */
+
+#elif (__STATEMAC_KEY == 1)
 
 BSP_KEY_HandleTypeDef key[KEY_NUM];
 

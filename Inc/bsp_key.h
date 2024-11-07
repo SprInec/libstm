@@ -18,7 +18,27 @@ extern "C" {
 
 #include "bsp_config.h"
 
-#if (__STATEMAC_KEY == 1)
+#if (__NORMAL_KEY == 1)
+
+#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+
+#define BSP_KEY0_PORT GPIOB
+#define BSP_KEY0_PIN GPIO_PIN_9
+
+#define BSP_KEY1_PORT GPIOB
+#define BSP_KEY1_PIN GPIO_PIN_8
+
+#define BSP_KEY_PRESSED GPIO_PIN_RESET
+#define BSP_KEY_RELEASE GPIO_PIN_SET
+
+#define KEY_DEBOUNCE_DELAY 50
+
+void BSP_KEY_Init(void);
+GPIO_PinState BSP_KEY_Read(uint8_t key_num);
+
+#endif /* !__BSP_MCU_DEVEBOX_STM32F407VET6 */
+
+#elif (__STATEMAC_KEY == 1)
 
 #define BSP_KEY_LONG_TIMEOUT 20
 #define BSP_KEY_DOUB_TIMEOUT 5

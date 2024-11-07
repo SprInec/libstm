@@ -38,7 +38,7 @@ extern "C" {
 #define MCU_SELECTION 2
 #endif
 
-// MCU AUTO-DEFINE
+// DEV-BOARD AUTO-DEFINE
 #if MCU_SELECTION == 1
 #define __BSP_MCU_DEVEBOX_STM32F103C6T6
 #elif MCU_SELECTION == 2
@@ -49,6 +49,8 @@ extern "C" {
 #define __BSP_MCU_NUCLEO_H7A3ZIQ
 #elif MCU_SELECTION == 5
 #define __BSP_MCU_LANQIAO_GXCT_STM32G431
+#else
+#define __BSP_MCU_USER_DEFINED
 #endif
 
 // <h> RTOS
@@ -66,7 +68,7 @@ extern "C" {
 #endif 
 #elif __ENABLE_RTOS == 2
 #ifndef __RTOS_FREERTOS_ENABLED
-#define __RTOS_FREERTOS_ENABLED 2
+#define __RTOS_FREERTOS_ENABLED 1
 #endif 
 #endif
 
@@ -186,12 +188,16 @@ extern "C" {
 #ifndef __BSP_KEY_ENABLED
 #define __BSP_KEY_ENABLED 1
 #endif
-// ==================
 // <e> STATEMAC KEY
 #ifndef __STATEMAC_KEY
 #define __STATEMAC_KEY 0
 #endif 
 // </e> !statemac key
+// <e> NORMAL KEY
+#ifndef __NORMAL_KEY
+#define __NORMAL_KEY 1
+#endif 
+// </e> !NORMAL KEY
 // </e> !KEY
 
 // <h> Programmed DDS
@@ -487,6 +493,8 @@ extern "C" {
 #if __RTOS_FREERTOS_ENABLED
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
+#include "semphr.h"
 #endif /* !RTOS_FREERTOS_ENABLED */
 
 #if __BSP_CITE_MAIN
