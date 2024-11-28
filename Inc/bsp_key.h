@@ -22,6 +22,12 @@ extern "C" {
 
 #ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
 
+typedef enum
+{
+    KEY0 = 0,
+    KEY1,
+} BSP_KeyList;
+
 #define BSP_KEY0_PORT GPIOB
 #define BSP_KEY0_PIN GPIO_PIN_9
 
@@ -34,7 +40,7 @@ extern "C" {
 #define KEY_DEBOUNCE_DELAY 50
 
 void BSP_KEY_Init(void);
-GPIO_PinState BSP_KEY_Read(uint8_t key_num);
+GPIO_PinState BSP_KEY_Read(BSP_KeyList key);
 
 #endif /* !__BSP_MCU_DEVEBOX_STM32F407VET6 */
 

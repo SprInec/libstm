@@ -33,10 +33,10 @@ void BSP_KEY_Init(void)
 
 }
 
-GPIO_PinState BSP_KEY_Read(uint8_t key_num)
+GPIO_PinState BSP_KEY_Read(BSP_KeyList key)
 {
-    GPIO_TypeDef *port = (key_num == 0) ? BSP_KEY0_PORT : BSP_KEY1_PORT;
-    uint16_t pin = (key_num == 0) ? BSP_KEY0_PIN : BSP_KEY1_PIN;
+    GPIO_TypeDef *port = (key == KEY0) ? BSP_KEY0_PORT : BSP_KEY1_PORT;
+    uint16_t pin = (key == KEY0) ? BSP_KEY0_PIN : BSP_KEY1_PIN;
 
     if (HAL_GPIO_ReadPin(port, pin) == BSP_KEY_PRESSED)
     {
@@ -48,6 +48,7 @@ GPIO_PinState BSP_KEY_Read(uint8_t key_num)
         HAL_Delay(KEY_DEBOUNCE_DELAY);
 #endif
         if (HAL_GPIO_ReadPin(port, pin) == BSP_KEY_PRESSED) {
+            while (HAL_GPIO_ReadPin(port, pin) != BSP_KEY_RELEASE);
             return BSP_KEY_PRESSED;
         }
     }

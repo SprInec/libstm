@@ -27,61 +27,70 @@ extern "C" {
 #define BSP_LED_PIN1 GPIO_PIN_9
 #define BSP_LED_PIN2 GPIO_PIN_10
 
-#define __BSP_LED1_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port1, BSP_LED_PIN1)
-#define __BSP_LED2_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port2, BSP_LED_PIN2)
+#define BSP_LED_PIN_ON  GPIO_PIN_RESET
+#define BSP_LED_PIN_OFF GPIO_PIN_SET
+
+#define __BSP_LED1_ON() HAL_GPIO_WritePin(BSP_LED_Port1, BSP_LED_PIN1, BSP_LED_PIN_ON)
+#define __BSP_LED2_ON() HAL_GPIO_WritePin(BSP_LED_Port2, BSP_LED_PIN2, BSP_LED_PIN_ON)
+
+#define __BSP_LED1_OFF() HAL_GPIO_WritePin(BSP_LED_Port1, BSP_LED_PIN1, BSP_LED_PIN_OFF)
+#define __BSP_LED2_OFF() HAL_GPIO_WritePin(BSP_LED_Port2, BSP_LED_PIN2, BSP_LED_PIN_OFF)
+
+#define __BSP_LED1_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port1, BSP_LED_PIN1)
+#define __BSP_LED2_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port2, BSP_LED_PIN2)
 
 #if __RTOS_RTTHREAD_ENABLED
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 #elif __RTOS_FREERTOS_ENABLED
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
 	} while (0)
 #else
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		delay_ms(__TIME__);         \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		delay_ms(__TIME__);         \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		delay_ms(__TIME__);         \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		delay_ms(__TIME__);         \
 	} while (0)
 #endif
@@ -96,90 +105,90 @@ extern "C" {
 #define BSP_LED_PIN2 GPIO_PIN_1
 #define BSP_LED_PIN3 GPIO_PIN_14
 
-#define __BSP_LED1_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port1, BSP_LED_PIN1)
-#define __BSP_LED2_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port2, BSP_LED_PIN2)
-#define __BSP_LED3_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port3, BSP_LED_PIN3)
+#define __BSP_LED1_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port1, BSP_LED_PIN1)
+#define __BSP_LED2_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port2, BSP_LED_PIN2)
+#define __BSP_LED3_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port3, BSP_LED_PIN3)
 
 /* Macro Function */
 #if __RTOS_RTTHREAD_ENABLED
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 
-#define __BSP_LED3_Ficker(__TIME__) \
+#define __BSP_LED3_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 #elif __RTOS_FREERTOS_ENABLED
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
 	} while (0)
 
-#define __BSP_LED3_Ficker(__TIME__) \
+#define __BSP_LED3_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		vTaskDelay(__TIME__);       \
 	} while (0)
 #else
-#define __BSP_LED1_Ficker(__TIME__) \
+#define __BSP_LED1_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		delay_ms(__TIME__);         \
-		__BSP_LED1_Toggle();        \
+		__BSP_LED1_TOGGLE();        \
 		delay_ms(__TIME__);         \
 	} while (0)
 
-#define __BSP_LED2_Ficker(__TIME__) \
+#define __BSP_LED2_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		delay_ms(__TIME__);         \
-		__BSP_LED2_Toggle();        \
+		__BSP_LED2_TOGGLE();        \
 		delay_ms(__TIME__);         \
 	} while (0)
 
-#define __BSP_LED3_Ficker(__TIME__) \
+#define __BSP_LED3_FICKER(__TIME__) \
 	do                              \
 	{                               \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		delay_ms(__TIME__);         \
-		__BSP_LED3_Toggle();        \
+		__BSP_LED3_TOGGLE();        \
 		delay_ms(__TIME__);         \
 	} while (0)
 #endif
@@ -189,32 +198,32 @@ extern "C" {
 #define BSP_LED_Port GPIOA
 #define BSP_LED_PIN GPIO_PIN_1
 
-#define __BSP_LED_Toggle() HAL_GPIO_TogglePin(BSP_LED_Port, BSP_LED_PIN)
+#define __BSP_LED_TOGGLE() HAL_GPIO_TogglePin(BSP_LED_Port, BSP_LED_PIN)
 #if __RTOS_RTTHREAD_ENABLED
-#define __BSP_LED_Ficker(__TIME__)  \
+#define __BSP_LED_FICKER(__TIME__)  \
 	do                              \
 	{                               \
-		__BSP_LED_Toggle();         \
+		__BSP_LED_TOGGLE();         \
 		rt_thread_mdelay(__TIME__); \
-		__BSP_LED_Toggle();         \
+		__BSP_LED_TOGGLE();         \
 		rt_thread_mdelay(__TIME__); \
 	} while (0)
 #elif __RTOS_FREERTOS_ENABLED
-#define __BSP_LED_Ficker(__TIME__) \
+#define __BSP_LED_FICKER(__TIME__) \
 	do                             \
 	{                              \
-		__BSP_LED_Toggle();        \
+		__BSP_LED_TOGGLE();        \
 		vTaskDelay(__TIME__);      \
-		__BSP_LED_Toggle();        \
+		__BSP_LED_TOGGLE();        \
 		vTaskDelay(__TIME__);      \
 	} while (0)
 #else
-#define __BSP_LED_Ficker(__TIME__) \
+#define __BSP_LED_FICKER(__TIME__) \
 	do                             \
 	{                              \
-		__BSP_LED_Toggle();        \
+		__BSP_LED_TOGGLE();        \
 		delay_ms(__TIME__);        \
-		__BSP_LED_Toggle();        \
+		__BSP_LED_TOGGLE();        \
 		delay_ms(__TIME__);        \
 	} while (0)
 #endif

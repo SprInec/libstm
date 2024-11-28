@@ -113,6 +113,12 @@ extern "C" {
 #define __BSP_C_STD_MATH 0
 #endif
 // </e> !math.h
+
+// <e> limits.h
+#ifndef __BSP_C_STD_LIMITS
+#define __BSP_C_STD_LIMITS 1
+#endif
+// </e> !limits.h
 // </h> !C Standard library files
 
 // <h> std support files
@@ -134,7 +140,7 @@ extern "C" {
 // <e> bsp_delay.h
 //  <i> Default: USING
 #ifndef __BSP_DELAY_ENABLED
-#define __BSP_DELAY_ENABLED 1
+#define __BSP_DELAY_ENABLED 0
 #endif
 // </e>
 // </h> !std support files
@@ -495,6 +501,8 @@ extern "C" {
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "event_groups.h"
+#include "timers.h"
 #endif /* !RTOS_FREERTOS_ENABLED */
 
 #if __BSP_CITE_MAIN
@@ -516,6 +524,10 @@ extern "C" {
 #if __BSP_C_STD_MATH
 #include "math.h"
 #endif /* !MATH */
+
+#if __BSP_C_STD_LIMITS
+#include "limits.h"
+#endif /* !LIMITS */
 
 #if __BSP_SYS_ENABLED
 #include "bsp_sys.h"
