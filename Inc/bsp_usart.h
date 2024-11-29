@@ -30,7 +30,7 @@ extern "C" {
  * in file "bsp_config.h".
  */
 /* -@- */
-#if 1
+#if 0
 #define __BSP_USART_Receive
 #if 1
 #define __BSP_USART_VariableReceive

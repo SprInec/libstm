@@ -509,12 +509,28 @@ extern "C" {
 #endif /* !RTOS_RTTHREAD_ENABLED */
 
 #if __RTOS_FREERTOS_ENABLED
+#include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
-#include "semphr.h"
 #include "event_groups.h"
+
+#if configUSE_QUEUE_SETS
+#include "queue.h"
+#endif /* configUSE_QUEUE_SETS */
+
+#if (configUSE_MUTEXES ||           \
+     configUSE_RECURSIVE_MUTEXES || \
+     configUSE_COUNTING_SEMAPHORES)
+#include "semphr.h"
+#endif /* configUSE_SEMAPHORES */
+
+#if configUSE_TIMERS
 #include "timers.h"
+#endif /* configUSE_TIMERS */
+
+#if configGENERATE_RUN_TIME_STATS
+#include "bsp_timbase.h"
+#endif /* configGENERATE_RUN_TIME_STATS */
 #endif /* !RTOS_FREERTOS_ENABLED */
 
 #if __BSP_CITE_MAIN
