@@ -52,7 +52,6 @@ GPIO_PinState BSP_KEY_Read(BSP_KeyList key)
             return BSP_KEY_PRESSED;
         }
     }
-
     return BSP_KEY_RELEASE;
 }
 

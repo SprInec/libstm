@@ -30,7 +30,7 @@ extern "C" {
  * in file "bsp_config.h".
  */
 /* -@- */
-#if 0
+#if 1
 #define __BSP_USART_Receive
 #if 1
 #define __BSP_USART_VariableReceive
@@ -51,21 +51,45 @@ typedef enum
 } BSP_UsartState;
 
 #ifdef __BSP_USART_Receive
-
 #ifdef __BSP_USART_VariableReceive
+
 #define USART_RX_LEN 200
-#define USART_HANDLE huart4
-#define USART_DMA_HANDLE hdma_uart4_rx
+#define USART_HANDLE huart1
+#define USART_DMA_HANDLE hdma_usart1_rx
 
 extern volatile uint8_t rx_len;
 extern volatile uint8_t recv_end_flag;
 extern uint8_t rx_buffer[USART_RX_LEN];
 
+extern UART_HandleTypeDef USART_HANDLE;
+extern DMA_HandleTypeDef USART_DMA_HANDLE;
+
+#if __RTOS_FREERTOS_ENABLED
+extern SemaphoreHandle_t USART_BinarySem_Handle;
+#endif /* __RTOS_FREERTOS_ENABLED */
+
 BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void);
 BSP_UsartState BSP_UsartVar_Conduct(void);
 void BSP_UsartVar_Callback(uint8_t *str);
-#endif
 
+/**
+ * @brief Call this function to start serial port reception
+ * @note If FreeRTOS is enabled, a binary semaphore will be created.
+ */
+#if __RTOS_FREERTOS_ENABLED
+#define __BSP_USART_DMA_RECEIVE_START() {                         \
+	__HAL_UART_ENABLE_IT(&USART_HANDLE, UART_IT_IDLE);            \
+	HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN); \
+	USART_BinarySem_Handle = xSemaphoreCreateBinary();			  \
+}
+#else
+#define __BSP_USART_DMA_RECEIVE_START() {                         \
+	__HAL_UART_ENABLE_IT(&USART_HANDLE, UART_IT_IDLE);            \
+	HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN); \
+}
+
+#endif /* __RTOS_FREERTOS_ENABLED */
+#endif /* __BSP_USART_VariableReceive */
 #endif /* __BSP_USART_Receive */
 
 #if __BSP_USART_Transmit >= 1

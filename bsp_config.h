@@ -102,6 +102,18 @@ extern "C" {
 #endif
 // </e> !stdint.h
 
+// <e> stdlib.h
+#ifndef __BSP_C_STD_STDLIB
+#define __BSP_C_STD_STDLIB 0
+#endif
+// </e> !stdlib.h
+
+// <e> string.h
+#ifndef __BSP_C_STD_STRING
+#define __BSP_C_STD_STRING 1
+#endif
+// </e> !string.h
+
 //  <e> stdint.h
 #ifndef __BSP_C_STD_STDINT
 #define __BSP_C_STD_STDINT 0
@@ -514,19 +526,27 @@ extern "C" {
 #endif /* !USER CODE */
 
 #if __BSP_C_STD_STDIO
-#include "stdio.h"
+#include <stdio.h>
 #endif /* !STDIO */
 
+#if __BSP_C_STD_STDLIB
+#include <stdlib.h>
+#endif /* !STDLIB */
+
+#if __BSP_C_STD_STRING
+#include <string.h>
+#endif /* !STRING */
+
 #if __BSP_C_STD_STDINT
-#include "stdint.h"
+#include <stdint.h>
 #endif /* !STDINT */
 
 #if __BSP_C_STD_MATH
-#include "math.h"
+#include <math.h>
 #endif /* !MATH */
 
 #if __BSP_C_STD_LIMITS
-#include "limits.h"
+#include <limits.h>
 #endif /* !LIMITS */
 
 #if __BSP_SYS_ENABLED

@@ -52,7 +52,10 @@ void delay_ms(rt_uint16_t nms)
 }
 
 #elif __RTOS_FREERTOS_ENABLED
-
+void delay_ms(uint16_t nms)
+{	
+	vTaskDelay(pdMS_TO_TICKS(nms));
+}
 #else
 #if BSP_SYSTICK_DELAY
 void delay_us(uint32_t nus)

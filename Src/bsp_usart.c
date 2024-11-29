@@ -11,6 +11,7 @@
 
 #include "bsp_usart.h"
 #include "usart.h"
+#include "string.h"
 #include "stdarg.h"
 
 #if !__RTOS_RTTHREAD_ENABLED
@@ -21,6 +22,10 @@
 volatile uint8_t rx_len = 0;
 volatile uint8_t recv_end_flag = 0;
 uint8_t rx_buffer[USART_RX_LEN];
+
+#if __RTOS_FREERTOS_ENABLED
+SemaphoreHandle_t USART_BinarySem_Handle = NULL; /* 测试信号量句柄 */
+#endif /* __RTOS_FREERTOS_ENABLED */
 
 extern DMA_HandleTypeDef USART_DMA_HANDLE;
 #endif
@@ -49,61 +54,52 @@ BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void)
 	uint32_t tmp_flag = 0;
 	uint32_t temp;
 
+#if __RTOS_FREERTOS_ENABLED
+	uint32_t ulReturn;
+	BaseType_t pxHigherPriorityTaskWoken;
+	ulReturn = taskENTER_CRITICAL_FROM_ISR();
+#endif /* __RTOS_FREERTOS_ENABLED */
+
 	tmp_flag = __HAL_UART_GET_FLAG(&USART_HANDLE, UART_FLAG_IDLE);
 	if ((tmp_flag != RESET))
 	{
 		__HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE);
 		HAL_UART_DMAStop(&USART_HANDLE);
+
 #ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
 		temp = USART_DMA_HANDLE.Instance->CNDTR;
-#else
+
+#elif defined(__BSP_MCU_DEVEBOX_STM32F407VET6)
 		temp = __HAL_DMA_GET_COUNTER(&USART_DMA_HANDLE);
 #endif									
+
 		rx_len = USART_RX_LEN - temp;
 		recv_end_flag = 1;
 	}
+
+#if __RTOS_FREERTOS_ENABLED
+	xSemaphoreGiveFromISR(USART_BinarySem_Handle,
+						  &pxHigherPriorityTaskWoken);
+	portYIELD_FROM_ISR(pxHigherPriorityTaskWoken);
+	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+#endif /* __RTOS_FREERTOS_ENABLED */
+
 	return USART_OK;
 }
-
-/**
- * @brief	Users need to manually configure the code.
- * @attention
- *
- * 	The users need to paste the following two functions segments between ------
- * " USER CODE BEGIN USARTX_Init 2 " and " USER CODE END USARTX_Init 2 " of the
- * " MX_USART1_UART_Init(void) "in the <usart.c>.
- *
- * functions segments:
- *
- *	-> 	__HAL_UART_ENABLE_IT(&USART_HANDLE, UART_IT_IDLE);
- * 	->	HAL_UART_Receive_DMA(&USART_HANDLE, rx_buffer, USART_RX_LEN);
- *
- */
 
 /**
  *@brief	USART variable length receiving execution function.
  */
 BSP_UsartState BSP_UsartVar_Conduct(void)
 {
-	_Bool uart_state = 0;
+	BSP_UsartState uart_state = USART_ERROR;
 	if (recv_end_flag == 1)
 	{
-#if 0
-		/* 串口接收指示灯 */
-		__BSP_LED1_Ficker(50);
-#endif
-#if 0
-		/* 返回串口接收到的数据 */
-		bsprif1("%s\n", rx_buffer);
-#endif
-#if 1
 		/* 用户自定义串口回调 */
 		BSP_UsartVar_Callback(rx_buffer);
-#endif
-		for (uint8_t i = 0; i < rx_len; i++)
-		{
-			rx_buffer[i] = 0;
-		}
+
+		// pre-release: 清空缓冲区
+		memset(rx_buffer, 0, rx_len);
 		rx_len = 0;
 		recv_end_flag = 0;
 		uart_state = USART_OK;
