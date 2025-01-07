@@ -12,7 +12,6 @@
 - `README.md`: 本文件，提供项目说明
 - `Inc/`: BSP 头文件
 - `Src/`: BSP 源代码
-- `scripts/`: 一些 STM 开发中可能用到的脚本文件
 - `bsp_user.c`:  用户源文件
 - `bsp_user.h`:  用户头文件
 - `bsp_config.h`:  libstm 配置文件
