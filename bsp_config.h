@@ -192,7 +192,7 @@ extern "C" {
 // <e> LED
 //  <i> Default: USING
 #ifndef __BSP_LED_ENABLED
-#define __BSP_LED_ENABLED 1
+#define __BSP_LED_ENABLED 0
 #endif
 // </e>
 
@@ -204,7 +204,7 @@ extern "C" {
 
 // <e> KEY
 #ifndef __BSP_KEY_ENABLED
-#define __BSP_KEY_ENABLED 1
+#define __BSP_KEY_ENABLED 0
 #endif
 // <e> STATEMAC KEY
 #ifndef __STATEMAC_KEY
