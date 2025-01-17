@@ -11,7 +11,36 @@
 
 #include "bsp_led.h"
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+#ifdef BSP_MCU_USER_DEFINED
+void BSP_LED_Init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+	__BSP_RCC_LED_CLK_ENABLE();
+
+	HAL_GPIO_WritePin(BSP_LED_Port0, BSP_LED_PIN0 | BSP_LED_PIN1 | BSP_LED_PIN2, BSP_LED_PIN_OFF);
+
+	GPIO_InitStruct.Pin = BSP_LED_PIN0;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(BSP_LED_Port0, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = BSP_LED_PIN1;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(BSP_LED_Port1, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = BSP_LED_PIN2;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(BSP_LED_Port2, &GPIO_InitStruct);
+}
+#endif /* __BSP_MCU_USER_DEFINED */
+
+#ifdef BSP_MCU_DEVEBOX_STM32F407VET6
 void BSP_LED_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -28,7 +57,7 @@ void BSP_LED_Init(void)
 }
 #endif
 
-#ifdef __BSP_MCU_NUCLEO_H7A3ZIQ
+#ifdef BSP_MCU_NUCLEO_H7A3ZIQ
 void BSP_LED_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -53,7 +82,7 @@ void BSP_LED_Init(void)
 }
 #endif
 
-#ifdef __BSP_MCU_DEVEBOX_STM32H743VIT6
+#ifdef BSP_MCU_DEVEBOX_STM32H743VIT6
 void BSP_LED_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};

@@ -11,7 +11,7 @@
 
 #include "bsp_delay.h"
 
-#if __RTOS_RTTHREAD_ENABLED
+#if RTOS_RTTHREAD_ENABLED
 
 void delay_us(rt_uint32_t nus)
 {
@@ -51,10 +51,42 @@ void delay_ms(rt_uint16_t nms)
 	rt_thread_mdelay(nms);
 }
 
-#elif __RTOS_FREERTOS_ENABLED
+#elif RTOS_FREERTOS_ENABLED
 void delay_ms(uint16_t nms)
 {	
 	vTaskDelay(pdMS_TO_TICKS(nms));
+}
+
+void delay_us(uint32_t nus)
+{
+	uint32_t ticks;
+	uint32_t told, tnow, tcnt = 0;
+	uint32_t reload = SysTick->LOAD;
+
+	ticks = nus * (SystemCoreClock / 1000000);
+	tcnt = 0;
+
+	vTaskSuspendAll();
+	told = SysTick->VAL;
+
+	while (1)
+	{
+		tnow = SysTick->VAL;
+		if (tnow != told)
+		{
+			if (tnow < told) {
+				tcnt += told - tnow;
+			}
+			else {
+				tcnt += reload - tnow + told;
+			}
+			told = tnow;
+			if (tcnt >= ticks) {
+				break;
+			}
+		}
+	}
+	xTaskResumeAll();
 }
 #else
 #if BSP_SYSTICK_DELAY

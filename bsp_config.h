@@ -33,24 +33,43 @@ extern "C" {
 //      <3=> DevEBox-STM32H743VIT6
 //      <4=> NUCLEO-H7A3ZI-Q
 //      <5=> LANQIAO-GXCT-STM32G431
+//      <6=> USER-DEFINED
 //  <i> Select the development board and chip type
 #ifndef MCU_SELECTION
-#define MCU_SELECTION 2
+#define MCU_SELECTION 6
 #endif
 
 // DEV-BOARD AUTO-DEFINE
 #if MCU_SELECTION == 1
-#define __BSP_MCU_DEVEBOX_STM32F103C6T6
+#define BSP_MCU_DEVEBOX_STM32F103C6T6
 #elif MCU_SELECTION == 2
-#define __BSP_MCU_DEVEBOX_STM32F407VET6
+#define BSP_MCU_DEVEBOX_STM32F407VET6
 #elif MCU_SELECTION == 3
-#define __BSP_MCU_DEVEBOX_STM32H743VIT6
+#define BSP_MCU_DEVEBOX_STM32H743VIT6
 #elif MCU_SELECTION == 4
-#define __BSP_MCU_NUCLEO_H7A3ZIQ
+#define BSP_MCU_NUCLEO_H7A3ZIQ
 #elif MCU_SELECTION == 5
-#define __BSP_MCU_LANQIAO_GXCT_STM32G431
+#define BSP_MCU_LANQIAO_GXCT_STM32G431
 #else
-#define __BSP_MCU_USER_DEFINED
+#define BSP_MCU_USER_DEFINED
+#endif
+
+// <o> MCU ID
+//     <0=> STM32F1
+//     <1=> STM32F4
+//     <2=> STM32H7
+//     <3=> STM32G4
+// <i> Select the MCU ID
+#define MCU_ID 1
+
+#if MCU_ID == 0
+#define MCUID_STM32F1
+#elif MCU_ID == 1
+#define MCUID_STM32F4
+#elif MCU_ID == 2
+#define MCUID_STM32H7
+#elif MCU_ID == 3
+#define MCUID_STM32G4
 #endif
 
 // <h> RTOS
@@ -59,36 +78,31 @@ extern "C" {
 //      <0=> NOUSE
 //      <1=> RT-Thread
 //      <2=> FreeRTOS
-#define __ENABLE_RTOS 2
+#define BSP_ENABLE_RTOS 2
 // </h> !RTOS
 
-#if __ENABLE_RTOS == 1
-#ifndef __RTOS_RTTHREAD_ENABLED
-#define __RTOS_RTTHREAD_ENABLED 1
+#if BSP_ENABLE_RTOS == 1
+#ifndef RTOS_RTTHREAD_ENABLED
+#define RTOS_RTTHREAD_ENABLED 1
 #endif 
-#elif __ENABLE_RTOS == 2
-#ifndef __RTOS_FREERTOS_ENABLED
-#define __RTOS_FREERTOS_ENABLED 1
+#elif BSP_ENABLE_RTOS == 2
+#ifndef RTOS_FREERTOS_ENABLED
+#define RTOS_FREERTOS_ENABLED 1
 #endif 
 #endif
 
 // <e> CMSIS DSP
-#ifndef __CMSIS_DSP
-#define __CMSIS_DSP 0
+#ifndef USING_CMSIS_DSP
+#define USING_CMSIS_DSP 0
 #endif
 // </e> !main.h
 
 // <e> main.h
-#ifndef __BSP_CITE_MAIN
-#define __BSP_CITE_MAIN 1
+#ifndef BSP_CITE_MAIN
+#define BSP_CITE_MAIN 1
 #endif
 // </e> !main.h
 
-// <e> bsp_user.h
-#ifndef __BSP_CITE_USER
-#define __BSP_CITE_USER 1
-#endif
-// </e> !bsp_user.h
 // </h> !System configuration
 
 // <h> C Standard library files
@@ -97,38 +111,38 @@ extern "C" {
 //  <i> Default: NOUSE
 
 // <e> stdio.h
-#ifndef __BSP_C_STD_STDIO
-#define __BSP_C_STD_STDIO 1
+#ifndef BSP_C_STD_STDIO
+#define BSP_C_STD_STDIO 1
 #endif
 // </e> !stdint.h
 
 // <e> stdlib.h
-#ifndef __BSP_C_STD_STDLIB
-#define __BSP_C_STD_STDLIB 0
+#ifndef BSP_C_STD_STDLIB
+#define BSP_C_STD_STDLIB 0
 #endif
 // </e> !stdlib.h
 
 // <e> string.h
-#ifndef __BSP_C_STD_STRING
-#define __BSP_C_STD_STRING 1
+#ifndef BSP_C_STD_STRING
+#define BSP_C_STD_STRING 1
 #endif
 // </e> !string.h
 
 //  <e> stdint.h
-#ifndef __BSP_C_STD_STDINT
-#define __BSP_C_STD_STDINT 0
+#ifndef BSP_C_STD_STDINT
+#define BSP_C_STD_STDINT 0
 #endif
 // </e> !stdio.h
 
 // <e> math.h
-#ifndef __BSP_C_STD_MATH
-#define __BSP_C_STD_MATH 0
+#ifndef BSP_C_STD_MATH
+#define BSP_C_STD_MATH 0
 #endif
 // </e> !math.h
 
 // <e> limits.h
-#ifndef __BSP_C_STD_LIMITS
-#define __BSP_C_STD_LIMITS 1
+#ifndef BSP_C_STD_LIMITS
+#define BSP_C_STD_LIMITS 1
 #endif
 // </e> !limits.h
 // </h> !C Standard library files
@@ -137,22 +151,22 @@ extern "C" {
 // =====================
 // <e> bsp_sys.h
 //  <i> Default: USING
-#ifndef __BSP_SYS_ENABLED
-#define __BSP_SYS_ENABLED 0
+#ifndef BSP_SYS_ENABLED
+#define BSP_SYS_ENABLED 0
 #endif
 // </e>
 
 // <e> bsp_common.h
 //  <i> Default: USING
-#ifndef __BSP_COMMON_ENABLED
-#define __BSP_COMMON_ENABLED 0
+#ifndef BSP_COMMON_ENABLED
+#define BSP_COMMON_ENABLED 1
 #endif
 // </e>
 
 // <e> bsp_delay.h
 //  <i> Default: USING
-#ifndef __BSP_DELAY_ENABLED
-#define __BSP_DELAY_ENABLED 0
+#ifndef BSP_DELAY_ENABLED
+#define BSP_DELAY_ENABLED 1
 #endif
 // </e>
 // </h> !std support files
@@ -160,26 +174,26 @@ extern "C" {
 // <h> BSP on-chip Peripheral
 // ==========================
 // <e> BSP ADC
-#ifndef __BSP_ADC_ENABLED
-#define __BSP_ADC_ENABLED 0
+#ifndef BSP_ADC_ENABLED
+#define BSP_ADC_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP DAC
-#ifndef __BSP_DAC_ENABLED
-#define __BSP_DAC_ENABLED 0
+#ifndef BSP_DAC_ENABLED
+#define BSP_DAC_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP TIM
-#ifndef __BSP_TIM_ENABLED
-#define __BSP_TIM_ENABLED 0
+#ifndef BSP_TIM_ENABLED
+#define BSP_TIM_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP DWT
-#ifndef __BSP_DWT_ENABLED
-#define __BSP_DWT_ENABLED 0
+#ifndef BSP_DWT_ENABLED
+#define BSP_DWT_ENABLED 0
 #endif
 // </e>
 // </h> !BSP on-chip Peripheral
@@ -191,29 +205,29 @@ extern "C" {
 
 // <e> LED
 //  <i> Default: USING
-#ifndef __BSP_LED_ENABLED
-#define __BSP_LED_ENABLED 0
+#ifndef BSP_LED_ENABLED
+#define BSP_LED_ENABLED 1
 #endif
 // </e>
 
 // <e> Buzzer
-#ifndef __BSP_BUZZER_ENABLED
-#define __BSP_BUZZER_ENABLED 0
+#ifndef BSP_BUZZER_ENABLED
+#define BSP_BUZZER_ENABLED 0
 #endif
 // </e>
 
 // <e> KEY
-#ifndef __BSP_KEY_ENABLED
-#define __BSP_KEY_ENABLED 0
+#ifndef BSP_KEY_ENABLED
+#define BSP_KEY_ENABLED 0
 #endif
 // <e> STATEMAC KEY
-#ifndef __STATEMAC_KEY
-#define __STATEMAC_KEY 0
+#ifndef STATEMAC_KEY
+#define STATEMAC_KEY 0
 #endif 
 // </e> !statemac key
 // <e> NORMAL KEY
-#ifndef __NORMAL_KEY
-#define __NORMAL_KEY 1
+#ifndef NORMAL_KEY
+#define NORMAL_KEY 1
 #endif 
 // </e> !NORMAL KEY
 // </e> !KEY
@@ -224,26 +238,26 @@ extern "C" {
 //  <i> Default: NOUSE
 
 // <e> AD9833
-#ifndef __BSP_AD9833_ENABLED
-#define __BSP_AD9833_ENABLED 0
+#ifndef BSP_AD9833_ENABLED
+#define BSP_AD9833_ENABLED 0
 #endif
 // </e>
 
 // <e> AD9851
-#ifndef __BSP_AD9851_ENABLED
-#define __BSP_AD9851_ENABLED 0
+#ifndef BSP_AD9851_ENABLED
+#define BSP_AD9851_ENABLED 0  
 #endif
 // </e>
 
 // <e> AD9854
-#ifndef __BSP_AD9854_ENABLED
-#define __BSP_AD9854_ENABLED 0
+#ifndef BSP_AD9854_ENABLED
+#define BSP_AD9854_ENABLED 0
 #endif
 // </e>
 
 // <e> AD9959
-#ifndef __BSP_AD9959_ENABLED
-#define __BSP_AD9959_ENABLED 0
+#ifndef BSP_AD9959_ENABLED
+#define BSP_AD9959_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed DDS
@@ -251,8 +265,8 @@ extern "C" {
 // <h> Programmed ADC
 // ==================
 // <e> AD7606
-#ifndef __BSP_AD7606_ENABLED
-#define __BSP_AD7606_ENABLED 0
+#ifndef BSP_AD7606_ENABLED
+#define BSP_AD7606_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed ADC
@@ -260,8 +274,8 @@ extern "C" {
 // <h> Programmed DAC
 // ==================
 // <e> DAC8563
-#ifndef __BSP_DAC8563_ENABLED
-#define __BSP_DAC8563_ENABLED 0
+#ifndef BSP_DAC8563_ENABLED
+#define BSP_DAC8563_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed DAC
@@ -269,60 +283,60 @@ extern "C" {
 // <h> Programmed PLL
 // ==================
 // <e> ADF4351
-#ifndef __BSP_ADF4351_ENABLED
-#define __BSP_ADF4351_ENABLED 0
+#ifndef BSP_ADF4351_ENABLED
+#define BSP_ADF4351_ENABLED 0
 #endif
 // </e>
 
 // <e> ADF4002
-#ifndef __BSP_ADF4002_ENABLED
-#define __BSP_ADF4002_ENABLED 0
+#ifndef BSP_ADF4002_ENABLED
+#define BSP_ADF4002_ENABLED 0
 #endif
 // </e>
 // </h> !Programmed PLL
 
 // <e> LMK61E07
 //  <i> One dcxo module
-#ifndef __BSP_LMK61E07_ENABLED
-#define __BSP_LMK61E07_ENABLED 0
+#ifndef BSP_LMK61E07_ENABLED
+#define BSP_LMK61E07_ENABLED 0
 #endif
 // </e>
 
 // <e> PE4302
-#ifndef __BSP_PE4302_ENABLED
-#define __BSP_PE4302_ENABLED 0
+#ifndef BSP_PE4302_ENABLED
+#define BSP_PE4302_ENABLED 0
 #endif
 // </e>
 
 // <h> Display screen selection
 // ============================
 // <e> OLED I2C
-#ifndef __BSP_OLEDI2C_ENABLED
-#define __BSP_OLEDI2C_ENABLED 0
+#ifndef BSP_OLEDI2C_ENABLED
+#define BSP_OLEDI2C_ENABLED 0
 #endif
 // </e>
 
 // <e> OLED SPI
-#ifndef __BSP_OLEDSPI_ENABLED
-#define __BSP_OLEDSPI_ENABLED 0
+#ifndef BSP_OLEDSPI_ENABLED
+#define BSP_OLEDSPI_ENABLED 0
 #endif
 // </e>
 
 // <e> LCD1602
-#ifndef __BSP_LCD1602_ENABLED
-#define __BSP_LCD1602_ENABLED 0
+#ifndef BSP_LCD1602_ENABLED
+#define BSP_LCD1602_ENABLED 0
 #endif
 // </e>
 
 // <e> LCD TFT
-#ifndef __BSP_LCDTFT_ENABLED
-#define __BSP_LCDTFT_ENABLED 0
+#ifndef BSP_LCDTFT_ENABLED
+#define BSP_LCDTFT_ENABLED 0
 #endif
 // </e>
 
 // <e> UART HMI
-#ifndef __BSP_UARTHMI_ENABLED
-#define __BSP_UARTHMI_ENABLED 0
+#ifndef BSP_UARTHMI_ENABLED
+#define BSP_UARTHMI_ENABLED 0
 #endif
 // </e>
 // </h> !Display screen selection
@@ -330,60 +344,84 @@ extern "C" {
 // <h> Sensor
 // ==========
 // <e> DS18B20
-#ifndef __BSP_DS18B20_ENABLED
-#define __BSP_DS18B20_ENABLED 0
+#ifndef BSP_DS18B20_ENABLED
+#define BSP_DS18B20_ENABLED 0
 #endif
 // </e>
 
 // <e> DHT11
-#ifndef __BSP_DHT11_ENABLED
-#define __BSP_DHT11_ENABLED 0
+#ifndef BSP_DHT11_ENABLED
+#define BSP_DHT11_ENABLED 0
 #endif 
 // </e> !DHT11
 
 // <e> DHT20
-#ifndef __BSP_DHT20_ENABLED
-#define __BSP_DHT20_ENABLED 0
+#ifndef BSP_DHT20_ENABLED
+#define BSP_DHT20_ENABLED 0
 #endif
 // </e> !DHT20
 
 // <e> BMP280
-#ifndef __BSP_BMP280_ENABLED
-#define __BSP_BMP280_ENABLED 0
+#ifndef BSP_BMP280_ENABLED
+#define BSP_BMP280_ENABLED 0
 #endif
 // </e> !BMP280
 
 // <e> S12SD
-#ifndef __BSP_S12SD_ENABLED
-#define __BSP_S12SD_ENABLED 0
+#ifndef BSP_S12SD_ENABLED
+#define BSP_S12SD_ENABLED 0
 #endif 
 // </e> !S12SD
 
 // <e> GP12
-#ifndef __BSP_GP2Y_ENABLED
-#define __BSP_GP2Y_ENABLED 0
+#ifndef BSP_GP2Y_ENABLED
+#define BSP_GP2Y_ENABLED 0
 #endif
 // </e> GP12
 
+// <e> WTU404F4-B004
+//  <i> 高精度红外模块
+#ifndef BSP_WTU404F4_ENABLED
+#define BSP_WTU404F4_ENABLED 1
+#endif
+// </e> !WTU404F4
+
 // <e> GPS
-#ifndef __BSP_GPS_ENABLED
-#define __BSP_GPS_ENABLED 0
+#ifndef BSP_GPS_ENABLED
+#define BSP_GPS_ENABLED 0
 #endif
 // </e> !GPS
 
 // <e> VMS WIND SPEED SENSOR
-#ifndef __BSP_VMSWIND_ENABLED
-#define __BSP_VMSWIND_ENABLED 0
+#ifndef BSP_VMSWIND_ENABLED
+#define BSP_VMSWIND_ENABLED 0
 #endif 
 // </e> !VMS WIND SPEED SENSOR
 
 // </h> !Sensor
 
+// <h> Power Monitoring
+// <e> INA226
+#ifndef BSP_INA226_ENABLED
+#define BSP_INA226_ENABLED 1
+#endif
+// </e> !INA226
+// </h> !Power Monitoring
+
+// <h> Motor&Servo
+// =============
+// <e> TMI8260
+#ifndef BSP_TMI8260_ENABLED
+#define BSP_TMI8260_ENABLED 1
+#endif
+// </e> !TMI8260
+// </h> !Motor&Servo
+
 // <h> Camera
 // ==========
 // <e> OV2640
-#ifndef __BSP_OV2640_ENABLED
-#define __BSP_OV2640_ENABLED 0
+#ifndef BSP_OV2640_ENABLED
+#define BSP_OV2640_ENABLED 0
 #endif
 // </e>
 // </h> !Camera
@@ -394,14 +432,14 @@ extern "C" {
 // <i> Select the external storage media you use
 
 // <e> EEPROM
-#ifndef __BSP_EEPROM_ENABLED
-#define __BSP_EEPROM_ENABLED 0
+#ifndef BSP_EEPROM_ENABLED
+#define BSP_EEPROM_ENABLED 0  
 #endif
 // </e>
 
 // <e> W25QXX
-#ifndef __BSP_W25QXX_ENABLED
-#define __BSP_W25QXX_ENABLED 0
+#ifndef BSP_W25QXX_ENABLED
+#define BSP_W25QXX_ENABLED 0
 #endif
 // </e>
 
@@ -410,38 +448,38 @@ extern "C" {
 // <h> Communication Protocol
 // ==========================
 // <e> BSP I2C
-#ifndef __BSP_I2C_ENABLED
-#define __BSP_I2C_ENABLED 0
+#ifndef BSP_I2C_ENABLED
+#define BSP_I2C_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP SPI
-#ifndef __BSP_SPI_ENABLED
-#define __BSP_SPI_ENABLED 0
+#ifndef BSP_SPI_ENABLED
+#define BSP_SPI_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP SCCB
-#ifndef __BSP_SCCB_ENABLED
-#define __BSP_SCCB_ENABLED 0
+#ifndef BSP_SCCB_ENABLED
+#define BSP_SCCB_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP USART
-#ifndef __BSP_USART_ENABLED
-#define __BSP_USART_ENABLED 1
+#ifndef BSP_USART_ENABLED
+#define BSP_USART_ENABLED 1
 #endif
 // </e>
 
 // <e> BSP RS485
-#ifndef __BSP_RS485_ENABLED
-#define __BSP_RS485_ENABLED 0
+#ifndef BSP_RS485_ENABLED
+#define BSP_RS485_ENABLED 0
 #endif
 // </e> 
 
 // <e> BSP QUADSPI
-#ifndef __BSP_QUADSPI_ENABLED
-#define __BSP_QUADSPI_ENABLED 0
+#ifndef BSP_QUADSPI_ENABLED
+#define BSP_QUADSPI_ENABLED 0
 #endif
 // </e>
 // </h> !Communication Protocol
@@ -449,38 +487,38 @@ extern "C" {
 // <h> Custom algorithm
 // ====================
 // <e> CODING
-#ifndef __BSP_CODING_ENABLED
-#define __BSP_CODING_ENABLED 0
+#ifndef BSP_CODING_ENABLED
+#define BSP_CODING_ENABLED 0
 #endif
 // </e>
 
 // <e> DEDING
-#ifndef __BSP_DEDING_ENABLED
-#define __BSP_DEDING_ENABLED 0
+#ifndef BSP_DEDING_ENABLED
+#define BSP_DEDING_ENABLED 0
 #endif
 // </e>
 
 // <e> FILTER
-#ifndef __BSP_FILTER_ENABLED
-#define __BSP_FILTER_ENABLED 0
+#ifndef BSP_FILTER_ENABLED
+#define BSP_FILTER_ENABLED 0
 #endif
 // </e>
 
 // <e> BSP MATH
-#ifndef __BSP_MATH_ENABLED
-#define __BSP_MATH_ENABLED 0
+#ifndef BSP_MATH_ENABLED
+#define BSP_MATH_ENABLED 0
 #endif
 // </e>
 
 // <e> FFT
-#ifndef __BSP_FFT_ENABLED
-#define __BSP_FFT_ENABLED 0
+#ifndef BSP_FFT_ENABLED
+#define BSP_FFT_ENABLED 0
 #endif
 // </e>
 
 // <e> SPWM
-#ifndef __BSP_SPWM_ENABLED
-#define __BSP_SPWM_ENABLED 0
+#ifndef BSP_SPWM_ENABLED 
+#define BSP_SPWM_ENABLED 0
 #endif
 // </e>
 // </h> !Custom algorithm
@@ -488,27 +526,27 @@ extern "C" {
 
 /*!======= BSP Files Include =======!*/
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
+#ifdef MCUID_STM32F1
 #include "stm32f1xx_hal.h"
-#endif /* !__BSP_MCU_DEVEBOX_STM32F103C6T6 */
+#endif /* !MCUID_STM32F1 */
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+#ifdef MCUID_STM32F4
 #include "stm32f4xx_hal.h"
-#endif /* !__BSP_MCU_DEVEBOX_STM32F407VET6 */
+#endif /* !MCUID_STM32F4 */
 
-#ifdef __BSP_MCU_DEVEBOX_STM32H743VIT6
+#ifdef MCUID_STM32H7
 #include "stm32h7xx_hal.h"
-#endif /* !__BSP_MCU_DEVEBOX_STM32H743VIT6 */
+#endif /* !MCUID_STM32H7 */
 
-#ifdef __BSP_MCU_NUCLEO_H7A3ZIQ
-#include "stm32h7xx_hal.h"
-#endif /* !__BSP_MCU_NUCLEO_H7A3ZIQ */
+#ifdef MCUID_STM32G4
+#include "stm32g4xx_hal.h"
+#endif /* !MCUID_STM32G4 */
 
-#if __RTOS_RTTHREAD_ENABLED
+#if RTOS_RTTHREAD_ENABLED
 #include "rtthread.h"
 #endif /* !RTOS_RTTHREAD_ENABLED */
 
-#if __RTOS_FREERTOS_ENABLED
+#if RTOS_FREERTOS_ENABLED
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -518,7 +556,8 @@ extern "C" {
 #include "queue.h"
 #endif /* configUSE_QUEUE_SETS */
 
-#if (configUSE_MUTEXES ||           \
+#if (configUSE_MUTEXES || \
+     configUSE_BINARY_SEMAPHORES || \
      configUSE_RECURSIVE_MUTEXES || \
      configUSE_COUNTING_SEMAPHORES)
 #include "semphr.h"
@@ -533,229 +572,237 @@ extern "C" {
 #endif /* configGENERATE_RUN_TIME_STATS */
 #endif /* !RTOS_FREERTOS_ENABLED */
 
-#if __BSP_CITE_MAIN
+#if BSP_CITE_MAIN
 #include "main.h"
 #endif /* !MAIN */
 
-#if __BSP_CITE_USER
-#include "bsp_user.h"
-#endif /* !USER CODE */
-
-#if __BSP_C_STD_STDIO
+#if BSP_C_STD_STDIO || BSP_USART_ENABLED
 #include <stdio.h>
 #endif /* !STDIO */
 
-#if __BSP_C_STD_STDLIB
+#if BSP_C_STD_STDLIB
 #include <stdlib.h>
 #endif /* !STDLIB */
 
-#if __BSP_C_STD_STRING
+#if BSP_C_STD_STRING
 #include <string.h>
 #endif /* !STRING */
 
-#if __BSP_C_STD_STDINT
+#if BSP_C_STD_STDINT
 #include <stdint.h>
 #endif /* !STDINT */
 
-#if __BSP_C_STD_MATH
+#if BSP_C_STD_MATH
 #include <math.h>
 #endif /* !MATH */
 
-#if __BSP_C_STD_LIMITS
+#if BSP_C_STD_LIMITS
 #include <limits.h>
 #endif /* !LIMITS */
 
-#if __BSP_SYS_ENABLED
+#if BSP_SYS_ENABLED || BSP_I2C_ENABLED || BSP_INA226_ENABLED
 #include "bsp_sys.h"
-#endif /* !__BSP_SYS_ENABLED */
+#endif /* !BSP_SYS_ENABLED */
 
-#if __BSP_COMMON_ENABLED
+#if BSP_COMMON_ENABLED
 #include "bsp_common.h"
-#endif /* !__BSP_COMMON_ENABLED */
+#endif /* !BSP_COMMON_ENABLED */
 
-#if __BSP_DELAY_ENABLED
+#if BSP_DELAY_ENABLED
 #include "bsp_delay.h"
-#endif /* !__BSP_DELAY_ENABLED */
+#endif /* !BSP_DELAY_ENABLED */
 
-#if __BSP_ADC_ENABLED
+#if BSP_ADC_ENABLED
 #include "bsp_adc.h"
-#endif /* !__BSP_ADC_ENABLED */
+#endif /* !BSP_ADC_ENABLED */
 
-#if __BSP_DAC_ENABLED
+#if BSP_DAC_ENABLED
 #include "bsp_dac.h"
-#endif /* !__BSP_DAC_ENABLED */
+#endif /* !BSP_DAC_ENABLED */
 
-#if __BSP_TIM_ENABLED
+#if BSP_TIM_ENABLED
 #include "bsp_tim.h"
-#endif /* !__BSP_TIM_ENABLED */
+#endif /* !BSP_TIM_ENABLED */
 
-#if __BSP_DWT_ENABLED
+#if BSP_DWT_ENABLED
 #include "bsp_dwt.h"
-#endif /* !__BSP_DWT_ENABLED */
+#endif /* !BSP_DWT_ENABLED */
 
-#if __BSP_LED_ENABLED
+#if BSP_LED_ENABLED
 #include "bsp_led.h"
-#endif /* !__BSP_LED_ENABLED */
+#endif /* !BSP_LED_ENABLED */
 
-#if __BSP_BUZZER_ENABLED
+#if BSP_BUZZER_ENABLED
 #include "bsp_buzzer.h"
-#endif /* !__BSP_BUZZER_ENABLED */
+#endif /* !BSP_BUZZER_ENABLED */
 
-#if __BSP_KEY_ENABLED
+#if BSP_KEY_ENABLED
 #include "bsp_key.h"
-#endif /* !__BSP_KEY_ENABLED */
+#endif /* !BSP_KEY_ENABLED */
 
-#if __BSP_AD9833_ENABLED
+#if BSP_AD9833_ENABLED
 #include "bsp_ad9833.h"
-#endif /*! __BSP_AD9833_ENABLED */
+#endif /*! BSP_AD9833_ENABLED */
 
-#if __BSP_AD9851_ENABLED
+#if BSP_AD9851_ENABLED
 #include "bsp_ad9851.h"
-#endif /* !__BSP_AD9851_ENABLED */
+#endif /* !BSP_AD9851_ENABLED */
 
-#if __BSP_AD9854_ENABLED
+#if BSP_AD9854_ENABLED
 #include "bsp_ad9854.h"
-#endif /* !__BSP_AD9854_ENABLED */
+#endif /* !BSP_AD9854_ENABLED */
 
-#if __BSP_AD9959_ENABLED
+#if BSP_AD9959_ENABLED
 #include "bsp_ad9959.h"
 #endif /* !__BSP_AD9959_ENABLED */
 
-#if __BSP_AD7606_ENABLED
+#if BSP_AD7606_ENABLED
 #include "bsp_ad7606.h"
-#endif /* !__BSP_AD7606_ENABLED */
+#endif /* !BSP_AD7606_ENABLED */
 
-#if __BSP_DAC8563_ENABLED
+#if BSP_DAC8563_ENABLED
 #include "bsp_dac8563.h"
-#endif /* !__BSP_DAC8563_ENABLED */
+#endif /* !BSP_DAC8563_ENABLED */
 
-#if __BSP_ADF4351_ENABLED
+#if BSP_ADF4351_ENABLED
 #include "bsp_adf4351.h"
-#endif /* !__BSP_ADF4351_ENABLED */
+#endif /* !BSP_ADF4351_ENABLED */
 
-#if __BSP_ADF4002_ENABLED
+#if BSP_ADF4002_ENABLED
 #include "bsp_adf4002.h"
-#endif /* !__BSP_ADF4002_ENABLED */
+#endif /* !BSP_ADF4002_ENABLED */
 
-#if __BSP_LMK61E07_ENABLED
+#if BSP_LMK61E07_ENABLED
 #include "bsp_lmk61e07.h"
-#endif /* !__BSP_LMK61E07_ENABLED */
+#endif /* !BSP_LMK61E07_ENABLED */
 
-#if __BSP_PE4302_ENABLED
+#if BSP_PE4302_ENABLED
 #include "bsp_pe4302.h"
-#endif /* !__BSP_PE4302_ENABLED */
+#endif /* !BSP_PE4302_ENABLED */
 
-#if __BSP_OLEDI2C_ENABLED
+#if BSP_OLEDI2C_ENABLED
 #include "bsp_oled_i2c.h"
-#endif /* !__BSP_OLEDI2C_ENABLED */
+#endif /* !BSP_OLEDI2C_ENABLED */
 
-#if __BSP_OLEDSPI_ENABLED
+#if BSP_OLEDSPI_ENABLED
 #include "bsp_oled_spi.h"
-#endif /* !__BSP_OLEDI2C_ENABLED */
+#endif /* !BSP_OLEDI2C_ENABLED */
 
-#if __BSP_LCD1602_ENABLED
+#if BSP_LCD1602_ENABLED
 #include "bsp_lcd1602.h"
-#endif /* !__BSP_LCD1602_ENABLED */
+#endif /* !BSP_LCD1602_ENABLED */
 
-#if __BSP_LCDTFT_ENABLED
+#if BSP_LCDTFT_ENABLED
 #include "bsp_lcd_tft.h"
-#endif /* !__BSP_LCD_ENABLED */
+#endif /* !BSP_LCD_ENABLED */
 
-#if __BSP_UARTHMI_ENABLED
+#if BSP_UARTHMI_ENABLED
 #include "bsp_usart_hmi.h"
-#endif /* !__BSP_HMI_ENABLED */
+#endif /* !BSP_HMI_ENABLED */
 
-#if __BSP_DS18B20_ENABLED
+#if BSP_DS18B20_ENABLED
 #include "bsp_ds18b20.h"
 #endif /* !__BSP_DS18B20_ENABLED */
 
-#if __BSP_DHT11_ENABLED
+#if BSP_DHT11_ENABLED
 #include "bsp_dht11.h"
-#endif /* !__BSP_DHT11_ENABLED */
+#endif /* !BSP_DHT11_ENABLED */
 
-#if __BSP_DHT20_ENABLED
+#if BSP_DHT20_ENABLED
 #include "bsp_dht20.h"
-#endif /* !__BSP_DHT20_ENABLED */
+#endif /* !BSP_DHT20_ENABLED */
 
-#if __BSP_BMP280_ENABLED
+#if BSP_BMP280_ENABLED
 #include "bsp_bmp280.h"
-#endif /* !__BSP_BMP280_ENABLED */
+#endif /* !BSP_BMP280_ENABLED */
 
-#if __BSP_S12SD_ENABLED
+#if BSP_S12SD_ENABLED
 #include "bsp_s12sd.h"
 #endif /* !__BSP_S12SD_ENABLED */
 
-#if __BSP_GP2Y_ENABLED
+#if BSP_GP2Y_ENABLED
 #include "bsp_gp2y.h"
-#endif /* !__BSP_GP2Y_ENABLED */
+#endif /* !BSP_GP2Y_ENABLED */
 
-#if __BSP_GPS_ENABLED
+#if BSP_GPS_ENABLED
 #include "bsp_gps.h"
-#endif /* !__BSP_GPS_ENABLED */
+#endif /* !BSP_GPS_ENABLED */
 
-#if __BSP_VMSWIND_ENABLED
+#if BSP_WTU404F4_ENABLED
+#include "bsp_wtu404f4.h"
+#endif /* !BSP_WTU404F4_ENABLED */
+
+#if BSP_VMSWIND_ENABLED
 #include "bsp_vms_windsensor.h"
-#endif /* !__BSP_VMSWIND_ENABLED */
+#endif /* !BSP_VMSWIND_ENABLED */
 
-#if __BSP_OV2640_ENABLED
+#if BSP_INA226_ENABLED
+#include "bsp_ina226.h"
+#endif /* !BSP_INA226_ENABLED */
+
+#if BSP_TMI8260_ENABLED
+#include "bsp_tmi8260.h"
+#endif /* !__BSP_TMI8260_ENABLED */
+
+#if BSP_OV2640_ENABLED
 #include "bsp_ov2640.h"
-#endif /* !__BSP_OV2640_ENABLED */
+#endif /* !BSP_OV2640_ENABLED */
 
-#if __BSP_EEPROM_ENABLED
+#if BSP_EEPROM_ENABLED
 #include "bsp_eeprom.h"
-#endif /* !__BSP_EEPROM_ENABLED */
+#endif /* !BSP_EEPROM_ENABLED */
 
-#if __BSP_W25QXX_ENABLED
+#if BSP_W25QXX_ENABLED
 #include "bsp_w25qxx.h"
-#endif /* !__BSP_W25QXX_ENABLED */
+#endif /* !BSP_W25QXX_ENABLED */
 
-#if __BSP_I2C_ENABLED
+#if BSP_I2C_ENABLED || BSP_INA226_ENABLED
 #include "bsp_i2c.h"
-#endif /* !__BSP_I2C_ENABLED */
+#endif /* !BSP_I2C_ENABLED */
 
-#if __BSP_SPI_ENABLED
+#if BSP_SPI_ENABLED
 #include "bsp_spi.h"
 #endif /* !__BSP_I2C_ENABLED */
 
-#if __BSP_SCCB_ENABLED
+#if BSP_SCCB_ENABLED
 #include "bsp_sccb.h"
-#endif /* !__BSP_SCCB_ENABLED */
+#endif /* !BSP_SCCB_ENABLED */
 
-#if __BSP_USART_ENABLED
+#if BSP_USART_ENABLED
 #include "bsp_usart.h"
-#endif /* !__BSP_USART_ENABLED */
+#endif /* !BSP_USART_ENABLED */
 
-#if __BSP_RS485_ENABLED
+#if BSP_RS485_ENABLED
 #include "bsp_rs485.h"
-#endif /* !__BSP_RS485_ENABLED */
+#endif /* !BSP_RS485_ENABLED */
 
-#if __BSP_QUADSPI_ENABLED
+#if BSP_QUADSPI_ENABLED
 #include "bsp_quadspi.h"
-#endif /* !__BSP_QUADSPI_ENABLED */
+#endif /* !BSP_QUADSPI_ENABLED */
 
-#if __BSP_CODING_ENABLED
+#if BSP_CODING_ENABLED
 #include "bsp_encode.h"
-#endif /*! __BSP_CODING_ENABLED */
+#endif /*! BSP_CODING_ENABLED */
 
-#if __BSP_DECODE_ENABLED
+#if BSP_DECODE_ENABLED
 #include "bsp_decode.h"
-#endif /* !__BSP_DECODE_ENABLED */
+#endif /* !BSP_DECODE_ENABLED */
 
-#if __BSP_FILTER_ENABLED
+#if BSP_FILTER_ENABLED
 #include "bsp_filter.h"
-#endif /* !__BSP_FILTER_ENABLED */
+#endif /* !BSP_FILTER_ENABLED */
 
-#if __BSP_MATH_ENABLED
+#if BSP_MATH_ENABLED
 #include "bsp_math.h"
-#endif /* !__BSP_MATH_ENABLED */
+#endif /* !BSP_MATH_ENABLED */
 
-#if __BSP_FFT_ENABLED
+#if BSP_FFT_ENABLED
 #include "bsp_fft.h"
-#endif /* !__BSP_FFT_ENABLED */
+#endif /* !BSP_FFT_ENABLED */
 
-#if __BSP_SPWM_ENABLED
+#if BSP_SPWM_ENABLED
 #include "bsp_spwm.h"
-#endif /* !__BSP_SPWM_ENABLED */
+#endif /* !BSP_SPWM_ENABLED */
 
 #ifdef __cplusplus
 }

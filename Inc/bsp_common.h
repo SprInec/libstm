@@ -25,6 +25,9 @@ extern "C"
 
 #ifdef __BSP_Com_ExpDef
 
+#define bspTrue 0x01
+#define bspFalse 0x00
+
 #ifdef __cplusplus
 #define __I volatile /*!< Defines 'read only' permissions */
 #else

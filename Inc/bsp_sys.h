@@ -17,10 +17,10 @@ extern "C" {
 
 #include "bsp_config.h"
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
+#ifdef MCUID_STM32F1
 #include "stm32f1xx.h"
 #endif
-#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
+#ifdef MCUID_STM32F4
 #include "stm32f4xx.h"
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
 #define MEM_ADDR(addr) *((volatile unsigned long *)(addr))
 #define BIT_ADDR(addr, bitnum) MEM_ADDR(BITBAND(addr, bitnum))
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
+#ifdef MCUID_STM32F1
 
 #define GPIOA_ODR_Addr (GPIOA_BASE + 12) // 0x4001080C
 #define GPIOB_ODR_Addr (GPIOB_BASE + 12) // 0x40010C0C
@@ -53,8 +53,7 @@ extern "C" {
 
 #endif
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F407VET6
-
+#ifdef MCUID_STM32F4
 #define GPIOA_IDR_Addr (GPIOA_BASE + 0x10)
 #define GPIOB_IDR_Addr (GPIOB_BASE + 0x10)
 #define GPIOC_IDR_Addr (GPIOC_BASE + 0x10)
@@ -70,7 +69,6 @@ extern "C" {
 #define GPIOE_ODR_Addr (GPIOE_BASE + 0x14)
 #define GPIOF_ODR_Addr (GPIOF_BASE + 0x14)
 #define GPIOG_ODR_Addr (GPIOG_BASE + 0x14)
-
 #endif
 
 #define PAout(n) BIT_ADDR(GPIOA_ODR_Addr, n) 

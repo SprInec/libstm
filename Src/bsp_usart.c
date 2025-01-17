@@ -14,17 +14,17 @@
 #include "string.h"
 #include "stdarg.h"
 
-#if !__RTOS_RTTHREAD_ENABLED
-#ifdef __BSP_USART_Receive
+#if !RTOS_RTTHREAD_ENABLED
+#ifdef BSP_USART_Receive
 
 /* Variable declarations BEGIN */
-#ifdef __BSP_USART_VariableReceive
+#ifdef BSP_USART_VariableReceive
 volatile uint8_t rx_len = 0;
 volatile uint8_t recv_end_flag = 0;
 uint8_t rx_buffer[USART_RX_LEN];
 
-#if __RTOS_FREERTOS_ENABLED
-SemaphoreHandle_t USART_BinarySem_Handle = NULL; /* 测试信号量句柄 */
+#if RTOS_FREERTOS_ENABLED
+SemaphoreHandle_t USART_BinarySem_Handle = NULL; /* 串口接收信号量句柄 */
 #endif /* __RTOS_FREERTOS_ENABLED */
 
 extern DMA_HandleTypeDef USART_DMA_HANDLE;
@@ -41,7 +41,7 @@ __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 */
 
-#ifdef __BSP_USART_VariableReceive
+#ifdef BSP_USART_VariableReceive
 /**
  * @brief	USART variable length receiving additional initialization content.
  * @attention
@@ -54,37 +54,44 @@ BSP_UsartState BSP_UsartVar_ExtraIRQHandler(void)
 	uint32_t tmp_flag = 0;
 	uint32_t temp;
 
-#if __RTOS_FREERTOS_ENABLED
+#if RTOS_FREERTOS_ENABLED
 	uint32_t ulReturn;
-	BaseType_t pxHigherPriorityTaskWoken;
 	ulReturn = taskENTER_CRITICAL_FROM_ISR();
-#endif /* __RTOS_FREERTOS_ENABLED */
+#endif /* RTOS_FREERTOS_ENABLED */
 
 	tmp_flag = __HAL_UART_GET_FLAG(&USART_HANDLE, UART_FLAG_IDLE);
-	if ((tmp_flag != RESET))
+
+	if (tmp_flag != RESET)
 	{
+
+#if RTOS_FREERTOS_ENABLED
+		BaseType_t pxHigherPriorityTaskWoken = pdFALSE;
+#endif /* RTOS_FREERTOS_ENABLED */
+
 		__HAL_UART_CLEAR_IDLEFLAG(&USART_HANDLE);
 		HAL_UART_DMAStop(&USART_HANDLE);
 
-#ifdef __BSP_MCU_DEVEBOX_STM32F103C6T6
+#ifdef MCUID_STM32F1
 		temp = USART_DMA_HANDLE.Instance->CNDTR;
-
-#elif defined(__BSP_MCU_DEVEBOX_STM32F407VET6)
+#elif defined(MCUID_STM32F4)
 		temp = __HAL_DMA_GET_COUNTER(&USART_DMA_HANDLE);
 #endif									
 
 		rx_len = USART_RX_LEN - temp;
 		recv_end_flag = 1;
+
+#if RTOS_FREERTOS_ENABLED
+		xSemaphoreGiveFromISR(USART_BinarySem_Handle, &pxHigherPriorityTaskWoken);
+		portYIELD_FROM_ISR(pxHigherPriorityTaskWoken);
+		taskEXIT_CRITICAL_FROM_ISR(ulReturn);
+#endif /* RTOS_FREERTOS_ENABLED */
+		return USART_OK;
 	}
 
-#if __RTOS_FREERTOS_ENABLED
-	xSemaphoreGiveFromISR(USART_BinarySem_Handle,
-						  &pxHigherPriorityTaskWoken);
-	portYIELD_FROM_ISR(pxHigherPriorityTaskWoken);
+#if RTOS_FREERTOS_ENABLED
 	taskEXIT_CRITICAL_FROM_ISR(ulReturn);
-#endif /* __RTOS_FREERTOS_ENABLED */
-
-	return USART_OK;
+#endif /* RTOS_FREERTOS_ENABLED */
+	return USART_ERROR;
 }
 
 /**
@@ -118,22 +125,21 @@ __weak void BSP_UsartVar_Callback(uint8_t *str)
 	/* User Code */
 }
 
-#endif /* __BSP_USART_VariableReceive */
+#endif /* BSP_USART_VariableReceive */
+#endif /* BSP_USART_Receive */
 
-#endif /* __BSP_USART_Receive */
-
-#if __BSP_USART_Transmit >= 1
+#if BSP_USART_Transmit >= 1
 
 /**
  * @brief	Redirect the output function.
  */
 int fputc(int ch, FILE *f)
 {
-	HAL_UART_Transmit(&USART_HANDLE_PRF1, (uint8_t *)&ch, 1, 0xffff);
+	HAL_UART_Transmit(&USART_HANDLE_PRF, (uint8_t *)&ch, 1, 0xffff);
 	return ch;
 }
 
-#ifdef __BSP_USE_PRINTF
+#ifdef BSP_USE_PRINTF
 void bsprif(UART_HandleTypeDef *huart, char *fmt, ...)
 {
 	va_list va;
@@ -185,7 +191,7 @@ void bsprif3(char *fmt, ...)
 	HAL_UART_Transmit(&USART_HANDLE_PRF3, (uint8_t *)buffer, i, 0XFF);
 }
 #endif
-#endif
+#endif 
 #endif
 #endif /* __BSP_USART_Transmit */
-#endif
+#endif /* BSP_USART_Transmit */
